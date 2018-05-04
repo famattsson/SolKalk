@@ -1,0 +1,380 @@
+﻿@using Data
+@using System.Resources
+@using System.Globalization
+@using System.Drawing;
+@using System.Collections
+@using Resources;
+
+@model List<ProducedCompanyPower>
+<!-------------try.get true/false----------->
+@{
+    Dictionary<string, double> companyPowerDict = new Dictionary<string, double>();
+    Dictionary<string, Dictionary<string, double>> monthCompanyPowerDict = new Dictionary<string, Dictionary<string, double>>();
+    List<string> företag = new List<string>() { "Husqvarna" };
+    var month = "";
+    foreach (var elem in företag)
+    {
+        companyPowerDict.Add(elem, 0);
+    }
+    foreach (var elem in Model)
+    {
+        companyPowerDict[elem.Företag] += Math.Round(elem.Energi / 1000);
+    }
+
+    Dictionary<string, double> monthlyCompanyPowerDict = new Dictionary<string, double>();
+    foreach (var elem in Model)
+    {
+        if (elem.Month != month)
+        {
+            monthlyCompanyPowerDict.Clear();
+            foreach (var elem1 in företag)
+            {
+                monthlyCompanyPowerDict.Add(elem1, 0);
+            }
+        }
+        monthlyCompanyPowerDict[elem.Företag] += Math.Round(elem.Energi / 1000);
+        monthCompanyPowerDict[elem.Month] = new Dictionary<string, double>(monthlyCompanyPowerDict);
+        month = elem.Month;
+    }
+
+
+}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    var data = null;
+    var chart = null;
+    var options = null;
+    var ModelJson = @Html.Raw(Json.Encode(Model));
+    var monthSummedList = []
+    @foreach(var monthelem in monthCompanyPowerDict)
+
+    {
+        foreach(var record in monthelem.Value)
+        {
+            <text>
+                monthSummedList.push({
+                    month: "@monthelem.Key",
+                    energy: @record.Value,
+                    company: "@record.Key",
+                })
+            </text>
+        }
+    }
+
+
+    $("[type='number']").keypress(function (evt) {
+        evt.preventDefault();
+    });
+    $(window).resize(function () {
+        chart.draw(data, options);
+    })
+
+
+    function drawChart() {
+        data = new google.visualization.DataTable();
+        data.addColumn("string", "Företag");
+        data.addColumn("number", "Energi");
+        @foreach (var elem in companyPowerDict)
+        {
+            <text>
+                data.addRow(["@elem.Key",@elem.Value]);
+            </text>
+        }
+        options = {
+            title: "Producerade kilowatttimmar",
+            bar: { groupWidth: "50%" },
+            legend: { position: "none" },
+            animation: {
+                duration: 750,
+                easing: 'out'
+            },
+            vAxis: { minValue: 0, maxValue: 200 }
+        };
+
+        chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+        chart.draw(data, options);
+    }
+    function changeChart() {
+        var timeInput = document.getElementById("timeInput");
+        var timeUnit = timeInput.value;
+        data.removeRows(0, data.getNumberOfRows());
+        if (timeUnit < 10) {
+            timeUnit = "0" + timeUnit;
+        }
+        if ("@Session["chosenAction"]" == "ShowPowerOfMonth") {
+            for (var i = 0; i < ModelJson.length; i++) {
+                if (ModelJson[i].Day == timeUnit) {
+                    data.addRow([ModelJson[i].Företag, Math.round(ModelJson[i].Energi / 1000)]);
+                }
+            }
+        }
+        else if ("@Session["chosenAction"]" == "ShowPowerOfYear") {
+            for (var i = 0; i < monthSummedList.length; i++) {
+                if (monthSummedList[i].month == timeUnit) {
+                    data.addRow([monthSummedList[i].company, monthSummedList[i].energy]);
+                }
+            }
+        }
+        chart.draw(data, options)
+    }
+</script>
+
+@helper DisplayActive()
+    {
+        if ((string)Session["chosenACtion"] == "ShowPowerOfYear")
+        {
+            <li class="active"><a href="/Company/ShowPowerOfYear"> Visa senaste året </a></li>
+        }
+        else if ((string)Session["chosenACtion"] != "ShowPowerOfYear")
+        {
+            <li><a href="/Company/ShowPowerOfYear"> Visa senaste året </a></li>
+        }
+        if ((string)Session["ChosenACtion"] == "ShowPowerOfMonth")
+        {
+            <li class="active"><a href="/Company/ShowPowerOfMonth"> Visa senaste månaden </a></li>
+        }
+        else if ((string)Session["ChosenACtion"] != "ShowPowerOfMonth")
+        {
+            <li><a href="/Company/ShowPowerOfMonth"> Visa senaste månaden </a></li>
+        }
+        if ((string)Session["ChosenACtion"] == "ShowPowerOfDay")
+        {
+            <li class="active"><a href="/Company/ShowPowerOfDay"> Visa senaste dagen </a></li>
+        }
+        else if ((string)Session["ChosenACtion"] != "ShowPowerOfDay")
+        {
+            <li><a href="/Company/ShowPowerOfDay"> Visa senaste dagen </a></li>
+        }
+}
+
+@helper RandomizeEq(double totalenergi, char prefix)
+    {
+
+        string omvandling = "";
+        Random rnd = new Random();
+        int rand = rnd.Next(1, 4);
+        double times = 0;
+        if (prefix == 'k')
+        {
+            switch (rand)
+            {
+                case 1:
+                    omvandling = " koppar kaffe";
+                    times = 40;
+                    break;
+                case 2:
+                    omvandling = " timmar hårtork";
+                    times = 0.5;
+                    break;
+                case 3:
+                    omvandling = " timmar mikrovågsugn";
+                    times = 0.7166;
+                    break;
+            }
+        }
+        else if (prefix == 'm')
+        {
+            switch (rand)
+            {
+                case 1:
+                    omvandling = " timmar med en vattenkokare";
+                    times = (0.45);
+                    break;
+                case 2:
+                    omvandling = " timmar med en dammsugare";
+                    times = (0.8333);
+                    break;
+                case 3:
+                    omvandling = " timmar med en induktionsspis";
+                    times = (0.55);
+                    break;
+            }
+        }
+        else if (prefix == 'g')
+        {
+            switch (rand)
+            {
+                case 1:
+                    omvandling = " timmar bastubad";
+                    times = 0.2;
+                    break;
+                case 2:
+                    omvandling = " timmar med ett strykjärn";
+                    times = 0.4166;
+                    break;
+                case 3:
+                    omvandling = " kg tvätt i en torktummlare";
+                    times = 1.2;
+                    break;
+            }
+        }
+
+        @Math.Round((totalenergi / 1000) * times, 0)@omvandling
+}
+
+@helper DisplayEnergy()
+    {
+        double totalenergi = 0;
+        foreach (var elem in Model)
+        {
+            totalenergi += elem.Energi;
+        }
+        if ((string)Session["chosenACtion"] == "ShowPowerOfYear")
+        {
+            <h2>Energi genererad senaste året:</h2>
+        }
+        else if ((string)Session["chosenACtion"] == "ShowPowerOfMonth")
+        {
+            <h2>Energi genererad denna månaden:</h2>
+        }
+        else if ((string)Session["chosenACtion"] == "ShowPowerOfDay")
+        {
+            <h2>Energi genererad senaste dagen:</h2>
+        }
+        else if ((string)Session["chosenACtion"] == "Recalculate")
+        {
+            <h2>Total energi:</h2>
+        }
+        if (totalenergi > 1000000000)
+        {
+            <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
+            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'g')</h4>
+        }
+        else if (totalenergi > 1000000)
+        {
+            <h2> @Math.Round(totalenergi / 1000000, 2) MWh</h2>
+            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'm')</h4>
+        }
+        else if (totalenergi > 1000)
+        {
+            <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
+            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
+        }
+        else if (totalenergi > 1000)
+        {
+            <h2> @Math.Round(totalenergi) Wh </h2>
+        }
+}
+
+@helper DisplayMap()
+    {
+        ResourceSet resourceSet = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
+        foreach (DictionaryEntry elem in resourceSet)
+        {
+            var kommun = Session["företag"];
+            if ((string)elem.Key == (string)Session["företag"] || (Session["företag"] == null && (string)elem.Key == "alla_kommuner"))
+            {
+                ImageConverter converter = new ImageConverter();
+                byte[] imagebytes = (byte[])converter.ConvertTo(elem.Value, typeof(byte[]));
+                <img src="@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(imagebytes))" class="img-responsive img-responsive" width="300" height="300" />
+            }
+        }
+}
+
+@helper GenerateDropdownContents()
+    {
+        List<string> företag = new List<string>() { "Husqvarna", "Alla Företag" };
+        foreach (var elem in företag)
+        {
+            if (elem == "Alla Företag")
+            {
+                <li> <a href="/Company/ChooseCompany/"> @elem </a>  </li>
+            }
+            else
+            {
+                <li> <a href="/Company/ChooseCompany/@elem"> @elem </a>  </li>
+            }
+
+        }
+}
+
+@helper DisplayComparison()
+    {
+        <div id="columnchart_values"></div>
+}
+
+@helper ChartButton()
+    {
+        if ((bool?)Session["compare"] == true)
+        {
+            <a href="/Company/SetCompareMode/1" class="btncompany btn btn-info" role="button">Dölj Diagram</a>
+        }
+        else
+        {
+            <a href="/Company/SetCompareMode/1" class="btncompany btn btn-info" role="button">Visa Diagram</a>
+        }
+}
+
+@helper Timeinput()
+    {
+        if ((string)Session["chosenAction"] == "ShowPowerOfYear" && (bool?)Session["compare"] == true)
+        {
+            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.Min(x => x.Month)" max="@Model.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+        }
+        if ((string)Session["chosenAction"] == "ShowPowerOfMonth" && (bool?)Session["compare"] == true)
+        {
+            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.Min(x => x.Day)" max="@Model.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px"/>
+        }
+}
+
+<div class="row container">
+    <div class=" col-sm-4" style="padding: 15px">
+        @if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+        {
+            <div class="dropdown">
+                <button class="btncompany btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Välj Företag
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    @GenerateDropdownContents()
+                </ul>
+            </div>
+        }
+        @DisplayMap()
+
+        <button type="button" class="infobtn btn collapsed" data-toggle="collapse" style="padding-left:75px" data-target="#info"> Hur det fungerar </button>
+        <div class="infodiv collapse" id="info">
+            <p class="text-info">
+                Observera att datan som presenteras på denna sida inte är fullständigt exakt och momentan.
+                Observera att datan som presenteras på denna sida inte är fullständigt exakt och momentan.
+            </p>
+        </div>
+
+    </div>
+    <div class="col-sm-6" style="padding:20px" color="#fff">
+        <ul class="nav nav-tabs">
+            @DisplayActive()
+        </ul>
+        @if ((bool?)Session["compare"] == true)
+        {
+            @DisplayComparison();
+        }
+        else
+        {
+            if (Session["företag"] == null)
+            {
+                <h3>Alla Företag</h3>
+            }
+            else
+            {
+                <h3>@((string)Session["företag"])</h3>
+            }
+            @DisplayEnergy()
+        }
+        <br />
+    </div>
+
+    <div class="col-sm-2" style="margin-top:2%">
+        <div class="row">
+            <div class="col"> @ChartButton() </div>
+        </div>
+        <div class="row" style="padding-top: 15px">
+            <div class="col"> @Timeinput() </div>
+        </div>
+    </div>
+
+</div>
