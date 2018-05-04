@@ -19,12 +19,10 @@ namespace Data
             : base("name=SolkalkDbEntities")
         {
         }
-
         static SolkalkDbEntities()
         {
             var foo = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

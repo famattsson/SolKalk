@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SolkalkDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SolkalkDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ProducedCompanyPower">
           <Key>
             <PropertyRef Name="Id" />
@@ -15,7 +15,7 @@
           <Property Name="Year" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="Month" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="Day" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="Hour" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="Irradiance" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="ProducedMunicipalPower">
           <Key>
@@ -27,14 +27,14 @@
           <Property Name="Year" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="Month" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="Day" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="Hour" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="Inhabitants" Type="int" Nullable="false" />
+          <Property Name="Irradiance" Type="float" Nullable="false" />
         </EntityType>
         <EntityContainer Name="SolkalkDbModelStoreContainer">
           <EntitySet Name="ProducedCompanyPower" EntityType="Self.ProducedCompanyPower" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProducedMunicipalPower" EntityType="Self.ProducedMunicipalPower" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SolkalkDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -48,7 +48,7 @@
           <Property Name="Year" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Month" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Day" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Hour" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Irradiance" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="ProducedMunicipalPower">
           <Key>
@@ -60,7 +60,8 @@
           <Property Name="Year" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Month" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Day" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Hour" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Inhabitants" Type="Int32" Nullable="false" />
+          <Property Name="Irradiance" Type="Double" Nullable="false" />
         </EntityType>
         <EntityContainer Name="SolkalkDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ProducedCompanyPowers" EntityType="Self.ProducedCompanyPower" />
@@ -75,26 +76,27 @@
           <EntitySetMapping Name="ProducedCompanyPowers">
             <EntityTypeMapping TypeName="SolkalkDbModel.ProducedCompanyPower">
               <MappingFragment StoreEntitySet="ProducedCompanyPower">
+                <ScalarProperty Name="Irradiance" ColumnName="Irradiance" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Företag" ColumnName="Företag" />
                 <ScalarProperty Name="Energi" ColumnName="Energi" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="Month" ColumnName="Month" />
                 <ScalarProperty Name="Day" ColumnName="Day" />
-                <ScalarProperty Name="Hour" ColumnName="Hour" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProducedMunicipalPowers">
             <EntityTypeMapping TypeName="SolkalkDbModel.ProducedMunicipalPower">
               <MappingFragment StoreEntitySet="ProducedMunicipalPower">
+                <ScalarProperty Name="Irradiance" ColumnName="Irradiance" />
+                <ScalarProperty Name="Inhabitants" ColumnName="Inhabitants" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Kommun" ColumnName="Kommun" />
                 <ScalarProperty Name="Energi" ColumnName="Energi" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="Month" ColumnName="Month" />
                 <ScalarProperty Name="Day" ColumnName="Day" />
-                <ScalarProperty Name="Hour" ColumnName="Hour" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
