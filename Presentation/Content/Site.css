@@ -20,6 +20,14 @@ h3 { /*Kommunnamn font*/
     font-weight: 900 !important
 }
 
+path {
+    transition: .4s fill;
+}
+
+path:hover {
+    fill: rgb(58, 145, 63);
+}
+
 .btnmunicipal {
     background-color: rgb(0, 153, 51) !important;
     font-family: "Lato", sans-serif !important;
@@ -59,6 +67,7 @@ h3 { /*Kommunnamn font*/
     position: relative;
     outline: 0 !important;
     -webkit-box-shadow: none !important;
+    margin:auto !important; 
 }
 
     .infobtn:hover {
@@ -73,6 +82,7 @@ h3 { /*Kommunnamn font*/
     position: relative;
     outline: 0 !important;
     -webkit-box-shadow: none !important;
+    margin:auto !important;
 }
 
 /* Icon when the collapsible content is shown */

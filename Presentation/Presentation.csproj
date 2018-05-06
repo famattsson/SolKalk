@@ -115,40 +115,21 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <None Include="Resources\alla_kommuner.jpg" />
-    <None Include="Resources\Aneby.jpg" />
-    <None Include="Resources\Eksjö.jpg" />
-    <None Include="Resources\Gislaved.jpg" />
-    <None Include="Resources\Gnosjö.jpg" />
-    <None Include="Resources\Habo.jpg" />
-    <None Include="Resources\Jönköping.jpg" />
-    <None Include="Resources\Mullsjö.jpg" />
-    <None Include="Resources\Nässjö.jpg" />
-    <None Include="Resources\Sävsjö.jpg" />
-    <None Include="Resources\Tranås.jpg" />
-    <None Include="Resources\Vaggeryd.jpg" />
-    <None Include="Resources\Vetlanda.jpg" />
-    <None Include="Resources\Värnamo.jpg" />
-    <None Include="Resources\Husqvarna.jpg" />
-    <None Include="Resources\eksjö1.jpg" />
-    <None Include="Resources\gislaved1.jpg" />
-    <None Include="Resources\vaggeryd1.jpg" />
-    <None Include="Resources\vetlanda1.jpg" />
-    <None Include="Resources\värnamo1.jpg" />
     <None Include="Resources\alla_kommuner.png" />
     <None Include="Resources\Aneby.png" />
     <None Include="Resources\eksjö.png" />
     <None Include="Resources\gislaved.png" />
     <None Include="Resources\gnosjö.png" />
     <None Include="Resources\habo.png" />
+    <None Include="Resources\jönköping.png" />
     <None Include="Resources\mullsjö.png" />
     <None Include="Resources\nässjö.png" />
     <None Include="Resources\sävsjö.png" />
     <None Include="Resources\tranås.png" />
-    <None Include="Resources\värnamo.png" />
-    <None Include="Resources\vetlanda.png" />
     <None Include="Resources\vaggeryd.png" />
-    <None Include="Resources\jönköping.png" />
+    <None Include="Resources\vetlanda.png" />
+    <None Include="Resources\värnamo.png" />
+    <None Include="Resources\Husqvarna.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -158,7 +139,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_LocalResources\Resources1.Designer.cs">
+    <Compile Include="App_LocalResources\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -210,7 +191,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CustomToolNamespace>Resources</CustomToolNamespace>
-      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
