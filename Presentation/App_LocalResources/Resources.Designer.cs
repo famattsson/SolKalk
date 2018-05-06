@@ -71,52 +71,47 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m151.49-102.43 6.4273 1.6818 10.41-2.6935-4.2864-16.834 1.533-6.0605-8.5728-11.447-2.4493-9.7612-5.8198-3.7064-9.7973-2.0197-9.4889 3.3668-3.0618-3.7009-12.859-0.67392 1.8367-7.0732-3.9826-3.3668-4.8989 1.3458-0.91648 9.4272-8.2689 4.0403-3.6741 8.0806 1.8367 11.447 5.8196-2.3543 7.3482 0.33391 4.2864 25.928 8.8764-5.053 4.2864-4.3742 6.4321-1.014 3.0618 3.0329 7.0394-5.053 6.7357 1.6858z.
         /// </summary>
-        public static System.Drawing.Bitmap Aneby {
+        public static string Aneby {
             get {
-                object obj = ResourceManager.GetObject("Aneby", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Aneby", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m151.49-102.43 6.4273 1.6818 10.41-2.6935 4.8987 12.794 17.454-2.0197 15.921 4.0403 3.0616 6.7338 8.5728 2.0198 17.146 14.814-9.185 12.794-8.2691-2.0197-5.511 9.4275-7.0395 0.34001-5.5111 6.0605-7.6566-6.0605-10.101-1.0119-5.8198 2.6935-9.7973-0.67393-8.5728-7.4071-8.2643-2.0198-2.1455-8.4145-9.7975-2.0198-6.7357-3.7062 4.2864-10.774 10.41-13.468-2.1407-5.0475z.
         /// </summary>
-        public static System.Drawing.Bitmap Eksjö {
+        public static string Eksjö {
             get {
-                object obj = ResourceManager.GetObject("Eksjö", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Eksjö", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m-59.468 56.143 11.022-5.0475 12.555 2.6935 3.0617-3.3668 1.2248 8.0804 3.6741-1.0119 10.101 7.0732-2.4493 9.4272 3.3703 8.0804 7.9605 3.367 2.7532-16.5 5.511-3.7009-3.0616-11.113 2.758-6.0605-2.758-5.721-5.5111 1.6797-2.4493-4.7136 3.6741-5.3869 0.30919-14.475 4.2864 1.0078 0.30364-7.4071-4.8987-10.101 0.30919-7.741-5.5111-2.0197-6.4321-1.0119 2.758-7.4073 4.5902-11.781 5.2073-8.0804 5.2025 1.6797 5.2073-4.7138 5.511 4.0403 3.9779-3.0274 7.6566 2.3541 1.2257-12.794-3.0618-8.0804 1.5275-6.3944-3.3655-2.3596 [rest of string was truncated]&quot;;.
         /// </summary>
-        public static System.Drawing.Bitmap Gislaved {
+        public static string Gislaved {
             get {
-                object obj = ResourceManager.GetObject("Gislaved", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Gislaved", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m-8.0317 2.9458 4.8987 10.101-0.30364 7.4071 15.612 1.3458 0.3092-6.3944 6.7357-3.0331 2.1409 3.7064 7.9603 2.6935 5.8198-5.3869 3.9777-5.3872-6.7357-3.3668 1.8367-7.4071-5.8148-8.42-5.2073-1.3458-5.2025-7.7412 2.4493-8.4198v-6.0605l-7.6566-2.3541-3.9779 3.0274-5.511-4.0403-5.2073 4.7138-5.2025-1.6797-5.2073 8.0804-4.5902 11.781-2.758 7.4073 6.4321 1.0119 5.5111 2.0198z.
         /// </summary>
-        public static System.Drawing.Bitmap Gnosjö {
+        public static string Gnosjö {
             get {
-                object obj = ResourceManager.GetObject("Gnosjö", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Gnosjö", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m17.687-134.42 7.9605 3.7062 5.511 10.435 4.2864 1.0119-0.30364-11.787 5.2025-4.0403 4.595 2.3596 4.2864-4.7136 0.91649-18.181 5.2075-9.7667 4.59-16.834 2.758-19.862-11.943-1.6858-0.30365 18.854-5.2073 7.0732-0.61284 4.3742-13.163 4.3795-3.6741 1.0078-3.9826 9.0933 1.8367 11.108-1.8367 6.7338h-6.1236z.
         /// </summary>
-        public static System.Drawing.Bitmap Habo {
+        public static string Habo {
             get {
-                object obj = ResourceManager.GetObject("Habo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Habo", resourceCulture);
             }
         }
         
@@ -131,82 +126,74 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m42.793-74.153 5.8196 5.3869 4.5902-7.7465 7.9605-1.6818-2.1409 5.0475 3.6741 17.847 10.713 4.7136 1.533-14.141 4.8987-4.7136-1.533-4.7136 3.3703-8.0806 3.9777-2.0198 3.3704-13.133 8.2641-4.7136 9.7973 1.6858 5.8198-6.0602-4.2864-25.928-7.3482-0.33391-5.8196 2.3543-1.8367-11.447 3.6741-8.0806 8.2689-4.0403 0.91648-9.4272 4.8989-1.3458-1.8367-22.895-7.9605-3.7009-8.5728 15.148-2.4493 10.44-11.938 8.4145-8.5728 16.5-2.4495 11.781-1.2238 14.48-6.1234 0.67392-3.6741 3.0276-3.3703-2.6935 1.2238-10.101-1.8367-10. [rest of string was truncated]&quot;;.
         /// </summary>
-        public static System.Drawing.Bitmap Jönköping {
+        public static string Jönköping {
             get {
-                object obj = ResourceManager.GetObject("Jönköping", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Jönköping", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m17.687-141.16v6.7338l-3.3654 8.4198-10.41-2.3596 1.2238-9.7612-4.595-13.807 0.30919-11.108 6.1234-7.7465 2.4493-9.0878 2.753-0.67393 5.8198 3.7007 3.6741-2.6935 8.8764 4.3797 0.92019 6.0603-3.6741 1.0078-3.9826 9.0933 1.8367 11.108-1.8367 6.7338z.
         /// </summary>
-        public static System.Drawing.Bitmap Mullsjö {
+        public static string Mullsjö {
             get {
-                object obj = ResourceManager.GetObject("Mullsjö", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Mullsjö", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m73.409-50.585 1.533-14.141 4.8987-4.7136-1.533-4.7136 3.3703-8.0806 3.9777-2.0198 3.3704-13.133 8.2641-4.7136 9.7973 1.6858 5.8198-6.0603 8.8764-5.053 4.2866-4.3742 6.4319-1.014 3.0618 3.0329 7.0394-5.053 6.7359 1.6858 2.1455 14.814-7.9603 6.0605 2.1407 5.0475-10.41 13.468-4.2864 10.774 6.7357 3.7062-1.5275 10.101-0.61284 11.781 0.91648 9.7667-3.0618 15.148-8.2641-2.0198-4.8988-11.781-8.2689-1.6858-4.2864 4.7136-5.2025-1.3458-5.8196-9.7614h-7.6518l-3.0618-8.0804-15.308-2.3596z.
         /// </summary>
-        public static System.Drawing.Bitmap Nässjö {
+        public static string Nässjö {
             get {
-                object obj = ResourceManager.GetObject("Nässjö", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Nässjö", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m114.13 32.24 7.0394-4.7136h7.3482l2.758-8.7539 0.91649-15.488 1.2257-19.867-8.2643-2.0197-4.8988-11.781-8.2689-1.6858-4.2864 4.7136-5.2025-1.3458-5.8196-9.7614h-7.6518l-11.943 6.0605 0.9202 21.548 2.4495 11.447 4.2864 12.455-2.4495 19.867-4.8987 3.3668 1.5275 9.4274 12.247-0.34002 7.0444-1.6797 1.2257-8.0806 4.8987 1.0078 2.1407-3.3668z.
         /// </summary>
-        public static System.Drawing.Bitmap Sävsjö {
+        public static string Sävsjö {
             get {
-                object obj = ResourceManager.GetObject("Sävsjö", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Sävsjö", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m126.68-190.65 0.9202 7.7412 16.837-3.7009 4.595-10.101 5.8148 3.3668 5.2073 21.548 2.7532 8.0806-4.2864 5.7211-3.9777 10.44-5.8198-3.7064-9.7973-2.0198-9.4889 3.3668-3.0618-3.7009-12.859-0.67393 1.8367-7.0732-3.9826-3.3668-1.8367-22.895z.
         /// </summary>
-        public static System.Drawing.Bitmap Tranås {
+        public static string Tranås {
             get {
-                object obj = ResourceManager.GetObject("Tranås", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Tranås", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m42.793-74.153 5.8196 5.3869 4.5902-7.7465 7.9605-1.6818-2.1409 5.0475 3.6741 17.847 10.713 4.7136-2.753 1.6797 15.308 2.3596 3.0618 8.0804-11.943 6.0605 0.92019 21.548-5.8196 2.0197-6.4271 4.0403 0.30364 6.3944-3.3654 5.053-4.595-3.7064-10.41 3.7064-3.3654-2.3596-5.2073 3.7062-6.7357-3.3668 1.8367-7.4071-5.8148-8.42-5.2073-1.3458-5.2025-7.7412 2.4493-8.4198v-6.0604l1.2257-12.794-3.0618-8.0804 1.5275-6.3944-3.3654-2.3596-4.2864-4.7136 5.2025-4.7136 7.348 2.0198 7.0444-9.0878 4.8988 7.4071z.
         /// </summary>
-        public static System.Drawing.Bitmap Vaggeryd {
+        public static string Vaggeryd {
             get {
-                object obj = ResourceManager.GetObject("Vaggeryd", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Vaggeryd", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m65.758 113.72 6.1232-3.7062 6.7359-17.842-7.3482-10.44-1.2238-8.7537 2.4493-4.0403 0.61284-23.229h5.8148l-1.5275-9.4274 4.8987-3.3668 2.4495-19.867-4.2864-12.455-2.4495-11.447-5.8196 2.0197-6.4271 4.0403 0.30364 6.3944-3.3654 5.053-4.595-3.7064-10.41 3.7064-3.3654-2.3595-5.2073 3.7062-3.9777 5.3871-5.8198 5.387-7.9603-2.6935-2.1409-3.7064-6.7357 3.0329-0.3092 6.3944-15.612-1.3458-4.2866-1.0078-0.3092 14.475-3.6741 5.387 2.4493 4.7136 5.5111-1.6818 2.758 5.7211-2.758 6.0605 3.0616 11.113 8.8814 1.3478 4.898 [rest of string was truncated]&quot;;.
         /// </summary>
-        public static System.Drawing.Bitmap Värnamo {
+        public static string Värnamo {
             get {
-                object obj = ResourceManager.GetObject("Värnamo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Värnamo", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to m182.1-45.537 10.101 1.0119 7.6566 6.0605 5.5111-6.0605 7.0395-0.34 5.511-9.4275 8.2691 2.0197 5.2025 5.053 1.8367 7.0679-3.6741 4.0401-0.61284 11.447-6.7357-5.387-5.8148 5.053 0.61285 13.468-1.8367 4.7136 2.1407 11.108-5.8148 4.3795 0.61284 13.128 3.9777 3.367 3.9827 11.447-18.983-8.4145-19.595 3.3668-5.511-4.7136h-7.3482l5.2025 8.7539-8.5728-0.67393-2.4493 4.0403-4.8988 3.7009-5.2023 1.3458-2.4495 6.0602-7.0443 0.67393-1.8367-12.455-4.8986-6.0605-7.9605-4.7136 2.758-8.7539 0.91648-15.488 1.2238-19.867 3.0 [rest of string was truncated]&quot;;.
         /// </summary>
-        public static System.Drawing.Bitmap Vetlanda {
+        public static string Vetlanda {
             get {
-                object obj = ResourceManager.GetObject("Vetlanda", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Vetlanda", resourceCulture);
             }
         }
     }

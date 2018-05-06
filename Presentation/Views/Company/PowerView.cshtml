@@ -58,7 +58,7 @@
                 monthSummedList.push({
                     month: "@monthelem.Key",
                     energy: @record.Value,
-                    company: "@record.Key",
+                    company: he.decode("@record.Key"),
                 })
             </text>
         }
@@ -76,11 +76,12 @@
     function drawChart() {
         data = new google.visualization.DataTable();
         data.addColumn("string", "Företag");
-        data.addColumn("number", "Energi");
+        data.addColumn("number", "Kwh");
         @foreach (var elem in companyPowerDict)
         {
             <text>
-                data.addRow(["@elem.Key",@elem.Value]);
+                var name = he.decode("@elem.Key")
+                data.addRow([name,@elem.Value]);
             </text>
         }
         options = {
@@ -93,6 +94,8 @@
             },
             vAxis: { minValue: 0, maxValue: 200 }
         };
+
+
 
         chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
         chart.draw(data, options);

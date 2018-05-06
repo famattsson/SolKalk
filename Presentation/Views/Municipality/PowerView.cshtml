@@ -8,73 +8,132 @@
 @model List<ProducedMunicipalPower>
 <!-------------try.get true/false----------->
 @{
-    Dictionary<string, double> kommunPowerDict = new Dictionary<string, double>();
-    List<string> Kommuner = new List<string>() { "Aneby", "Gnosjö", "Tranås", "Nässjö", "Eksjö", "Vetlanda", "Sävsjö", "Värnamo", "Gislaved", "Vaggeryd", "Jönköping", "Habo", "Mullsjö", "Hela Länet" };
+    Dictionary<string, double> PowerDict = new Dictionary<string, double>();
+    Dictionary<string, Dictionary<string, double>> monthPowerDict = new Dictionary<string, Dictionary<string, double>>();
+    List<string> Kommuner = new List<string>() { "Aneby", "Tranås", "Nässjö", "Eksjö", "Vetlanda", "Sävsjö", "Värnamo", "Gislaved", "Gnosjö", "Vaggeryd", "Jönköping", "Habo", "Mullsjö"};
+
+    var month = "";
     foreach (var elem in Kommuner)
     {
-        kommunPowerDict.Add(elem, 0);
+        PowerDict.Add(elem, 0);
     }
     foreach (var elem in Model)
     {
-        kommunPowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
+        PowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
     }
 
+    Dictionary<string, double> tempPowerDict = new Dictionary<string, double>();
+    foreach (var elem in Model)
+    {
+        if (elem.Month != month)
+        {
+            tempPowerDict.Clear();
+            foreach (var elem1 in Kommuner)
+            {
+                tempPowerDict.Add(elem1, 0);
+            }
+        }
+        tempPowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
+        monthPowerDict[elem.Month] = new Dictionary<string, double>(tempPowerDict);
+        month = elem.Month;
+    }
+
+
 }
+
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load("current", { packages: ['corechart'] });
     google.charts.setOnLoadCallback(drawChart);
+    var data = null;
+    var chart = null;
+    var options = null;
+    var ModelJson = @Html.Raw(Json.Encode(Model));
+    var monthSummedList = []
+    @foreach(var monthelem in monthPowerDict)
+
+    {
+        foreach(var record in monthelem.Value)
+        {
+            <text>
+                monthSummedList.push({
+                    month: "@monthelem.Key",
+                    energy: @record.Value,
+                    municipality: he.decode("@record.Key"),
+                })
+            </text>
+        }
+    }
+
+
+    $("[type='number']").keypress(function (evt) {
+        evt.preventDefault();
+    });
+    $(window).resize(function () {
+        chart.draw(data, options);
+    })
+
+
     function drawChart() {
-
-            var data = google.visualization.arrayToDataTable([
-                ["Kommun", "Kilowatttimmar", { role: "style" }],
-                ["Aneby",@kommunPowerDict["Aneby"], "3A913F"],
-                ["Gnosjö", @kommunPowerDict["Gnosjö"], "3A913F"],
-                ["Tranås", @kommunPowerDict["Tranås"], "3A913F"],
-                ["Nässjö", @kommunPowerDict["Nässjö"], "3A913F"],
-                ["Eksjö", @kommunPowerDict["Eksjö"], "3A913F"],
-                ["Vetlanda", @kommunPowerDict["Vetlanda"], "3A913F"],
-                ["Sävsjö", @kommunPowerDict["Sävsjö"], "3A913F"],
-                ["Värnamo", @kommunPowerDict["Värnamo"], "3A913F"],
-                ["Gislaved", @kommunPowerDict["Gislaved"], "3A913F"],
-                ["Vaggeryd", @kommunPowerDict["Vaggeryd"], "3A913F"],
-                ["Jönköping", @kommunPowerDict["Jönköping"], "3A913F"],
-                ["Habo", @kommunPowerDict["Habo"], "3A913F"],
-                ["Mullsjö", @kommunPowerDict["Mullsjö"], "3A913F"]
-            ]);
-
-
-        var view = new google.visualization.DataView(data);
-        view.setColumns([0, 1,
-            {
-                calc: "stringify",
-                sourceColumn: 1,
-                type: "string",
-                role: "annotation"
-            },
-            2]);
-
-        var options = {
-            title: "Producerade Kilowatttimmar",
-            width: 600,
-            height: 300,
-            bar: { groupWidth: "60%" },
+        data = new google.visualization.DataTable();
+        data.addColumn("string", "Kommun");
+        data.addColumn("number", "Kwh");
+        @foreach (var elem in PowerDict)
+        {
+            <text>
+                var name = he.decode("@elem.Key")
+                data.addRow([name,@elem.Value]);
+            </text>
+        }
+        options = {
+            title: "Producerade kilowatttimmar",
+            bar: { groupWidth: "50%" },
             legend: { position: "none" },
+            animation: {
+                duration: 750,
+                easing: 'out'
+            },
+            series: { 0: { color: 'green' } },
+            vAxis: { minValue: 0, maxValue: 200 }
         };
-        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-        chart.draw(view, options);
+
+        chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+        chart.draw(data, options);
+    }
+    function changeChart() {
+        var timeInput = document.getElementById("timeInput");
+        var timeUnit = timeInput.value;
+        data.removeRows(0, data.getNumberOfRows());
+        if (timeUnit < 10) {
+            timeUnit = "0" + timeUnit;
+        }
+        if ("@Session["chosenAction"]" == "ShowPowerOfMonth") {
+            for (var i = 0; i < ModelJson.length; i++) {
+                if (ModelJson[i].Day == timeUnit) {
+                    data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi / 1000)]);
+                }
+            }
+        }
+        else if ("@Session["chosenAction"]" == "ShowPowerOfYear") {
+            for (var i = 0; i < monthSummedList.length; i++) {
+                if (monthSummedList[i].month == timeUnit) {
+                    data.addRow([monthSummedList[i].municipality, monthSummedList[i].energy]);
+                }
+            }
+        }
+        chart.draw(data, options)
     }
 </script>
 
 @helper DisplayActive()
     {
-        if ((string)Session["chosenACtion"] == "ShowTotalPower")
+        if ((string)Session["chosenACtion"] == "ShowPowerOfYear")
         {
-            <li class="active"><a href="/Municipality/ShowTotalPower"> Visa totalt </a></li>
+            <li class="active"><a href="/Municipality/ShowPowerOfYear"> Visa senaste året </a></li>
         }
-        else if ((string)Session["chosenACtion"] != "ShowTotalPower")
+        else if ((string)Session["chosenACtion"] != "ShowPowerOfYear")
         {
-            <li><a href="/Municipality/ShowTotalPower"> Visa totalt </a></li>
+            <li><a href="/Municipality/ShowPowerOfYear"> Visa senaste året </a></li>
         }
         if ((string)Session["chosenACtion"] == "ShowPowerOfMonth")
         {
@@ -166,7 +225,7 @@
         {
             totalenergi += elem.Energi;
         }
-        if ((string)Session["chosenACtion"] == "ShowTotalPower")
+        if ((string)Session["chosenACtion"] == "ShowPowerOfYear")
         {
             <h2> </h2>
         }
@@ -177,10 +236,6 @@
         else if ((string)Session["chosenACtion"] == "ShowPowerOfDay")
         {
             <h2> </h2>
-        }
-        else if ((string)Session["chosenACtion"] == "Recalculate")
-        {
-            <h2>Total energi:</h2>
         }
         if (totalenergi > 1000000000)
         {
@@ -203,24 +258,10 @@
         }
 }
 
-@helper DisplayMap()
-    {
-        ResourceSet resourceSet = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
-        foreach (DictionaryEntry elem in resourceSet)
-        {
-            var kommun = Session["kommun"];
-            if ((string)elem.Key == (string)Session["kommun"] || (Session["kommun"] == null && (string)elem.Key == "alla_kommuner"))
-            {
-                ImageConverter converter = new ImageConverter();
-                byte[] imagebytes = (byte[])converter.ConvertTo(elem.Value, typeof(byte[]));
-                <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imagebytes))" class="img-responsive img-rounded" width="300" height="300" />
-            }
-        }
-}
-
 @helper GenerateDropdownContents()
     {
         List<string> Kommuner = new List<string>() { "Aneby", "Gnosjö", "Tranås", "Nässjö", "Eksjö", "Vetlanda", "Sävsjö", "Värnamo", "Gislaved", "Vaggeryd", "Jönköping", "Habo", "Mullsjö", "Hela Länet" };
+
         foreach (var elem in Kommuner)
         {
             if (elem == "Hela Länet")
@@ -252,170 +293,45 @@
 }
 
 @helper DisplaySVGMap()
-{
-    <svg style="max-width:300px; max-height:300px" version="1.1" viewBox="0 0 317.5 317.5" xmlns="http://www.w3.org/2000/svg" xlmns:xlink="http://www.w3.org/1999/xlink">
-
-        <g transform="translate(82.124 203.78)" stroke-width="5.1371">
-            <a xlink:href="/Municipality/ChooseMunicipality/Aneby">
-                <title id="title">Aneby</title>
-                @if ((string)Session["kommun"] == "Aneby")
+    {
+        ResourceSet resourceSet = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
+        <svg style="max-width:300px; max-height:300px" version="1.1" viewBox="0 0 317.5 317.5" xmlns="http://www.w3.org/2000/svg" xlmns:xlink="http://www.w3.org/1999/xlink">
+            <g transform="translate(82.124 203.78)" stroke-width="5.1371">
+                @foreach (DictionaryEntry resource in resourceSet)
                 {
-                    <path class="k0604" fill="rgb(58, 145, 63)" d="m151.49-102.43 6.4273 1.6818 10.41-2.6935-4.2864-16.834 1.533-6.0605-8.5728-11.447-2.4493-9.7612-5.8198-3.7064-9.7973-2.0197-9.4889 3.3668-3.0618-3.7009-12.859-0.67392 1.8367-7.0732-3.9826-3.3668-4.8989 1.3458-0.91648 9.4272-8.2689 4.0403-3.6741 8.0806 1.8367 11.447 5.8196-2.3543 7.3482 0.33391 4.2864 25.928 8.8764-5.053 4.2864-4.3742 6.4321-1.014 3.0618 3.0329 7.0394-5.053 6.7357 1.6858z" />
+                    if (resource.Value is string)
+                    {
+                        if ((string)Session["kommun"] == (string)resource.Key)
+                        {
+                            <a xlink:href="/Municipality/ChooseMunicipality/">
+                                <title id="title">@resource.Key</title>
+                                <path fill="rgb(58, 145, 63)" d="@resource.Value" />
+                            </a>
+                        }
+                        else
+                        {
+                            <a xlink:href="/Municipality/ChooseMunicipality/@((string)resource.Key)">
+                                <title id="title">@resource.Key</title>
+                                <path fill="rgb(161, 216, 132)" d="@resource.Value" />
+                            </a>
+                        }
+                    }
                 }
-                else
-                {
-                    <path class="k0604" fill="rgb(161, 216, 132)" d="m151.49-102.43 6.4273 1.6818 10.41-2.6935-4.2864-16.834 1.533-6.0605-8.5728-11.447-2.4493-9.7612-5.8198-3.7064-9.7973-2.0197-9.4889 3.3668-3.0618-3.7009-12.859-0.67392 1.8367-7.0732-3.9826-3.3668-4.8989 1.3458-0.91648 9.4272-8.2689 4.0403-3.6741 8.0806 1.8367 11.447 5.8196-2.3543 7.3482 0.33391 4.2864 25.928 8.8764-5.053 4.2864-4.3742 6.4321-1.014 3.0618 3.0329 7.0394-5.053 6.7357 1.6858z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Nässjö">
-                <title id="title">Nässjö</title>
-                @if ((string)Session["kommun"] == "Nässjö")
-                {
-                    <path class="k0682" fill="rgb(58, 145, 63)" d="m73.409-50.585 1.533-14.141 4.8987-4.7136-1.533-4.7136 3.3703-8.0806 3.9777-2.0198 3.3704-13.133 8.2641-4.7136 9.7973 1.6858 5.8198-6.0603 8.8764-5.053 4.2866-4.3742 6.4319-1.014 3.0618 3.0329 7.0394-5.053 6.7359 1.6858 2.1455 14.814-7.9603 6.0605 2.1407 5.0475-10.41 13.468-4.2864 10.774 6.7357 3.7062-1.5275 10.101-0.61284 11.781 0.91648 9.7667-3.0618 15.148-8.2641-2.0198-4.8988-11.781-8.2689-1.6858-4.2864 4.7136-5.2025-1.3458-5.8196-9.7614h-7.6518l-3.0618-8.0804-15.308-2.3596z" />
-                }
-                else
-                {
-                    <path class="k0682" fill="rgb(161, 216, 132)" d="m73.409-50.585 1.533-14.141 4.8987-4.7136-1.533-4.7136 3.3703-8.0806 3.9777-2.0198 3.3704-13.133 8.2641-4.7136 9.7973 1.6858 5.8198-6.0603 8.8764-5.053 4.2866-4.3742 6.4319-1.014 3.0618 3.0329 7.0394-5.053 6.7359 1.6858 2.1455 14.814-7.9603 6.0605 2.1407 5.0475-10.41 13.468-4.2864 10.774 6.7357 3.7062-1.5275 10.101-0.61284 11.781 0.91648 9.7667-3.0618 15.148-8.2641-2.0198-4.8988-11.781-8.2689-1.6858-4.2864 4.7136-5.2025-1.3458-5.8196-9.7614h-7.6518l-3.0618-8.0804-15.308-2.3596z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Vetlanda">
-                <title id="title">Vetlanda</title>
-                @if ((string)Session["kommun"] == "Vetlanda")
-                {
-                    <path class="k0685" fill="rgb(58, 145, 63)" d="m182.1-45.537 10.101 1.0119 7.6566 6.0605 5.5111-6.0605 7.0395-0.34 5.511-9.4275 8.2691 2.0197 5.2025 5.053 1.8367 7.0679-3.6741 4.0401-0.61284 11.447-6.7357-5.387-5.8148 5.053 0.61285 13.468-1.8367 4.7136 2.1407 11.108-5.8148 4.3795 0.61284 13.128 3.9777 3.367 3.9827 11.447-18.983-8.4145-19.595 3.3668-5.511-4.7136h-7.3482l5.2025 8.7539-8.5728-0.67393-2.4493 4.0403-4.8988 3.7009-5.2023 1.3458-2.4495 6.0602-7.0443 0.67393-1.8367-12.455-4.8986-6.0605-7.9605-4.7136 2.758-8.7539 0.91648-15.488 1.2238-19.867 3.0618-15.148-0.91649-9.7666 0.61284-11.782 1.5275-10.101 9.7973 2.0197 2.1457 8.4145 8.2641 2.0198 8.5728 7.4071 9.7975 0.67393z" />
-                }
-                else
-                {
-                    <path class="k0685" fill="rgb(161, 216, 132)" d="m182.1-45.537 10.101 1.0119 7.6566 6.0605 5.5111-6.0605 7.0395-0.34 5.511-9.4275 8.2691 2.0197 5.2025 5.053 1.8367 7.0679-3.6741 4.0401-0.61284 11.447-6.7357-5.387-5.8148 5.053 0.61285 13.468-1.8367 4.7136 2.1407 11.108-5.8148 4.3795 0.61284 13.128 3.9777 3.367 3.9827 11.447-18.983-8.4145-19.595 3.3668-5.511-4.7136h-7.3482l5.2025 8.7539-8.5728-0.67393-2.4493 4.0403-4.8988 3.7009-5.2023 1.3458-2.4495 6.0602-7.0443 0.67393-1.8367-12.455-4.8986-6.0605-7.9605-4.7136 2.758-8.7539 0.91648-15.488 1.2238-19.867 3.0618-15.148-0.91649-9.7666 0.61284-11.782 1.5275-10.101 9.7973 2.0197 2.1457 8.4145 8.2641 2.0198 8.5728 7.4071 9.7975 0.67393z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Eksjö">
-                <title id="title">Eksjö</title>
-                @if ((string)Session["kommun"] == "Eksjö")
-                {
-                    <path class="k0686" fill="rgb(58, 145, 63)" d="m151.49-102.43 6.4273 1.6818 10.41-2.6935 4.8987 12.794 17.454-2.0197 15.921 4.0403 3.0616 6.7338 8.5728 2.0198 17.146 14.814-9.185 12.794-8.2691-2.0197-5.511 9.4275-7.0395 0.34001-5.5111 6.0605-7.6566-6.0605-10.101-1.0119-5.8198 2.6935-9.7973-0.67393-8.5728-7.4071-8.2643-2.0198-2.1455-8.4145-9.7975-2.0198-6.7357-3.7062 4.2864-10.774 10.41-13.468-2.1407-5.0475z" />
-                }
-                else
-                {
-                    <path class="k0686" fill="rgb(161, 216, 132)" d="m151.49-102.43 6.4273 1.6818 10.41-2.6935 4.8987 12.794 17.454-2.0197 15.921 4.0403 3.0616 6.7338 8.5728 2.0198 17.146 14.814-9.185 12.794-8.2691-2.0197-5.511 9.4275-7.0395 0.34001-5.5111 6.0605-7.6566-6.0605-10.101-1.0119-5.8198 2.6935-9.7973-0.67393-8.5728-7.4071-8.2643-2.0198-2.1455-8.4145-9.7975-2.0198-6.7357-3.7062 4.2864-10.774 10.41-13.468-2.1407-5.0475z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Tranås">
-                <title id="title">Tranås</title>
-                @if ((string)Session["kommun"] == "Tranås")
-                {
-                    <path class="k0687" fill="rgb(58, 145, 63)" d="m126.68-190.65 0.9202 7.7412 16.837-3.7009 4.595-10.101 5.8148 3.3668 5.2073 21.548 2.7532 8.0806-4.2864 5.7211-3.9777 10.44-5.8198-3.7064-9.7973-2.0198-9.4889 3.3668-3.0618-3.7009-12.859-0.67393 1.8367-7.0732-3.9826-3.3668-1.8367-22.895z" />
-                }
-                else
-                {
-                    <path class="k0687" fill="rgb(161, 216, 132)" d="m126.68-190.65 0.9202 7.7412 16.837-3.7009 4.595-10.101 5.8148 3.3668 5.2073 21.548 2.7532 8.0806-4.2864 5.7211-3.9777 10.44-5.8198-3.7064-9.7973-2.0198-9.4889 3.3668-3.0618-3.7009-12.859-0.67393 1.8367-7.0732-3.9826-3.3668-1.8367-22.895z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Sävsjö">
-                <title id="title">Sävsjö</title>
-                @if ((string)Session["kommun"] == "Sävsjö")
-                {
-                    <path class="k0684" fill="rgb(58, 145, 63)" d="m114.13 32.24 7.0394-4.7136h7.3482l2.758-8.7539 0.91649-15.488 1.2257-19.867-8.2643-2.0197-4.8988-11.781-8.2689-1.6858-4.2864 4.7136-5.2025-1.3458-5.8196-9.7614h-7.6518l-11.943 6.0605 0.9202 21.548 2.4495 11.447 4.2864 12.455-2.4495 19.867-4.8987 3.3668 1.5275 9.4274 12.247-0.34002 7.0444-1.6797 1.2257-8.0806 4.8987 1.0078 2.1407-3.3668z" />
-                }
-                else
-                {
-                    <path class="k0684" fill="rgb(161, 216, 132)" d="m114.13 32.24 7.0394-4.7136h7.3482l2.758-8.7539 0.91649-15.488 1.2257-19.867-8.2643-2.0197-4.8988-11.781-8.2689-1.6858-4.2864 4.7136-5.2025-1.3458-5.8196-9.7614h-7.6518l-11.943 6.0605 0.9202 21.548 2.4495 11.447 4.2864 12.455-2.4495 19.867-4.8987 3.3668 1.5275 9.4274 12.247-0.34002 7.0444-1.6797 1.2257-8.0806 4.8987 1.0078 2.1407-3.3668z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Mullsjö">
-                <title id="title">Mullsjö</title>
-                @if ((string)Session["kommun"] == "Mullsjö")
-                {
-                    <path class="k0642" fill="rgb(58, 145, 63)" d="m17.687-141.16v6.7338l-3.3654 8.4198-10.41-2.3596 1.2238-9.7612-4.595-13.807 0.30919-11.108 6.1234-7.7465 2.4493-9.0878 2.753-0.67393 5.8198 3.7007 3.6741-2.6935 8.8764 4.3797 0.92019 6.0603-3.6741 1.0078-3.9826 9.0933 1.8367 11.108-1.8367 6.7338z" />
-                }
-                else
-                {
-                    <path class="k0642" fill="rgb(161, 216, 132)" d="m17.687-141.16v6.7338l-3.3654 8.4198-10.41-2.3596 1.2238-9.7612-4.595-13.807 0.30919-11.108 6.1234-7.7465 2.4493-9.0878 2.753-0.67393 5.8198 3.7007 3.6741-2.6935 8.8764 4.3797 0.92019 6.0603-3.6741 1.0078-3.9826 9.0933 1.8367 11.108-1.8367 6.7338z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Gnosjö">
-                <title id="title">Gnosjö</title>
-                @if ((string)Session["kommun"] == "Gnosjö")
-                {
-                    <path class="k0617" fill="rgb(58, 145, 63)" d="m-8.0317 2.9458 4.8987 10.101-0.30364 7.4071 15.612 1.3458 0.3092-6.3944 6.7357-3.0331 2.1409 3.7064 7.9603 2.6935 5.8198-5.3869 3.9777-5.3872-6.7357-3.3668 1.8367-7.4071-5.8148-8.42-5.2073-1.3458-5.2025-7.7412 2.4493-8.4198v-6.0605l-7.6566-2.3541-3.9779 3.0274-5.511-4.0403-5.2073 4.7138-5.2025-1.6797-5.2073 8.0804-4.5902 11.781-2.758 7.4073 6.4321 1.0119 5.5111 2.0198z" />
-                }
-                else
-                {
-                    <path class="k0617" fill="rgb(161, 216, 132)" d="m-8.0317 2.9458 4.8987 10.101-0.30364 7.4071 15.612 1.3458 0.3092-6.3944 6.7357-3.0331 2.1409 3.7064 7.9603 2.6935 5.8198-5.3869 3.9777-5.3872-6.7357-3.3668 1.8367-7.4071-5.8148-8.42-5.2073-1.3458-5.2025-7.7412 2.4493-8.4198v-6.0605l-7.6566-2.3541-3.9779 3.0274-5.511-4.0403-5.2073 4.7138-5.2025-1.6797-5.2073 8.0804-4.5902 11.781-2.758 7.4073 6.4321 1.0119 5.5111 2.0198z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Habo">
-                <title id="title">Habo</title>
-                @if ((string)Session["kommun"] == "Habo")
-                {
-                    <path class="k0643" fill="rgb(58, 145, 63)" d="m17.687-134.42 7.9605 3.7062 5.511 10.435 4.2864 1.0119-0.30364-11.787 5.2025-4.0403 4.595 2.3596 4.2864-4.7136 0.91649-18.181 5.2075-9.7667 4.59-16.834 2.758-19.862-11.943-1.6858-0.30365 18.854-5.2073 7.0732-0.61284 4.3742-13.163 4.3795-3.6741 1.0078-3.9826 9.0933 1.8367 11.108-1.8367 6.7338h-6.1236z" />
-                }
-                else
-                {
-                    <path class="k0643" fill="rgb(161, 216, 132)" d="m17.687-134.42 7.9605 3.7062 5.511 10.435 4.2864 1.0119-0.30364-11.787 5.2025-4.0403 4.595 2.3596 4.2864-4.7136 0.91649-18.181 5.2075-9.7667 4.59-16.834 2.758-19.862-11.943-1.6858-0.30365 18.854-5.2073 7.0732-0.61284 4.3742-13.163 4.3795-3.6741 1.0078-3.9826 9.0933 1.8367 11.108-1.8367 6.7338h-6.1236z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Vaggeryd">
-                <title id="title">Vaggeryd</title>
-                @if ((string)Session["kommun"] == "Vaggeryd")
-                {
-                    <path class="k0665" fill="rgb(58, 145, 63)" d="m42.793-74.153 5.8196 5.3869 4.5902-7.7465 7.9605-1.6818-2.1409 5.0475 3.6741 17.847 10.713 4.7136-2.753 1.6797 15.308 2.3596 3.0618 8.0804-11.943 6.0605 0.92019 21.548-5.8196 2.0197-6.4271 4.0403 0.30364 6.3944-3.3654 5.053-4.595-3.7064-10.41 3.7064-3.3654-2.3596-5.2073 3.7062-6.7357-3.3668 1.8367-7.4071-5.8148-8.42-5.2073-1.3458-5.2025-7.7412 2.4493-8.4198v-6.0604l1.2257-12.794-3.0618-8.0804 1.5275-6.3944-3.3654-2.3596-4.2864-4.7136 5.2025-4.7136 7.348 2.0198 7.0444-9.0878 4.8988 7.4071z" />
-                }
-                else
-                {
-                    <path class="k0665" fill="rgb(161, 216, 132)" d="m42.793-74.153 5.8196 5.3869 4.5902-7.7465 7.9605-1.6818-2.1409 5.0475 3.6741 17.847 10.713 4.7136-2.753 1.6797 15.308 2.3596 3.0618 8.0804-11.943 6.0605 0.92019 21.548-5.8196 2.0197-6.4271 4.0403 0.30364 6.3944-3.3654 5.053-4.595-3.7064-10.41 3.7064-3.3654-2.3596-5.2073 3.7062-6.7357-3.3668 1.8367-7.4071-5.8148-8.42-5.2073-1.3458-5.2025-7.7412 2.4493-8.4198v-6.0604l1.2257-12.794-3.0618-8.0804 1.5275-6.3944-3.3654-2.3596-4.2864-4.7136 5.2025-4.7136 7.348 2.0198 7.0444-9.0878 4.8988 7.4071z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Jönköping">
-                <title id="title">Jönköping</title>
-                @if ((string)Session["kommun"] == "Jönköping")
-                {
-                    <path class="k0680" fill="rgb(58, 145, 63)" d="m42.793-74.153 5.8196 5.3869 4.5902-7.7465 7.9605-1.6818-2.1409 5.0475 3.6741 17.847 10.713 4.7136 1.533-14.141 4.8987-4.7136-1.533-4.7136 3.3703-8.0806 3.9777-2.0198 3.3704-13.133 8.2641-4.7136 9.7973 1.6858 5.8198-6.0602-4.2864-25.928-7.3482-0.33391-5.8196 2.3543-1.8367-11.447 3.6741-8.0806 8.2689-4.0403 0.91648-9.4272 4.8989-1.3458-1.8367-22.895-7.9605-3.7009-8.5728 15.148-2.4493 10.44-11.938 8.4145-8.5728 16.5-2.4495 11.781-1.2238 14.48-6.1234 0.67392-3.6741 3.0276-3.3703-2.6935 1.2238-10.101-1.8367-10.434-3.3654-3.367-4.2864 4.7136-4.595-2.3596-5.2025 4.0403 0.30364 11.787-4.2864-1.0119-5.511-10.435-7.9605-3.7062-3.3654 8.4198-10.41-2.3596-0.3092 19.867-4.2864 7.0677-0.61284 7.0732 3.3703 9.7612-1.8367 6.7338-5.8196 3.0329-0.61284 5.3871 0.92018 11.447 8.2641-3.7064 4.8987 3.0329 4.595-10.44 5.2025-4.7136 7.348 2.0198 7.0444-9.0878 4.8988 7.4071z" />
-                }
-                else
-                {
-                    <path class="k0680" fill="rgb(161, 216, 132)" d="m42.793-74.153 5.8196 5.3869 4.5902-7.7465 7.9605-1.6818-2.1409 5.0475 3.6741 17.847 10.713 4.7136 1.533-14.141 4.8987-4.7136-1.533-4.7136 3.3703-8.0806 3.9777-2.0198 3.3704-13.133 8.2641-4.7136 9.7973 1.6858 5.8198-6.0602-4.2864-25.928-7.3482-0.33391-5.8196 2.3543-1.8367-11.447 3.6741-8.0806 8.2689-4.0403 0.91648-9.4272 4.8989-1.3458-1.8367-22.895-7.9605-3.7009-8.5728 15.148-2.4493 10.44-11.938 8.4145-8.5728 16.5-2.4495 11.781-1.2238 14.48-6.1234 0.67392-3.6741 3.0276-3.3703-2.6935 1.2238-10.101-1.8367-10.434-3.3654-3.367-4.2864 4.7136-4.595-2.3596-5.2025 4.0403 0.30364 11.787-4.2864-1.0119-5.511-10.435-7.9605-3.7062-3.3654 8.4198-10.41-2.3596-0.3092 19.867-4.2864 7.0677-0.61284 7.0732 3.3703 9.7612-1.8367 6.7338-5.8196 3.0329-0.61284 5.3871 0.92018 11.447 8.2641-3.7064 4.8987 3.0329 4.595-10.44 5.2025-4.7136 7.348 2.0198 7.0444-9.0878 4.8988 7.4071z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Värnamo">
-                <title id="title">Värnamo</title>
-                @if ((string)Session["kommun"] == "Värnamo")
-                {
-                    <path class="k0683" fill="rgb(58, 145, 63)" d="m65.758 113.72 6.1232-3.7062 6.7359-17.842-7.3482-10.44-1.2238-8.7537 2.4493-4.0403 0.61284-23.229h5.8148l-1.5275-9.4274 4.8987-3.3668 2.4495-19.867-4.2864-12.455-2.4495-11.447-5.8196 2.0197-6.4271 4.0403 0.30364 6.3944-3.3654 5.053-4.595-3.7064-10.41 3.7064-3.3654-2.3595-5.2073 3.7062-3.9777 5.3871-5.8198 5.387-7.9603-2.6935-2.1409-3.7064-6.7357 3.0329-0.3092 6.3944-15.612-1.3458-4.2866-1.0078-0.3092 14.475-3.6741 5.387 2.4493 4.7136 5.5111-1.6818 2.758 5.7211-2.758 6.0605 3.0616 11.113 8.8814 1.3478 4.8987 14.141 7.3482-4.0401 1.5293-6.0605 11.022-3.0329 6.7357 2.3596 4.595 5.7208 2.7532-2.354 7.0444 13.128 0.91649 10.44 5.2073 13.468z" />
-                }
-                else
-                {
-                    <path class="k0683" fill="rgb(161, 216, 132)" d="m65.758 113.72 6.1232-3.7062 6.7359-17.842-7.3482-10.44-1.2238-8.7537 2.4493-4.0403 0.61284-23.229h5.8148l-1.5275-9.4274 4.8987-3.3668 2.4495-19.867-4.2864-12.455-2.4495-11.447-5.8196 2.0197-6.4271 4.0403 0.30364 6.3944-3.3654 5.053-4.595-3.7064-10.41 3.7064-3.3654-2.3595-5.2073 3.7062-3.9777 5.3871-5.8198 5.387-7.9603-2.6935-2.1409-3.7064-6.7357 3.0329-0.3092 6.3944-15.612-1.3458-4.2866-1.0078-0.3092 14.475-3.6741 5.387 2.4493 4.7136 5.5111-1.6818 2.758 5.7211-2.758 6.0605 3.0616 11.113 8.8814 1.3478 4.8987 14.141 7.3482-4.0401 1.5293-6.0605 11.022-3.0329 6.7357 2.3596 4.595 5.7208 2.7532-2.354 7.0444 13.128 0.91649 10.44 5.2073 13.468z" />
-                }
-            </a>
-
-            <a xlink:href="/Municipality/ChooseMunicipality/Gislaved">
-                <title id="title">Gislaved</title>
-                @if ((string)Session["kommun"] == "Gislaved")
-                {
-                    <path class="k0662" fill="rgb(58, 145, 63)" d="m-59.468 56.143 11.022-5.0475 12.555 2.6935 3.0617-3.3668 1.2248 8.0804 3.6741-1.0119 10.101 7.0732-2.4493 9.4272 3.3703 8.0804 7.9605 3.367 2.7532-16.5 5.511-3.7009-3.0616-11.113 2.758-6.0605-2.758-5.721-5.5111 1.6797-2.4493-4.7136 3.6741-5.3869 0.30919-14.475 4.2864 1.0078 0.30364-7.4071-4.8987-10.101 0.30919-7.741-5.5111-2.0197-6.4321-1.0119 2.758-7.4073 4.5902-11.781 5.2073-8.0804 5.2025 1.6797 5.2073-4.7138 5.511 4.0403 3.9779-3.0274 7.6566 2.3541 1.2257-12.794-3.0618-8.0804 1.5275-6.3944-3.3655-2.3596-4.2864-4.7136-4.595 10.44-4.8987-3.0329-8.2641 3.7064-2.1457 6.7338-5.5111 4.3742-14.696 24.241-3.0616 8.7539-7.0395 4.0403v6.0602l-5.5111 1.3458-2.1456 4.7136-9.4888 2.3595-3.0617 13.801-5.5111-2.3541-3.674 5.3869-2.758 12.121-6.1234 8.7539-6.1234 5.0477 0.30864 8.0804 4.5901 16.161 11.331-10.774 1.2248-7.741z" />
-                }
-                else
-                {
-                    <path class="k0662" fill="rgb(161, 216, 132)" d="m-59.468 56.143 11.022-5.0475 12.555 2.6935 3.0617-3.3668 1.2248 8.0804 3.6741-1.0119 10.101 7.0732-2.4493 9.4272 3.3703 8.0804 7.9605 3.367 2.7532-16.5 5.511-3.7009-3.0616-11.113 2.758-6.0605-2.758-5.721-5.5111 1.6797-2.4493-4.7136 3.6741-5.3869 0.30919-14.475 4.2864 1.0078 0.30364-7.4071-4.8987-10.101 0.30919-7.741-5.5111-2.0197-6.4321-1.0119 2.758-7.4073 4.5902-11.781 5.2073-8.0804 5.2025 1.6797 5.2073-4.7138 5.511 4.0403 3.9779-3.0274 7.6566 2.3541 1.2257-12.794-3.0618-8.0804 1.5275-6.3944-3.3655-2.3596-4.2864-4.7136-4.595 10.44-4.8987-3.0329-8.2641 3.7064-2.1457 6.7338-5.5111 4.3742-14.696 24.241-3.0616 8.7539-7.0395 4.0403v6.0602l-5.5111 1.3458-2.1456 4.7136-9.4888 2.3595-3.0617 13.801-5.5111-2.3541-3.674 5.3869-2.758 12.121-6.1234 8.7539-6.1234 5.0477 0.30864 8.0804 4.5901 16.161 11.331-10.774 1.2248-7.741z" />
-                }
-            </a>
-        </g>
-    </svg>
+            </g>
+        </svg>
 }
 
-
+@helper Timeinput()
+    {
+        if ((string)Session["chosenAction"] == "ShowPowerOfYear" && (bool?)Session["compare"] == true)
+        {
+            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.Min(x => x.Month)" max="@Model.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+        }
+        if ((string)Session["chosenAction"] == "ShowPowerOfMonth" && (bool?)Session["compare"] == true)
+        {
+            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.Min(x => x.Day)" max="@Model.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+        }
+}
 
 <div class="row container">
     <div class=" col-sm-4" style="padding-left: 15px">
@@ -442,7 +358,7 @@
         </div>
 
     </div>
-    <div class="col-sm-5" style="padding-left: 28px" color="#fff">
+    <div class="col-sm-6" style="padding-left: 28px" color="#fff">
         <ul class="nav nav-tabs">
             @DisplayActive()
         </ul>
@@ -465,5 +381,12 @@
         <br />
 
     </div>
-    @ChartButton()
+    <div class="col-sm-2" style="margin-top:2%">
+        <div class="row">
+            <div class="col"> @ChartButton() </div>
+        </div>
+        <div class="row" style="padding-top: 15px">
+            <div class="col"> @Timeinput() </div>
+        </div>
+    </div>
 </div>
