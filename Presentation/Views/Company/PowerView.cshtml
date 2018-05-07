@@ -256,7 +256,7 @@
             <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
             <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
         }
-        else if (totalenergi > 1000)
+        else if (totalenergi < 1000)
         {
             <h2> @Math.Round(totalenergi) Wh </h2>
         }

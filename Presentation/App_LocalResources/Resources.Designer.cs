@@ -162,6 +162,16 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap sun {
+            get {
+                object obj = ResourceManager.GetObject("sun", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to m126.68-190.65 0.9202 7.7412 16.837-3.7009 4.595-10.101 5.8148 3.3668 5.2073 21.548 2.7532 8.0806-4.2864 5.7211-3.9777 10.44-5.8198-3.7064-9.7973-2.0198-9.4889 3.3668-3.0618-3.7009-12.859-0.67393 1.8367-7.0732-3.9826-3.3668-1.8367-22.895z.
         /// </summary>
         public static string Tranås {

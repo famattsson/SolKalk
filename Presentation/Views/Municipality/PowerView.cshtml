@@ -5,25 +5,32 @@
 @using System.Collections
 @using Resources;
 
-@model List<ProducedMunicipalPower>
-<!-------------try.get true/false----------->
+@model HandledData
+
 @{
     Dictionary<string, double> PowerDict = new Dictionary<string, double>();
     Dictionary<string, Dictionary<string, double>> monthPowerDict = new Dictionary<string, Dictionary<string, double>>();
-    List<string> Kommuner = new List<string>() { "Aneby", "Tranås", "Nässjö", "Eksjö", "Vetlanda", "Sävsjö", "Värnamo", "Gislaved", "Gnosjö", "Vaggeryd", "Jönköping", "Habo", "Mullsjö"};
+    List<string> Kommuner = new List<string>() { "Aneby", "Tranås", "Nässjö", "Eksjö", "Vetlanda", "Sävsjö", "Värnamo", "Gislaved", "Gnosjö", "Vaggeryd", "Jönköping", "Habo", "Mullsjö" };
 
     var month = "";
     foreach (var elem in Kommuner)
     {
         PowerDict.Add(elem, 0);
     }
-    foreach (var elem in Model)
+    foreach (var elem in Model.powerRecords)
     {
-        PowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
+        if ((bool?)Session["perInhabitant"] == false)
+        {
+            PowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
+        }
+        else
+        {
+            PowerDict[elem.Kommun] += Math.Round(elem.Energi);
+        }
     }
 
     Dictionary<string, double> tempPowerDict = new Dictionary<string, double>();
-    foreach (var elem in Model)
+    foreach (var elem in Model.powerRecords)
     {
         if (elem.Month != month)
         {
@@ -33,7 +40,15 @@
                 tempPowerDict.Add(elem1, 0);
             }
         }
-        tempPowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
+
+        if ((bool?)Session["perInhabitant"] == false)
+        {
+            tempPowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
+        }
+        else
+        {
+            tempPowerDict[elem.Kommun] += Math.Round(elem.Energi);
+        }
         monthPowerDict[elem.Month] = new Dictionary<string, double>(tempPowerDict);
         month = elem.Month;
     }
@@ -48,7 +63,7 @@
     var data = null;
     var chart = null;
     var options = null;
-    var ModelJson = @Html.Raw(Json.Encode(Model));
+    var ModelJson = @Html.Raw(Json.Encode(Model.powerRecords));
     var monthSummedList = []
     @foreach(var monthelem in monthPowerDict)
 
@@ -76,8 +91,11 @@
 
     function drawChart() {
         data = new google.visualization.DataTable();
+
         data.addColumn("string", "Kommun");
-        data.addColumn("number", "Kwh");
+        @if((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Wh");</text> }
+        else { <text>data.addColumn("number", "Kwh");</text> }
+
         @foreach (var elem in PowerDict)
         {
             <text>
@@ -110,7 +128,13 @@
         if ("@Session["chosenAction"]" == "ShowPowerOfMonth") {
             for (var i = 0; i < ModelJson.length; i++) {
                 if (ModelJson[i].Day == timeUnit) {
-                    data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi / 1000)]);
+                    if (ModelJson[i].Energi < 1000) {
+                        data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi)]);
+                    }
+                    else {
+                        data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi / 1000)]);
+                    }
+
                 }
             }
         }
@@ -221,7 +245,7 @@
 @helper DisplayEnergy()
     {
         double totalenergi = 0;
-        foreach (var elem in Model)
+        foreach (var elem in Model.powerRecords)
         {
             totalenergi += elem.Energi;
         }
@@ -252,7 +276,7 @@
             <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
             <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
         }
-        else if (totalenergi > 1000)
+        else if (totalenergi < 1000)
         {
             <h2> @Math.Round(totalenergi) Wh </h2>
         }
@@ -325,11 +349,39 @@
     {
         if ((string)Session["chosenAction"] == "ShowPowerOfYear" && (bool?)Session["compare"] == true)
         {
-            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.Min(x => x.Month)" max="@Model.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
         if ((string)Session["chosenAction"] == "ShowPowerOfMonth" && (bool?)Session["compare"] == true)
         {
-            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.Min(x => x.Day)" max="@Model.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+        }
+}
+
+@helper DisplayWeatherQuality()
+    {
+        int maxWeatherRating = 5;
+        ImageConverter converter = new ImageConverter();
+        Bitmap sunImg = Resources.sun;
+        byte[] imagebytes = (byte[])converter.ConvertTo(sunImg, typeof(byte[]));
+        for (var i = 0; i < Model.weatherRating; i++)
+        {
+            <img src="@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(imagebytes))" class="img-responsive" style="margin-right:5px; display:inline; max-width:35px; max-height:35px" />
+        }
+        for (var i = 0; i < maxWeatherRating - Model.weatherRating; i++)
+        {
+            <img src="@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(imagebytes))" class="img-responsive" style="filter: grayscale(100%); margin-right:5px; display:inline; max-width:35px; max-height:35px" />
+        }
+}
+
+@helper PerInhabitantButton()
+    {
+        if ((bool?)Session["perInhabitant"] == true)
+        {
+            <a class="btnmunicipal btn btn-info" role="button" href="/Municipality/PerInhabitant/false"> Se Totalt </a>
+        }
+        else
+        {
+            <a class="btnmunicipal btn btn-info" role="button" href="/Municipality/PerInhabitant/true"> Se Per Invånare </a>
         }
 }
 
@@ -379,14 +431,23 @@
             @DisplayEnergy()
         }
         <br />
-
+        <div class="row" style="padding-bottom:50px">
+            <div class="col-sm-6">
+                <h2 class="text-info"> Väder kvalité </h2>
+                @DisplayWeatherQuality()
+            </div>
+        </div>
     </div>
-    <div class="col-sm-2" style="margin-top:2%">
+    <div class="col-sm-2" style="">
         <div class="row">
             <div class="col"> @ChartButton() </div>
+        </div>
+        <div class="row" style="padding-top:5px">
+            <div class="col"> @PerInhabitantButton() </div>
         </div>
         <div class="row" style="padding-top: 15px">
             <div class="col"> @Timeinput() </div>
         </div>
+
     </div>
 </div>

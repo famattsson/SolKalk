@@ -130,6 +130,7 @@
     <None Include="Resources\vetlanda.png" />
     <None Include="Resources\värnamo.png" />
     <None Include="Resources\Husqvarna.jpg" />
+    <Content Include="Resources\sun.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

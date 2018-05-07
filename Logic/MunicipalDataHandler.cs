@@ -6,28 +6,92 @@ using System.Threading.Tasks;
 using System.Globalization;
 using Data;
 
+public struct HandledData
+{
+    public List<ProducedMunicipalPower> powerRecords;
+    public int weatherRating;
+}
 
 namespace Logic
 {
-    static public class MunicipalDataHandler
+    public class MunicipalDataHandler
     {
 
-        static public List<ProducedMunicipalPower> GetTotalProducedPower(string kommun = null)
+        static public HandledData GetTotalProducedPower(string kommun = null, bool? perInhabitant = false)
         {
-            return MunicipalDataAccesser.GetTotalProducedPower(kommun);
+            if (perInhabitant == true)
+            {
+                HandledData handledData = new HandledData();
+                handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetTotalProducedPower(kommun));
+                handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
+                return handledData;
+            }
+            else
+            {
+                HandledData handledData = new HandledData();
+                handledData.powerRecords = MunicipalDataAccesser.GetTotalProducedPower(kommun);
+                handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
+                return handledData;
+            }
+            
         }
-        static public List<ProducedMunicipalPower> GetProducedPowerOfDay(string date, string kommun = null)
+
+        static public HandledData GetProducedPowerOfDay(string date, string kommun = null, bool? perInhabitant = false)
         {
-            return MunicipalDataAccesser.GetProducedPowerOfDay(ConvertDate(date), kommun);
+            if (perInhabitant == true)
+            {
+                HandledData handledData = new HandledData();
+                handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfDay(ConvertDate(date), kommun));
+                handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
+                return handledData;
+            }
+            else
+            {
+                HandledData handledData = new HandledData();
+                handledData.powerRecords = MunicipalDataAccesser.GetProducedPowerOfDay(ConvertDate(date), kommun);
+                handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
+                return handledData;
+            }
+            
         }
-        static public List<ProducedMunicipalPower> GetProducedPowerOfMonth(string date, string kommun = null)
+
+        static public HandledData GetProducedPowerOfMonth(string date, string kommun = null, bool? perInhabitant = false)
         {
-            return MunicipalDataAccesser.GetProducedPowerOfMonth(ConvertDate(date),kommun);
+            
+            if(perInhabitant == true)
+            {
+                HandledData handledData = new HandledData();
+                handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfMonth(ConvertDate(date),kommun));
+                handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
+                return handledData;
+            }
+            else
+            {
+                HandledData handledData = new HandledData();
+                handledData.powerRecords = MunicipalDataAccesser.GetProducedPowerOfMonth(ConvertDate(date), kommun);
+                handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
+                return handledData;
+            }
         }
-        static public List<ProducedMunicipalPower> GetProducedPowerOfYear(string date, string kommun = null)
+
+        static public HandledData GetProducedPowerOfYear(string date, string kommun = null, bool? perInhabitant = false)
         {
-            return MunicipalDataAccesser.GetProducedPowerOfYear(ConvertDate(date), kommun);
+            if (perInhabitant == true)
+            {
+                HandledData handledData = new HandledData();
+                handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfYear(ConvertDate(date), kommun));
+                handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
+                return handledData;
+            }
+            else
+            {
+                HandledData handledData = new HandledData();
+                handledData.powerRecords = MunicipalDataAccesser.GetProducedPowerOfYear(ConvertDate(date), kommun);
+                handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
+                return handledData;
+            }
         }
+
         static private Date ConvertDate(string date)
         {
             Date formattedDate = new Date();
@@ -54,5 +118,38 @@ namespace Logic
             formattedDate.date = String.Format("{0} {1} {2} {3}", year, month, day, hour);
             return formattedDate;
         }
+
+        static private List<ProducedMunicipalPower> ConvertToPerInhabitant(List<ProducedMunicipalPower> powerRecords)
+        {
+            foreach(var record in powerRecords)
+            {
+                record.Energi /= record.Inhabitants;
+            }
+            return powerRecords;
+        }
+
+        static private int CalculateWeatherRating(List<ProducedMunicipalPower> powerRecords)
+        {
+            double averageIrradiance = 0;
+            Dictionary<int, int> WeatherQualityIndex = new Dictionary<int, int> {
+                {0,0}, {80,1},{160,2},{240,3},{320,4},{400,5}
+            };
+            foreach (var record in powerRecords)
+            {
+                averageIrradiance += record.Irradiance;
+            }
+            averageIrradiance /= powerRecords.Count;
+            var lastValue = 0;
+            foreach (var index in WeatherQualityIndex)
+            {
+                if (averageIrradiance >= WeatherQualityIndex[lastValue] && averageIrradiance < index.Key)
+                {
+                    return WeatherQualityIndex[lastValue];
+                }
+                lastValue = index.Key;
+            }
+            return WeatherQualityIndex[lastValue];
+        }
+
     }
 }
