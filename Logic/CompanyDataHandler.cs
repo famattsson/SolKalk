@@ -82,7 +82,7 @@ namespace Logic
         static private int CalculateWeatherRating(List<ProducedCompanyPower> powerRecords)
         {
             double averageIrradiance = 0;
-            double firstFullSunValue = 80f;
+            double firstFullSunValue = 70f;
             double irradianceRatingFactor = 100f / firstFullSunValue;
             // 100% / Första värdet som ger en full sol. Detta ger en faktor att multiplicera averageIrradiance med för att pass den till skalan
 

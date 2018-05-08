@@ -46,7 +46,7 @@
     var data = null;
     var chart = null;
     var options = null;
-    var ModelJson = @Html.Raw(Json.Encode(Model));
+    var ModelJson = @Html.Raw(Json.Encode(Model.powerRecords));
     var monthSummedList = []
     @foreach(var monthelem in monthCompanyPowerDict)
 

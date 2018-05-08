@@ -19,13 +19,13 @@
     }
     foreach (var elem in Model.powerRecords)
     {
-        if ((bool?)Session["perInhabitant"] == false)
+        if ((bool?)Session["perInhabitant"] == true)
         {
-            PowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
+            PowerDict[elem.Kommun] += Math.Round(elem.Energi);
         }
         else
         {
-            PowerDict[elem.Kommun] += Math.Round(elem.Energi);
+            PowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
         }
     }
 
@@ -103,17 +103,40 @@
                 data.addRow([name,@elem.Value]);
             </text>
         }
-        options = {
-            title: "Producerade kilowatttimmar",
+        @if((bool?)Session["perInhabitant"] == true)
+        {
+            <text>
+            options = {
+                title: "Producerade kilowatttimmar",
             bar: { groupWidth: "50%" },
             legend: { position: "none" },
-            animation: {
-                duration: 750,
+            animation:
+                {
+                    duration: 750,
                 easing: 'out'
             },
             series: { 0: { color: 'green' } },
-            vAxis: { minValue: 0, maxValue: 200 }
-        };
+            vAxis: { minValue: 0, maxValue: 500 }
+            };
+            </text>
+        }
+        else
+        {
+            <text>
+            options = {
+                title: "Producerade kilowatttimmar",
+            bar: { groupWidth: "50%" },
+            legend: { position: "none" },
+            animation:
+                {
+                    duration: 750,
+                easing: 'out'
+            },
+            series: { 0: { color: 'green' } },
+            vAxis: { minValue: 0, maxValue: 27500 }
+            };
+            </text>
+        }
 
         chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
         chart.draw(data, options);
