@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Threading.Tasks;
-using System.Globalization;
 using Data;
 
-public struct HandledData
+public struct HandledMunicipalData
 {
     public List<ProducedMunicipalPower> powerRecords;
     public int weatherRating;
@@ -17,18 +13,18 @@ namespace Logic
     public class MunicipalDataHandler
     {
 
-        static public HandledData GetTotalProducedPower(string kommun = null, bool? perInhabitant = false)
+        static public HandledMunicipalData GetTotalProducedPower(string kommun = null, bool? perInhabitant = false)
         {
             if (perInhabitant == true)
             {
-                HandledData handledData = new HandledData();
+                HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetTotalProducedPower(kommun));
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
             else
             {
-                HandledData handledData = new HandledData();
+                HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = MunicipalDataAccesser.GetTotalProducedPower(kommun);
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
@@ -36,18 +32,18 @@ namespace Logic
             
         }
 
-        static public HandledData GetProducedPowerOfDay(string date, string kommun = null, bool? perInhabitant = false)
+        static public HandledMunicipalData GetProducedPowerOfDay(string date, string kommun = null, bool? perInhabitant = false)
         {
             if (perInhabitant == true)
             {
-                HandledData handledData = new HandledData();
+                HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfDay(ConvertDate(date), kommun));
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
             else
             {
-                HandledData handledData = new HandledData();
+                HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = MunicipalDataAccesser.GetProducedPowerOfDay(ConvertDate(date), kommun);
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
@@ -55,37 +51,37 @@ namespace Logic
             
         }
 
-        static public HandledData GetProducedPowerOfMonth(string date, string kommun = null, bool? perInhabitant = false)
+        static public HandledMunicipalData GetProducedPowerOfMonth(string date, string kommun = null, bool? perInhabitant = false)
         {
             
             if(perInhabitant == true)
             {
-                HandledData handledData = new HandledData();
+                HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfMonth(ConvertDate(date),kommun));
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
             else
             {
-                HandledData handledData = new HandledData();
+                HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = MunicipalDataAccesser.GetProducedPowerOfMonth(ConvertDate(date), kommun);
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
         }
 
-        static public HandledData GetProducedPowerOfYear(string date, string kommun = null, bool? perInhabitant = false)
+        static public HandledMunicipalData GetProducedPowerOfYear(string date, string kommun = null, bool? perInhabitant = false)
         {
             if (perInhabitant == true)
             {
-                HandledData handledData = new HandledData();
+                HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfYear(ConvertDate(date), kommun));
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
             else
             {
-                HandledData handledData = new HandledData();
+                HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = MunicipalDataAccesser.GetProducedPowerOfYear(ConvertDate(date), kommun);
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
@@ -131,24 +127,19 @@ namespace Logic
         static private int CalculateWeatherRating(List<ProducedMunicipalPower> powerRecords)
         {
             double averageIrradiance = 0;
-            Dictionary<int, int> WeatherQualityIndex = new Dictionary<int, int> {
-                {0,0}, {80,1},{160,2},{240,3},{320,4},{400,5}
-            };
+            double firstFullSunValue = 80f;
+            double irradianceRatingFactor = 100f / firstFullSunValue;
+            // 100% / Första värdet som ger en full sol. Detta ger en faktor att multiplicera averageIrradiance med för att pass den till skalan
+
             foreach (var record in powerRecords)
             {
                 averageIrradiance += record.Irradiance;
             }
-            averageIrradiance /= powerRecords.Count;
-            var lastValue = 0;
-            foreach (var index in WeatherQualityIndex)
+            if(averageIrradiance > 0)
             {
-                if (averageIrradiance >= WeatherQualityIndex[lastValue] && averageIrradiance < index.Key)
-                {
-                    return WeatherQualityIndex[lastValue];
-                }
-                lastValue = index.Key;
+                averageIrradiance /= powerRecords.Count;
             }
-            return WeatherQualityIndex[lastValue];
+            return (int)Math.Round(averageIrradiance * irradianceRatingFactor);
         }
 
     }

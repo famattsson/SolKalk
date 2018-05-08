@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Logic;
-using Data;
-using System.Text;
 
 namespace Presentation.Controllers
 {
@@ -53,11 +48,13 @@ namespace Presentation.Controllers
             {
                 Session["compare"] = false;
                 Session["kommun"] = Session["kommunOld"];
+                Session["företag"] = Session["företagOld"];
             }
             else
             {
                 Session["compare"] = true;
                 Session["kommun"] = null;
+                Session["företag"] = null;
             }
             return RedirectToAction((string)Session["chosenACtion"]);
         }
