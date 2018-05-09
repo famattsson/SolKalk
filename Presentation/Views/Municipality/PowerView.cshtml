@@ -342,7 +342,7 @@
 @helper DisplaySVGMap()
     {
         ResourceSet resourceSet = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
-        <svg style="max-width:300px; max-height:300px" version="1.1" viewBox="0 0 317.5 317.5" xmlns="http://www.w3.org/2000/svg" xlmns:xlink="http://www.w3.org/1999/xlink">
+        <svg style=" padding-top:10px; max-height:300px" version="1.1" viewBox="0 0 317.5 317.5" xmlns="http://www.w3.org/2000/svg" xlmns:xlink="http://www.w3.org/1999/xlink">
             <g transform="translate(82.124 203.78)" stroke-width="5.1371">
                 @foreach (DictionaryEntry resource in resourceSet)
                 {
@@ -432,7 +432,7 @@
         }
         @DisplaySVGMap()
 
-        <button data-toggle="collapse" class="infobtncompany btn collapsed" style="padding-left:75px" data-target="#info"> Hur det fungerar </button>
+        <button data-toggle="collapse" class="infobtncompany btn collapsed" style="padding-left:110px" data-target="#info"> Hur det fungerar </button>
         <div class="infodiv collapse" id="info">
             <p class="text-info">
                 Observera att datan som presenteras på denna sida inte är fullständigt exakt och momentan.
