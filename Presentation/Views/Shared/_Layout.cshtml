@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using System.Drawing;
+@using System.Collections
+@using Resources;
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -34,7 +38,14 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            @{
+                ImageConverter converter = new ImageConverter();
+                byte[] imagebytes = (byte[])converter.ConvertTo(Resources.Cybercom, typeof(byte[]));
+                <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imagebytes))" style="display:inline; margin-left: 80%" class="img-responsive img-rounded" width="100" height="100" />
+
+                byte[] imagebyte = (byte[])converter.ConvertTo(Resources.klimatradet, typeof(byte[]));
+                <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imagebyte))" style="display:inline" class="img-responsive" width="90" height="00" />
+            }
         </footer>
     </div>
 
