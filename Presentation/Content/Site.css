@@ -28,6 +28,10 @@ path:hover {
     fill: rgb(58, 145, 63);
 }
 
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
+}
+
 .btnmunicipal {
     background-color: rgb(0, 153, 51) !important;
     font-family: "Lato", sans-serif !important;

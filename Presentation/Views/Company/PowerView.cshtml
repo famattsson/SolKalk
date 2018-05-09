@@ -1,11 +1,10 @@
-﻿@using Data
-@using System.Resources
+﻿@using System.Resources
 @using System.Globalization
 @using System.Drawing;
 @using System.Collections
 @using Resources;
 
-@model List<ProducedCompanyPower>
+@model HandledCompanyData
 <!-------------try.get true/false----------->
 @{
     Dictionary<string, double> companyPowerDict = new Dictionary<string, double>();
@@ -16,13 +15,13 @@
     {
         companyPowerDict.Add(elem, 0);
     }
-    foreach (var elem in Model)
+    foreach (var elem in Model.powerRecords)
     {
         companyPowerDict[elem.Företag] += Math.Round(elem.Energi / 1000);
     }
 
     Dictionary<string, double> monthlyCompanyPowerDict = new Dictionary<string, double>();
-    foreach (var elem in Model)
+    foreach (var elem in Model.powerRecords)
     {
         if (elem.Month != month)
         {
@@ -47,7 +46,7 @@
     var data = null;
     var chart = null;
     var options = null;
-    var ModelJson = @Html.Raw(Json.Encode(Model));
+    var ModelJson = @Html.Raw(Json.Encode(Model.powerRecords));
     var monthSummedList = []
     @foreach(var monthelem in monthCompanyPowerDict)
 
@@ -129,27 +128,27 @@
     {
         if ((string)Session["chosenACtion"] == "ShowPowerOfYear")
         {
-            <li class="active"><a href="/Company/ShowPowerOfYear"> Visa senaste året </a></li>
+            <li class="active"><a href="/Company/ShowPowerOfYear"> Senaste året </a></li>
         }
         else if ((string)Session["chosenACtion"] != "ShowPowerOfYear")
         {
-            <li><a href="/Company/ShowPowerOfYear"> Visa senaste året </a></li>
+            <li><a href="/Company/ShowPowerOfYear"> Senaste året </a></li>
         }
         if ((string)Session["ChosenACtion"] == "ShowPowerOfMonth")
         {
-            <li class="active"><a href="/Company/ShowPowerOfMonth"> Visa senaste månaden </a></li>
+            <li class="active"><a href="/Company/ShowPowerOfMonth"> Senaste månaden </a></li>
         }
         else if ((string)Session["ChosenACtion"] != "ShowPowerOfMonth")
         {
-            <li><a href="/Company/ShowPowerOfMonth"> Visa senaste månaden </a></li>
+            <li><a href="/Company/ShowPowerOfMonth"> Senaste månaden </a></li>
         }
         if ((string)Session["ChosenACtion"] == "ShowPowerOfDay")
         {
-            <li class="active"><a href="/Company/ShowPowerOfDay"> Visa senaste dagen </a></li>
+            <li class="active"><a href="/Company/ShowPowerOfDay"> Igår </a></li>
         }
         else if ((string)Session["ChosenACtion"] != "ShowPowerOfDay")
         {
-            <li><a href="/Company/ShowPowerOfDay"> Visa senaste dagen </a></li>
+            <li><a href="/Company/ShowPowerOfDay"> Igår </a></li>
         }
 }
 
@@ -221,7 +220,7 @@
 @helper DisplayEnergy()
     {
         double totalenergi = 0;
-        foreach (var elem in Model)
+        foreach (var elem in Model.powerRecords)
         {
             totalenergi += elem.Energi;
         }
@@ -315,11 +314,35 @@
     {
         if ((string)Session["chosenAction"] == "ShowPowerOfYear" && (bool?)Session["compare"] == true)
         {
-            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.Min(x => x.Month)" max="@Model.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
         if ((string)Session["chosenAction"] == "ShowPowerOfMonth" && (bool?)Session["compare"] == true)
         {
-            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.Min(x => x.Day)" max="@Model.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px"/>
+            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+        }
+}
+
+@helper DisplayWeatherQuality()
+    {
+        int maxWeatherRating = 5;
+        ImageConverter converter = new ImageConverter();
+        Bitmap sunImg = Resources.sun;
+        byte[] imagebytes = (byte[])converter.ConvertTo(sunImg, typeof(byte[]));
+        int weatherRating = Model.weatherRating;
+        List<int> weatherRatingInts = new List<int>();
+
+        for (var i = 0; i < maxWeatherRating; i++)
+        {
+            if (weatherRating - 100 >= 0)
+            {
+                <img src="@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(imagebytes))" class="img-responsive" style="filter: grayscale(0%); margin-right:5px; display:inline; max-width:35px; max-height:35px" />
+                weatherRating -= 100;
+            }
+            else
+            {
+                <img src="@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(imagebytes))" class="img-responsive" style="filter: grayscale(@(100-weatherRating)%); margin-right:5px; display:inline; max-width:35px; max-height:35px" />
+                weatherRating = 0;
+            }
         }
 }
 
@@ -367,6 +390,12 @@
                 <h3>@((string)Session["företag"])</h3>
             }
             @DisplayEnergy()
+            <div class="row" style="padding-bottom:50px">
+                <div class="col-sm-6">
+                    <h2 class="text-info"> Väder kvalité </h2>
+                    @DisplayWeatherQuality()
+                </div>
+            </div>
         }
         <br />
     </div>

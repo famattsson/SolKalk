@@ -115,6 +115,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
     <None Include="Resources\alla_kommuner.png" />
     <None Include="Resources\Aneby.png" />
     <None Include="Resources\eksjö.png" />

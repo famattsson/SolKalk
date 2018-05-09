@@ -11,6 +11,7 @@ namespace Presentation.Controllers
         // GET: Home
         public ActionResult Index()
         {
+            Session["chosenAction"] = "ShowPowerOfDay";
             return View("HomeView");
         }
     }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Logic;
 
@@ -46,20 +43,16 @@ namespace Presentation.Controllers
             if (id == null || id == 0 || (bool?)Session["compare"] == true)
             {
                 Session["compare"] = false;
+                Session["kommun"] = Session["kommunOld"];
                 Session["företag"] = Session["företagOld"];
             }
             else
             {
                 Session["compare"] = true;
+                Session["kommun"] = null;
                 Session["företag"] = null;
             }
             return RedirectToAction((string)Session["chosenACtion"]);
-
-        }
-        public ActionResult SetDay(int id)
-        {
-            Session["day"] = id;
-            return new EmptyResult();
         }
     }
 }
