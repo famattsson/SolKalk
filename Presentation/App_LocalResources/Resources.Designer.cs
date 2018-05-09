@@ -80,6 +80,16 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Cybercom {
+            get {
+                object obj = ResourceManager.GetObject("Cybercom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to m151.49-102.43 6.4273 1.6818 10.41-2.6935 4.8987 12.794 17.454-2.0197 15.921 4.0403 3.0616 6.7338 8.5728 2.0198 17.146 14.814-9.185 12.794-8.2691-2.0197-5.511 9.4275-7.0395 0.34001-5.5111 6.0605-7.6566-6.0605-10.101-1.0119-5.8198 2.6935-9.7973-0.67393-8.5728-7.4071-8.2643-2.0198-2.1455-8.4145-9.7975-2.0198-6.7357-3.7062 4.2864-10.774 10.41-13.468-2.1407-5.0475z.
         /// </summary>
         public static string Eksjö {
@@ -131,6 +141,16 @@ namespace Resources {
         public static string Jönköping {
             get {
                 return ResourceManager.GetString("Jönköping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap klimatradet {
+            get {
+                object obj = ResourceManager.GetObject("klimatradet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

@@ -362,7 +362,7 @@ else if (prefix == 'n')
 @helper DisplaySVGMap()
     {
         ResourceSet resourceSet = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
-        <svg style="max-width:300px; max-height:300px" version="1.1" viewBox="0 0 317.5 317.5" xmlns="http://www.w3.org/2000/svg" xlmns:xlink="http://www.w3.org/1999/xlink">
+        <svg style=" padding-top:10px; max-height:300px" version="1.1" viewBox="0 0 317.5 317.5" xmlns="http://www.w3.org/2000/svg" xlmns:xlink="http://www.w3.org/1999/xlink">
             <g transform="translate(82.124 203.78)" stroke-width="5.1371">
                 @foreach (DictionaryEntry resource in resourceSet)
                 {
@@ -449,10 +449,16 @@ else if (prefix == 'n')
                     @GenerateDropdownContents()
                 </ul>
             </div>
+            @DisplaySVGMap()
         }
-        @DisplaySVGMap()
+        else
+        {
+            <div style="padding-top:34px">
+                 @DisplaySVGMap()
+            </div>
+        }
 
-        <button data-toggle="collapse" class="infobtncompany btn collapsed" style="padding-left:75px" data-target="#info"> Hur det fungerar </button>
+        <button data-toggle="collapse" class="infobtncompany btn collapsed" style="padding-left:110px" data-target="#info"> Hur det fungerar </button>
         <div class="infodiv collapse" id="info">
             <p class="text-info">
                 Observera att datan som presenteras på denna sida inte är fullständigt exakt och momentan.
@@ -481,25 +487,26 @@ else if (prefix == 'n')
                 <h3>@((string)Session["kommun"])</h3>
             }
             @DisplayEnergy()
-            <div class="row" style="padding-bottom:50px">
-                <div class="col-sm-6">
-                    <h2 class="text-info"> Väder kvalité </h2>
-                    @DisplayWeatherQuality()
-                </div>
-            </div>
         }
         <br />
+        <div class="row" style="padding-bottom:50px">
+            <div class="col-sm-6">
+                @if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+                {
+                    @DisplayWeatherQuality()
+                }
+            </div>
+        </div>
     </div>
-    <div class="col-sm-2" style="">
-        <div class="row">
-            <div class="col"> @ChartButton() </div>
-        </div>
-        <div class="row" style="padding-top:5px">
-            <div class="col"> @PerInhabitantButton() </div>
-        </div>
-        <div class="row" style="padding-top: 15px">
-            <div class="col"> @Timeinput() </div>
-        </div>
+ 
+    <div class="col-sm-2">
+        <div class="col"> @ChartButton() </div>
+        <div class="row" style="padding:5px 0px 0px 15px">
+                <div class="col"> @PerInhabitantButton() </div>
+            </div>
+            <div class="row" style="padding: 15px 0px 0px 15px">
+                <div class="col"> @Timeinput() </div>
+            </div>
+    </div>
 
-    </div>
 </div>
