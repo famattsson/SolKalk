@@ -398,8 +398,14 @@
                     @GenerateDropdownContents()
                 </ul>
             </div>
+            @DisplaySVGMap()
         }
-        @DisplaySVGMap()
+        else
+        {
+            <div style="padding-top:34px">
+                 @DisplaySVGMap()
+            </div>
+        }
 
         <button data-toggle="collapse" class="infobtncompany btn collapsed" style="padding-left:75px" data-target="#info"> Hur det fungerar </button>
         <div class="infodiv collapse" id="info">
@@ -433,21 +439,22 @@
         <br />
         <div class="row" style="padding-bottom:50px">
             <div class="col-sm-6">
-                <h2 class="text-info"> Väder kvalité </h2>
-                @DisplayWeatherQuality()
+                @if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+                {
+                    @DisplayWeatherQuality()
+                }
             </div>
         </div>
     </div>
-    <div class="col-sm-2" style="">
-        <div class="row">
-            <div class="col"> @ChartButton() </div>
-        </div>
-        <div class="row" style="padding-top:5px">
-            <div class="col"> @PerInhabitantButton() </div>
-        </div>
-        <div class="row" style="padding-top: 15px">
-            <div class="col"> @Timeinput() </div>
-        </div>
-
+ 
+    <div class="col-sm-2">
+        <div class="col"> @ChartButton() </div>
+        <div class="row" style="padding:5px 0px 0px 15px">
+                <div class="col"> @PerInhabitantButton() </div>
+            </div>
+            <div class="row" style="padding: 15px 0px 0px 15px">
+                <div class="col"> @Timeinput() </div>
+            </div>
     </div>
+
 </div>
