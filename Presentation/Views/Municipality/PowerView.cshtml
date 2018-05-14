@@ -107,8 +107,8 @@
         {
             <text>
             options = {
-                title: "Producerade kilowatttimmar",
-            bar: { groupWidth: "50%" },
+                title: "Estimerad energi per invånare i alla kommuner",
+            bar: { groupWidth: "65%" },
             legend: { position: "none" },
             animation:
                 {
@@ -124,8 +124,8 @@
         {
             <text>
             options = {
-                title: "Producerade kilowatttimmar",
-            bar: { groupWidth: "50%" },
+                title: "Producerad energi i alla kommuner",
+            bar: { groupWidth: "65%" },
             legend: { position: "none" },
             animation:
                 {
@@ -344,7 +344,7 @@ else if (prefix == 'n')
 
 @helper DisplayComparison()
     {
-        <div id="columnchart_values"></div>
+        <div id="columnchart_values" style="padding-top:40px"></div>
 }
 
 @helper ChartButton()

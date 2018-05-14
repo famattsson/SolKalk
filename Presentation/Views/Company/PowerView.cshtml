@@ -224,22 +224,6 @@
         {
             totalenergi += elem.Energi;
         }
-        if ((string)Session["chosenACtion"] == "ShowPowerOfYear")
-        {
-            <h2>Energi genererad senaste året:</h2>
-        }
-        else if ((string)Session["chosenACtion"] == "ShowPowerOfMonth")
-        {
-            <h2>Energi genererad denna månaden:</h2>
-        }
-        else if ((string)Session["chosenACtion"] == "ShowPowerOfDay")
-        {
-            <h2>Energi genererad senaste dagen:</h2>
-        }
-        else if ((string)Session["chosenACtion"] == "Recalculate")
-        {
-            <h2>Total energi:</h2>
-        }
         if (totalenergi > 1000000000)
         {
             <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
@@ -392,7 +376,6 @@
             @DisplayEnergy()
             <div class="row" style="padding-bottom:50px">
                 <div class="col-sm-6">
-                    <h2 class="text-info"> Väder kvalité </h2>
                     @DisplayWeatherQuality()
                 </div>
             </div>
