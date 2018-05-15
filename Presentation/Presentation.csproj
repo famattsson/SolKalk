@@ -133,6 +133,11 @@
     <None Include="Resources\Husqvarna.jpg" />
     <None Include="Images\Cybercom.png" />
     <None Include="Images\klimatradet.png" />
+    <Content Include="Resources\Image1.bmp" />
+    <Content Include="Resources\Naturvärdsverket.png" />
+    <Content Include="Resources\smhi.png" />
+    <Content Include="Resources\solstartbild.jpg" />
+    <Content Include="Resources\ssm.png" />
     <Content Include="Resources\sun.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -145,8 +150,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_LocalResources\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />

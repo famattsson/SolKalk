@@ -11,6 +11,12 @@
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    @{ 
+        ImageConverter imageConverter = new ImageConverter();
+        Image image = Resources.sun;
+        byte[] imageBytes = (byte[])imageConverter.ConvertTo(image, typeof(byte[]));
+        <link rel="icon" href="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" />
+    }
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script src="~/Scripts/he.js"></script>
@@ -38,14 +44,40 @@
         @RenderBody()
         <hr />
         <footer>
-            @{
-                ImageConverter converter = new ImageConverter();
-                byte[] imagebytes = (byte[])converter.ConvertTo(Resources.Cybercom, typeof(byte[]));
-                <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imagebytes))" style="display:inline; margin-left: 80%" class="img-responsive img-rounded" width="100" height="100" />
+            <div class="row">
+                <div class="col-sm-4">
+                    @if((bool)Session["onHome"] != true)
+                    {
+                        <button type="button" class="infobtn btn collapsed" data-toggle="collapse" style="padding-left:80px" data-target="#info"> Hur det fungerar </button>
+                        <div class="infodiv collapse" id="info">
+                            <p class="text-info">
+                                @Resources.Description
+                            </p>
+                        </div>
+                    }
 
-                byte[] imagebyte = (byte[])converter.ConvertTo(Resources.klimatradet, typeof(byte[]));
-                <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imagebyte))" style="display:inline" class="img-responsive" width="90" height="00" />
-            }
+                </div>
+                <div class="col-sm-3"></div>
+                <div class="col-sm-5">
+                    @{
+                        ImageConverter converter = new ImageConverter();
+                        imageBytes = (byte[])converter.ConvertTo(Resources.Cybercom, typeof(byte[]));
+                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive img-rounded" />
+
+                        imageBytes = (byte[])converter.ConvertTo(Resources.klimatradet, typeof(byte[]));
+                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive" />
+
+                        imageBytes = (byte[])converter.ConvertTo(Resources.Naturvärdsverket, typeof(byte[]));
+                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive img-rounded" />
+
+                        imageBytes = (byte[])converter.ConvertTo(Resources.smhi, typeof(byte[]));
+                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive" />
+
+                        imageBytes = (byte[])converter.ConvertTo(Resources.ssm, typeof(byte[]));
+                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive"/>
+                    }
+                </div>
+            </div> 
         </footer>
     </div>
 

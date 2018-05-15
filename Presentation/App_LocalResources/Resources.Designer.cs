@@ -90,6 +90,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observera att datan som presenteras här inte är fullständingt exakt eller momentan. Datan estimeras baserat på insamlad statistik från klimatrådet.  Datan uppdateras varje dag kl. 12:30. STRÅNG har använts för insamling av irradiansdata. Irradians är den effekt som solen alstrar på en kvadratmeter på jordens yta..
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to m151.49-102.43 6.4273 1.6818 10.41-2.6935 4.8987 12.794 17.454-2.0197 15.921 4.0403 3.0616 6.7338 8.5728 2.0198 17.146 14.814-9.185 12.794-8.2691-2.0197-5.511 9.4275-7.0395 0.34001-5.5111 6.0605-7.6566-6.0605-10.101-1.0119-5.8198 2.6935-9.7973-0.67393-8.5728-7.4071-8.2643-2.0198-2.1455-8.4145-9.7975-2.0198-6.7357-3.7062 4.2864-10.774 10.41-13.468-2.1407-5.0475z.
         /// </summary>
         public static string Eksjö {
@@ -173,11 +182,51 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Naturvärdsverket {
+            get {
+                object obj = ResourceManager.GetObject("Naturvärdsverket", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to m114.13 32.24 7.0394-4.7136h7.3482l2.758-8.7539 0.91649-15.488 1.2257-19.867-8.2643-2.0197-4.8988-11.781-8.2689-1.6858-4.2864 4.7136-5.2025-1.3458-5.8196-9.7614h-7.6518l-11.943 6.0605 0.9202 21.548 2.4495 11.447 4.2864 12.455-2.4495 19.867-4.8987 3.3668 1.5275 9.4274 12.247-0.34002 7.0444-1.6797 1.2257-8.0806 4.8987 1.0078 2.1407-3.3668z.
         /// </summary>
         public static string Sävsjö {
             get {
                 return ResourceManager.GetString("Sävsjö", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap smhi {
+            get {
+                object obj = ResourceManager.GetObject("smhi", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap solstartbild {
+            get {
+                object obj = ResourceManager.GetObject("solstartbild", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ssm {
+            get {
+                object obj = ResourceManager.GetObject("ssm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

@@ -298,11 +298,11 @@
     {
         if ((string)Session["chosenAction"] == "ShowPowerOfYear" && (bool?)Session["compare"] == true)
         {
-            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" oninput="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
         if ((string)Session["chosenAction"] == "ShowPowerOfMonth" && (bool?)Session["compare"] == true)
         {
-            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" oninput="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
 }
 
@@ -345,14 +345,6 @@
             </div>
         }
         @DisplayMap()
-
-        <button type="button" class="infobtn btn collapsed" data-toggle="collapse" style="padding-left:80px" data-target="#info"> Hur det fungerar </button>
-        <div class="infodiv collapse" id="info">
-            <p class="text-info">
-                Observera att datan som presenteras på denna sida inte är fullständigt exakt och momentan.
-                Observera att datan som presenteras på denna sida inte är fullständigt exakt och momentan.
-            </p>
-        </div>
 
     </div>
     <div class="col-sm-6" style="padding-left:15px" color="#fff">
