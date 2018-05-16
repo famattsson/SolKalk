@@ -9,6 +9,9 @@
 h1, h2, h3, h4, h5, h6 {
     font-family: "Lato", sans-serif !important;
 }
+.tabtext {
+    font-size: calc(8px + 0.7vw);
+}
 
 h2 { /*Energi genererad font*/
     font-size: 30px !important;
@@ -161,6 +164,8 @@ textarea {
 .footerimg {
     max-height: 80px !important;
     max-width: 80px !important;
+    width: 12vw;
+    height: 12vw;
     padding-right: 5px !important;
 }
 
