@@ -9,6 +9,9 @@
 h1, h2, h3, h4, h5, h6 {
     font-family: "Lato", sans-serif !important;
 }
+.tabtext {
+    font-size: calc(8px + 0.4vw);
+}
 
 h2 { /*Energi genererad font*/
     font-size: 30px !important;
@@ -143,6 +146,8 @@ div.PowerDiv {
     border-bottom: solid;
 }
 
+
+
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -154,4 +159,46 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.footerimg {
+    max-height: 100px !important;
+    max-width: 100px !important;
+    width: 13vw;
+    height: 13vw;
+    padding-right: 2px !important;
+}
+
+.HomeDiv {
+    background-size: cover;
+    width: 90vw;
+    height: 30vw !important;
+    border-radius: 10px;
+}
+
+.HomeBigText {
+    font-family: "Lato", sans-serif !important;
+    font-weight: 900 !important;
+    padding-top: 15px;
+    text-shadow: 10px;
+    font-size: 8vw;
+    color: white;
+    text-align: center;
+}
+
+.HomeSmallText {
+    font-family: "Lato", sans-serif !important;
+    font-weight: 500 !important;
+    text-shadow: 10px;
+    font-size: calc(6px + 2vw);
+    color: white;
+    text-align: center;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden
+}
+.HomeLink {
+    color:yellow;
 }

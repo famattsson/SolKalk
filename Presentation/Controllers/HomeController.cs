@@ -11,7 +11,11 @@ namespace Presentation.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            Session["chosenAction"] = "ShowPowerOfDay";
+            Session["onHome"] = true;
+            if(Session["chosenAction"] == null)
+            {
+                Session["chosenAction"] = "ShowPowerOfDay";
+            }
             return View("HomeView");
         }
     }

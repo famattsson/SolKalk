@@ -8,6 +8,7 @@ namespace Presentation.Controllers
     {
         public ActionResult ShowPowerOfDay()
         {
+            Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfDay";
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView",MunicipalDataHandler.GetProducedPowerOfDay(date, (string)Session["kommun"], (bool?)Session["perInhabitant"]));
@@ -15,6 +16,7 @@ namespace Presentation.Controllers
 
         public ActionResult ShowPowerOfMonth()
         {
+            Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfMonth";
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", MunicipalDataHandler.GetProducedPowerOfMonth(date, (string)Session["kommun"], (bool?)Session["perInhabitant"]));
@@ -22,6 +24,7 @@ namespace Presentation.Controllers
 
         public ActionResult ShowPowerOfYear()
         {
+            Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfYear";
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", MunicipalDataHandler.GetProducedPowerOfYear(date, (string)Session["kommun"], (bool?)Session["perInhabitant"]));

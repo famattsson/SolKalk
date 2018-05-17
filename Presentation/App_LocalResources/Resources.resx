@@ -166,10 +166,25 @@
   <data name="sun" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sun.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Observera att datan som presenteras här inte är fullständingt exakt eller momentan. Datan estimeras baserat på insamlad statistik från klimatrådet.  Datan uppdateras varje dag kl. 12:30. STRÅNG har använts för insamling av irradiansdata. Irradians är den effekt som solen alstrar på en kvadratmeter på jordens yta.</value>
+  </data>
+  <data name="Naturvärdsverket" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Naturvärdsverket.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="smhi" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\smhi.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ssm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ssm.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="solstartbild" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\solstartbild.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Cybercom" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Cybercom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\Cybercom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="klimatradet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\klimatradet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\klimatradet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

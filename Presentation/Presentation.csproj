@@ -131,8 +131,12 @@
     <None Include="Resources\vetlanda.png" />
     <None Include="Resources\värnamo.png" />
     <None Include="Resources\Husqvarna.jpg" />
-    <None Include="Images\Cybercom.png" />
-    <None Include="Images\klimatradet.png" />
+    <None Include="Resources\Cybercom.png" />
+    <None Include="Resources\klimatradet.png" />
+    <Content Include="Resources\Naturvärdsverket.png" />
+    <Content Include="Resources\smhi.png" />
+    <Content Include="Resources\solstartbild.jpg" />
+    <Content Include="Resources\ssm.png" />
     <Content Include="Resources\sun.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -196,6 +200,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CustomToolNamespace>Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

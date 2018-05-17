@@ -128,27 +128,27 @@
     {
         if ((string)Session["chosenACtion"] == "ShowPowerOfYear")
         {
-            <li class="active"><a href="/Company/ShowPowerOfYear"> Senaste året </a></li>
+            <li class="active"><a class="tabtext" href="/Company/ShowPowerOfYear"> Senaste året </a></li>
         }
         else if ((string)Session["chosenACtion"] != "ShowPowerOfYear")
         {
-            <li><a href="/Company/ShowPowerOfYear"> Senaste året </a></li>
+            <li><a class="tabtext" href="/Company/ShowPowerOfYear"> Senaste året </a></li>
         }
         if ((string)Session["ChosenACtion"] == "ShowPowerOfMonth")
         {
-            <li class="active"><a href="/Company/ShowPowerOfMonth"> Senaste månaden </a></li>
+            <li class="active"><a class="tabtext" href="/Company/ShowPowerOfMonth"> Senaste månaden </a></li>
         }
         else if ((string)Session["ChosenACtion"] != "ShowPowerOfMonth")
         {
-            <li><a href="/Company/ShowPowerOfMonth"> Senaste månaden </a></li>
+            <li><a class="tabtext" href="/Company/ShowPowerOfMonth"> Senaste månaden </a></li>
         }
         if ((string)Session["ChosenACtion"] == "ShowPowerOfDay")
         {
-            <li class="active"><a href="/Company/ShowPowerOfDay"> Igår </a></li>
+            <li class="active"><a class="tabtext" href="/Company/ShowPowerOfDay"> Igår </a></li>
         }
         else if ((string)Session["ChosenACtion"] != "ShowPowerOfDay")
         {
-            <li><a href="/Company/ShowPowerOfDay"> Igår </a></li>
+            <li><a class="tabtext" href="/Company/ShowPowerOfDay"> Igår </a></li>
         }
 }
 
@@ -297,11 +297,11 @@
     {
         if ((string)Session["chosenAction"] == "ShowPowerOfYear" && (bool?)Session["compare"] == true)
         {
-            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" oninput="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
         if ((string)Session["chosenAction"] == "ShowPowerOfMonth" && (bool?)Session["compare"] == true)
         {
-            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" oninput="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
 }
 
@@ -345,14 +345,6 @@
         }
         @DisplayMap()
 
-        <button type="button" class="infobtn btn collapsed" data-toggle="collapse" style="padding-left:80px" data-target="#info"> Hur det fungerar </button>
-        <div class="infodiv collapse" id="info">
-            <p class="text-info">
-                Observera att datan som presenteras på denna sida inte är fullständigt exakt och momentan.
-                Observera att datan som presenteras på denna sida inte är fullständigt exakt och momentan.
-            </p>
-        </div>
-
     </div>
     <div class="col-sm-6" style="padding-left:15px" color="#fff">
         <ul class="nav nav-tabs">
@@ -390,5 +382,5 @@
             <div class="col"> @Timeinput() </div>
         </div>
     </div>
-
+    
 </div>

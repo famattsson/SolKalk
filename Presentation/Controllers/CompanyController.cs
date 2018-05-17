@@ -8,18 +8,21 @@ namespace Presentation.Controllers
     {
         public ActionResult ShowPowerOfDay()
         {
+            Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfDay";
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", CompanyDataHandler.GetProducedPowerOfDay(date, (string)Session["företag"]));
         }
         public ActionResult ShowPowerOfMonth()
         {
+            Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfMonth";
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", CompanyDataHandler.GetProducedPowerOfMonth(date, (string)Session["företag"]));
         }
         public ActionResult ShowPowerOfYear()
         {
+            Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfYear";
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", CompanyDataHandler.GetProducedPowerOfYear(date, (string)Session["företag"]));
