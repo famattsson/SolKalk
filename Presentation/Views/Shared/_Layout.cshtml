@@ -48,7 +48,7 @@
                 <div class="col-sm-4">
                     @if((bool)Session["onHome"] != true)
                     {
-                        <button type="button" class="infobtn btn collapsed" data-toggle="collapse" style="padding-left:80px" data-target="#info"> Hur det fungerar </button>
+                        <button type="button" class="infobtn btn collapsed" data-toggle="collapse" style="padding-left:100px" data-target="#info"> Hur det fungerar </button>
                         <div class="infodiv collapse" id="info">
                             <p class="text-info">
                                 @Resources.Description
@@ -58,7 +58,7 @@
 
                 </div>
                 <div class="col-sm-3"></div>
-                <div class="col-sm-5">
+                <div class="col-sm-5" style="text-align:right">
                     @{
                         ImageConverter converter = new ImageConverter();
                         imageBytes = (byte[])converter.ConvertTo(Resources.Cybercom, typeof(byte[]));
@@ -66,15 +66,6 @@
 
                         imageBytes = (byte[])converter.ConvertTo(Resources.klimatradet, typeof(byte[]));
                         <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive" />
-
-                        imageBytes = (byte[])converter.ConvertTo(Resources.Naturvärdsverket, typeof(byte[]));
-                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive img-rounded" />
-
-                        imageBytes = (byte[])converter.ConvertTo(Resources.smhi, typeof(byte[]));
-                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive" />
-
-                        imageBytes = (byte[])converter.ConvertTo(Resources.ssm, typeof(byte[]));
-                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive"/>
                     }
                 </div>
             </div> 
