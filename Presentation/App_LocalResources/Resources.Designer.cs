@@ -90,7 +90,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observera att datan som presenteras här inte är fullständingt exakt eller momentan. Datan estimeras baserat på insamlad statistik från klimatrådet.  Datan uppdateras varje dag kl. 12:30. STRÅNG har använts för insamling av irradiansdata. Irradians är den effekt som solen alstrar på en kvadratmeter på jordens yta..
+        ///   Looks up a localized string similar to Observera att datan som presenteras här inte är fullständingt exakt eller momentan. Datan estimeras baserat på insamlad statistik från klimatrådet.  Datan uppdateras varje dag kl. 10:30. STRÅNG har använts för insamling av irradiansdata. Irradians är den effekt som solen alstrar på en kvadratmeter på jordens yta.
         /// </summary>
         public static string Description {
             get {

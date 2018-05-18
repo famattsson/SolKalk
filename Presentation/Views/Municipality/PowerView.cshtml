@@ -280,25 +280,25 @@ else if (prefix == 'n')
     }
 
 }
-if (totalenergi > 1000000)
-{
-    if(Math.Round(totalenergi / 1000000) == 1)
+    if (totalenergi * times > 1000000)
     {
-        omvandling = " miljon" + omvandling;
-    }
-    else
-    {
-        omvandling = " miljoner" + omvandling;
-    }
+        if(Math.Round(totalenergi * times/ 1000000) == 1)
+        {
+            omvandling = " miljon" + omvandling;
+        }
+        else
+        {
+            omvandling = " miljoner" + omvandling;
+        }
 
-        @Math.Round(((totalenergi) * times) / 1000000, 0)@omvandling
+            @Math.Round(((totalenergi) * times) / 1000000, 0)@omvandling
     }
-    else if (totalenergi > 1000)
+    else if (totalenergi * times > 1000)
     {
         omvandling = " tusen" + omvandling;
         @Math.Round(((totalenergi) * times) / 1000, 0)@omvandling
     }
-    else if (totalenergi < 1000)
+    else if (totalenergi * times < 1000)
     {
         @Math.Round((totalenergi) * times, 0)@omvandling
     }
