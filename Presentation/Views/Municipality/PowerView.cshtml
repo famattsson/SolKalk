@@ -280,49 +280,61 @@ else if (prefix == 'n')
     }
 
 }
+if (totalenergi > 1000000)
+{
+    if(Math.Round(totalenergi / 1000000) == 1)
+    {
+        omvandling = " Miljon" + omvandling;
+    }
+    else
+    {
+        omvandling = " Miljoner" + omvandling;
+    }
 
-    @Math.Round((totalenergi) * times, 0)@omvandling
+        @Math.Round(((totalenergi) * times) / 1000000, 0)@omvandling
+    }
+    else if (totalenergi > 1000)
+    {
+        omvandling = " Tusen" + omvandling;
+        @Math.Round(((totalenergi) * times) / 1000, 0)@omvandling
+    }
+    else if (totalenergi < 1000)
+    {
+        @Math.Round((totalenergi) * times, 0)@omvandling
+    }
 }
 
 @helper DisplayEnergy()
     {
-        double totalenergi = 0;
-        foreach (var elem in Model.powerRecords)
-        {
-            totalenergi += elem.Energi;
-        }
-        if ((string)Session["chosenACtion"] == "ShowPowerOfYear")
-        {
-            <h2> </h2>
-        }
-        else if ((string)Session["chosenACtion"] == "ShowPowerOfMonth")
-        {
-            <h2> </h2>
-        }
-        else if ((string)Session["chosenACtion"] == "ShowPowerOfDay")
-        {
-            <h2> </h2>
-        }
-        if (totalenergi > 1000000000)
-        {
-            <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
-            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'g')</h4>
-        }
-        else if (totalenergi > 1000000)
-        {
-            <h2> @Math.Round(totalenergi / 1000000, 2) MWh</h2>
-            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'm')</h4>
-        }
-        else if (totalenergi > 1000)
-        {
-            <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
-            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
-        }
-        else if (totalenergi < 1000)
-        {
-            <h2> @Math.Round(totalenergi) Wh </h2>
-            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'n')</h4>
-        }
+    double totalenergi = 0;
+    foreach (var elem in Model.powerRecords)
+    {
+        totalenergi += elem.Energi;
+    }
+    if (totalenergi > 1000000000)
+    {
+        <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
+        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'g')</h4>
+    }
+    else if (totalenergi > 1000000)
+    {
+        <h2> @Math.Round(totalenergi / 1000000, 2) MWh</h2>
+        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'm')</h4>
+    }
+    else if (totalenergi > 1000)
+    {
+        <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
+        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
+    }
+    else if (totalenergi < 1000 && totalenergi > 0)
+    {
+        <h2> @Math.Round(totalenergi) Wh </h2>
+        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'n')</h4>
+    }
+    else if (totalenergi <= 0 )
+    {
+        <h2> Ingen data tillgänglig ännu. Återkom efter kl. 10:30 </h2>
+    }
 }
 
 @helper GenerateDropdownContents()
@@ -454,7 +466,7 @@ else if (prefix == 'n')
         else
         {
             <div style="padding-top:34px">
-                 @DisplaySVGMap()
+                @DisplaySVGMap()
             </div>
         }
 
@@ -490,15 +502,15 @@ else if (prefix == 'n')
             </div>
         </div>
     </div>
- 
+
     <div class="col-sm-2">
         <div class="col"> @ChartButton() </div>
         <div class="row" style="padding:5px 0px 0px 15px">
-                <div class="col"> @PerInhabitantButton() </div>
-            </div>
-            <div class="row" style="padding: 15px 0px 0px 15px">
-                <div class="col"> @Timeinput() </div>
-            </div>
+            <div class="col"> @PerInhabitantButton() </div>
+        </div>
+        <div class="row" style="padding: 15px 0px 0px 15px">
+            <div class="col"> @Timeinput() </div>
+        </div>
     </div>
 
 
