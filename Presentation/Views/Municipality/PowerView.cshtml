@@ -284,18 +284,18 @@ if (totalenergi > 1000000)
 {
     if(Math.Round(totalenergi / 1000000) == 1)
     {
-        omvandling = " Miljon" + omvandling;
+        omvandling = " miljon" + omvandling;
     }
     else
     {
-        omvandling = " Miljoner" + omvandling;
+        omvandling = " miljoner" + omvandling;
     }
 
         @Math.Round(((totalenergi) * times) / 1000000, 0)@omvandling
     }
     else if (totalenergi > 1000)
     {
-        omvandling = " Tusen" + omvandling;
+        omvandling = " tusen" + omvandling;
         @Math.Round(((totalenergi) * times) / 1000, 0)@omvandling
     }
     else if (totalenergi < 1000)
