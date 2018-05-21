@@ -90,7 +90,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observera att datan som presenteras här inte är fullständingt exakt eller momentan. Datan estimeras baserat på insamlad statistik från klimatrådet.  Datan uppdateras varje dag kl. 10:30. STRÅNG har använts för insamling av irradiansdata. Irradians är den effekt som solen alstrar på en kvadratmeter på jordens yta.
+        ///   Looks up a localized string similar to Solkalkylatorn är ett verktyg för att visualisera hur mycket solel som produceras i Jönköpings län. Klicka på din kommun för att se hur mycket solel ni producerar och klicka på grannkommunen för att se vem som är bäst! Verktyget är baserat på väderdata från SMHI, statistik om installerad effekt solel från Länsstyrelsen i Jönköpings län samt schabloner för solelsproduktion i Sverige. Observera att datan som presenteras här inte är fullständigt exakt eller momentan. Datan uppdateras varje dag kl. 10:30. Verkt [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Description {
             get {

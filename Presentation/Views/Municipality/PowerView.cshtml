@@ -94,7 +94,7 @@
 
         data.addColumn("string", "Kommun");
         @if((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Wh");</text> }
-        else { <text>data.addColumn("number", "Kwh");</text> }
+        else { <text>data.addColumn("number", "kWh");</text> }
 
         @foreach (var elem in PowerDict)
         {
@@ -107,7 +107,7 @@
         {
             <text>
             options = {
-                title: "Estimerad energi per invånare i alla kommuner",
+                title: "Estimerad energi per invånare i alla kommuner (Wh)",
             bar: { groupWidth: "65%" },
             legend: { position: "none" },
             animation:
@@ -124,7 +124,7 @@
         {
             <text>
             options = {
-                title: "Producerad energi i alla kommuner",
+                title: "Producerad energi i alla kommuner (kWh)",
             bar: { groupWidth: "65%" },
             legend: { position: "none" },
             animation:
