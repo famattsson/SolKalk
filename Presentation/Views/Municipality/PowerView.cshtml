@@ -382,17 +382,33 @@ else if (prefix == 'n')
                     {
                         if ((string)Session["kommun"] == (string)resource.Key)
                         {
-                            <a xlink:href="/Municipality/ChooseMunicipality/">
+                            if((bool?)Session["options"] == true)
+                            {
+                                <a xlink:href="/Municipality/ChooseMunicipality/">
+                                    <title id="title">@resource.Key</title>
+                                    <path fill="rgb(58, 145, 63)" d="@resource.Value" />
+                                </a>
+                            }
+                            else
+                            {
                                 <title id="title">@resource.Key</title>
                                 <path fill="rgb(58, 145, 63)" d="@resource.Value" />
-                            </a>
+                            }
                         }
                         else
                         {
-                            <a xlink:href="/Municipality/ChooseMunicipality/@((string)resource.Key)">
+                            if((bool?)Session["options"] == true)
+                            {
+                                <a xlink:href="/Municipality/ChooseMunicipality/@((string)resource.Key)">
+                                    <title id="title">@resource.Key</title>
+                                    <path fill="rgb(161, 216, 132)" d="@resource.Value" />
+                                </a>
+                            }
+                            else
+                            {
                                 <title id="title">@resource.Key</title>
                                 <path fill="rgb(161, 216, 132)" d="@resource.Value" />
-                            </a>
+                            }
                         }
                     }
                 }
@@ -450,7 +466,7 @@ else if (prefix == 'n')
 
 <div class="row container">
     <div class=" col-sm-4" style="padding-left: 15px">
-        @if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+        @if (((bool?)Session["compare"] == false || (bool?)Session["compare"] == null) && (bool?)Session["options"] == true)
         {
             <div class="dropdown">
                 <button class="btnmunicipal btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">

@@ -22,23 +22,27 @@
     <script src="~/Scripts/he.js"></script>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="/Home/Index" class="navbar-brand">SolKalk</a>
-            </div>
+    @if ((bool?)Session["options"] != false)
+    {
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/Home/Index" class="navbar-brand">SolKalk</a>
+                </div>
 
-            <ul class="navbar-collapse collapse nav navbar-nav" id="myNavbar">
-                <li><a href="/Municipality/@Session["chosenAction"]">Kommun</a></li>
-                <li><a href="/Company/@Session["chosenAction"]">Företag</a></li>
-            </ul>
+                <ul class="navbar-collapse collapse nav navbar-nav" id="myNavbar">
+                    <li><a href="/Municipality/@Session["chosenAction"]">Kommun</a></li>
+                    <li><a href="/Company/@Session["chosenAction"]">Företag</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
+    }
+
 
     <div class="container body-content">
         @RenderBody()
@@ -47,7 +51,7 @@
             <div class="row">
                 <div class="col-sm-4">
 
-                    @if((bool)Session["onHome"] != true)
+                    @if ((bool)Session["onHome"] != true)
                     {
                         <button type="button" class="infobtn btn collapsed" data-toggle="collapse" style="padding-left:100px" data-target="#info"> Hur det fungerar </button>
                         <div class="infodiv collapse" id="info">
@@ -61,7 +65,7 @@
                 <div class="col-sm-3"></div>
                 <div class="col-sm-5" style="text-align:right">
 
-                    
+
                     @{
                         ImageConverter converter = new ImageConverter();
                         imageBytes = (byte[])converter.ConvertTo(Resources.Cybercom, typeof(byte[]));

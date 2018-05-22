@@ -6,24 +6,55 @@ namespace Presentation.Controllers
 {
     public class CompanyController : Controller
     {
-        public ActionResult ShowPowerOfDay()
+        public ActionResult ShowPowerOfDay(string id)
         {
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfDay";
+            if (id != "" && id != null)
+            {
+                Session["options"] = false;
+                if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+                {
+                    Session["företag"] = id;
+                    Session["företagOld"] = id;
+                }
+            }
+            else if(id == "options")
+            {
+                Session["options"] = true;
+            }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", CompanyDataHandler.GetProducedPowerOfDay(date, (string)Session["företag"]));
         }
-        public ActionResult ShowPowerOfMonth()
+        public ActionResult ShowPowerOfMonth(string id)
         {
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfMonth";
+            if (id != "" && id != null)
+            {
+                Session["options"] = false;
+                if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+                {
+                    Session["företag"] = id;
+                    Session["företagOld"] = id;
+                }
+            }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", CompanyDataHandler.GetProducedPowerOfMonth(date, (string)Session["företag"]));
         }
-        public ActionResult ShowPowerOfYear()
+        public ActionResult ShowPowerOfYear(string id)
         {
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfYear";
+            if (id != "" && id != null)
+            {
+                Session["options"] = false;
+                if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+                {
+                    Session["företag"] = id;
+                    Session["företagOld"] = id;
+                }
+            }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", CompanyDataHandler.GetProducedPowerOfYear(date, (string)Session["företag"]));
         }
