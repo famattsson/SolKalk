@@ -6,26 +6,65 @@ namespace Presentation.Controllers
 {
     public class MunicipalityController : Controller
     {
-        public ActionResult ShowPowerOfDay()
+        public ActionResult ShowPowerOfDay(string id)
         {
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfDay";
+            if (id != "" && id != null)
+            {
+                Session["options"] = false;
+                if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+                {
+                    Session["kommun"] = id;
+                    Session["kommunOld"] = id;
+                }
+            }
+            else if (id == "options")
+            {
+                Session["options"] = true;
+            }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView",MunicipalDataHandler.GetProducedPowerOfDay(date, (string)Session["kommun"], (bool?)Session["perInhabitant"]));
         }
 
-        public ActionResult ShowPowerOfMonth()
+        public ActionResult ShowPowerOfMonth(string id)
         {
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfMonth";
+            if (id != "" && id != null)
+            {
+                Session["options"] = false;
+                if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+                {
+                    Session["kommun"] = id;
+                    Session["kommunOld"] = id;
+                }
+            }
+            else if (id == "options")
+            {
+                Session["options"] = true;
+            }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", MunicipalDataHandler.GetProducedPowerOfMonth(date, (string)Session["kommun"], (bool?)Session["perInhabitant"]));
         }
 
-        public ActionResult ShowPowerOfYear()
+        public ActionResult ShowPowerOfYear(string id)
         {
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfYear";
+            if (id != "" && id != null)
+            {
+                Session["options"] = false;
+                if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+                {
+                    Session["kommun"] = id;
+                    Session["kommunOld"] = id;
+                }
+            }
+            else if (id == "options")
+            {
+                Session["options"] = true;
+            }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", MunicipalDataHandler.GetProducedPowerOfYear(date, (string)Session["kommun"], (bool?)Session["perInhabitant"]));
         }
