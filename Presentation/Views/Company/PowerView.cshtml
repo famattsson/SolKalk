@@ -75,7 +75,7 @@
     function drawChart() {
         data = new google.visualization.DataTable();
         data.addColumn("string", "Företag");
-        data.addColumn("number", "Kwh");
+        data.addColumn("number", "Wh");
         @foreach (var elem in companyPowerDict)
         {
             <text>
@@ -84,8 +84,8 @@
             </text>
         }
         options = {
-            title: "Producerade kilowatttimmar",
-            bar: { groupWidth: "50%" },
+            title: "Producerad energi i alla företag (Wh)",
+            bar: { groupWidth: "65%" },
             legend: { position: "none" },
             animation: {
                 duration: 750,
@@ -282,9 +282,9 @@
             <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
             <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
         }
-        else if (totalenergi < 1000)
+        else if (totalenergi <= 0)
         {
-            <h2> @Math.Round(totalenergi) Wh </h2>
+            <h2>Ingen data tillgänglig ännu. Återkom efter kl. 10:30 </h2>
         }
 }
 
@@ -294,7 +294,7 @@
         foreach (DictionaryEntry elem in resourceSet)
         {
             var kommun = Session["företag"];
-            if ((string)elem.Key == (string)Session["företag"] || (Session["företag"] == null && (string)elem.Key == "alla_kommuner"))
+            if ((string)elem.Key == (string)Session["företag"] || (Session["företag"] == null && (string)elem.Key == "world"))
             {
                 ImageConverter converter = new ImageConverter();
                 byte[] imagebytes = (byte[])converter.ConvertTo(elem.Value, typeof(byte[]));
@@ -321,7 +321,7 @@
 
 @helper DisplayComparison()
     {
-        <div id="columnchart_values"></div>
+        <div id="columnchart_values" style="padding-top:40px"></div>
 }
 
 @helper ChartButton()
@@ -340,11 +340,11 @@
     {
         if ((string)Session["chosenAction"] == "ShowPowerOfYear" && (bool?)Session["compare"] == true)
         {
-            <span class="text-info"> Month: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" oninput="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Månad: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" oninput="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
         if ((string)Session["chosenAction"] == "ShowPowerOfMonth" && (bool?)Session["compare"] == true)
         {
-            <span class="text-info"> Day: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" oninput="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Dag: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" oninput="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
 }
 
@@ -375,21 +375,27 @@
 <div class="row container">
     <div class=" col-sm-4" style="padding-left: 15px">
         @if (((bool?)Session["compare"] == false || (bool?)Session["compare"] == null) && (bool?)Session["options"] != false)
-        {
-            <div class="dropdown">
-                <button class="btncompany btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    Välj Företag
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    @GenerateDropdownContents()
-                </ul>
-            </div>
-        }
-        @DisplayMap()
+    {
+        <div class="dropdown">
+            <button class="btncompany btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                Välj Företag
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                @GenerateDropdownContents()
+            </ul>
+        </div>
 
+        @DisplayMap()
+}
+else
+{
+    <div style="padding-top:34px">
+        @DisplayMap()
     </div>
-    <div class="col-sm-6" style="padding-left:15px" color="#fff">
+}
+    </div>
+    <div class="col-sm-6" style="padding-left:28px" color="#fff">
         <ul class="nav nav-tabs">
             @DisplayActive()
         </ul>
@@ -421,7 +427,7 @@
         <div class="row">
             <div class="col"> @ChartButton() </div>
         </div>
-        <div class="row" style="padding-top: 15px">
+        <div class="row" style="padding: 15px 0px 0px 15px">
             <div class="col"> @Timeinput() </div>
         </div>
     </div>
