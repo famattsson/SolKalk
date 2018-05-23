@@ -374,7 +374,7 @@
 
 <div class="row container">
     <div class=" col-sm-4" style="padding-left: 15px">
-        @if (((bool?)Session["compare"] == false || (bool?)Session["compare"] == null) && (bool?)Session["options"] == true)
+        @if (((bool?)Session["compare"] == false || (bool?)Session["compare"] == null) && (bool?)Session["options"] != false)
         {
             <div class="dropdown">
                 <button class="btncompany btn btn-primary dropdown-toggle" data-toggle="dropdown">
