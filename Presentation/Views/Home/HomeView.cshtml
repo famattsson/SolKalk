@@ -7,7 +7,7 @@
         ImageConverter imageConverter = new ImageConverter();
         byte[] imageBytes = (byte[])imageConverter.ConvertTo(Resources.solstartbild, typeof(byte[]));
     }
-    <div style="background-image:url(@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes)))" class="HomeDiv col-lg-12">
+    <div style=" width: 95%; background-image:url(@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes)))" class="HomeDiv col-lg-12">
         <h1 class="HomeBigText">Hello sunshine!</h1>
         <p class="HomeSmallText">Vad kul att DU är här, välj mellan <a class="HomeLink" href="/Municipality/@Session["chosenAction"]">kommun</a> eller <a class="HomeLink" href="/Company/@Session["chosenAction"]">företag</a></p>
     </div>
