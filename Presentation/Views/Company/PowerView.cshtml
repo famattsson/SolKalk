@@ -74,8 +74,10 @@
 
     function drawChart() {
         data = new google.visualization.DataTable();
+
         data.addColumn("string", "Företag");
-        data.addColumn("number", "Kwh");
+        data.addColumn("number", "Wh");
+
         @foreach (var elem in companyPowerDict)
         {
             <text>
@@ -84,14 +86,14 @@
             </text>
         }
         options = {
-            title: "Producerade kilowatttimmar",
-            bar: { groupWidth: "50%" },
+            title: "Producerad energi på alla företag (Wh)",
+            bar: { groupWidth: "65%" },
             legend: { position: "none" },
             animation: {
                 duration: 750,
                 easing: 'out'
             },
-            vAxis: { minValue: 0, maxValue: 200 }
+            vAxis: { minValue: 0, maxValue: 500 }
         };
 
 
@@ -282,10 +284,15 @@
             <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
             <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
         }
-        else if (totalenergi < 1000)
-        {
-            <h2> @Math.Round(totalenergi) Wh </h2>
-        }
+            else if (totalenergi < 1000 && totalenergi > 0)
+    {
+        <h2> @Math.Round(totalenergi) Wh </h2>
+        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'n')</h4>
+    }
+    else if (totalenergi <= 0 )
+    {
+        <h2> Ingen data tillgänglig ännu. Återkom efter kl. 10:30 </h2>
+    }
 }
 
 @helper DisplayMap()
@@ -294,11 +301,11 @@
         foreach (DictionaryEntry elem in resourceSet)
         {
             var kommun = Session["företag"];
-            if ((string)elem.Key == (string)Session["företag"] || (Session["företag"] == null && (string)elem.Key == "alla_kommuner"))
+            if ((string)elem.Key == (string)Session["företag"] || (Session["företag"] == null && (string)elem.Key == "world"))
             {
                 ImageConverter converter = new ImageConverter();
                 byte[] imagebytes = (byte[])converter.ConvertTo(elem.Value, typeof(byte[]));
-                <img src="@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(imagebytes))" class="img-responsive img-responsive" width="300" height="300" />
+                <img src="@String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(imagebytes))" class="img-responsive img-responsive" style="padding-top:10px" width="300" height="300" />
             }
         }
 }
@@ -321,7 +328,7 @@
 
 @helper DisplayComparison()
     {
-        <div id="columnchart_values"></div>
+        <div id="columnchart_values" style="padding-top:40px"></div>
 }
 
 @helper ChartButton()
@@ -375,21 +382,27 @@
 <div class="row container">
     <div class=" col-sm-4" style="padding-left: 15px">
         @if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
-        {
-            <div class="dropdown">
-                <button class="btncompany btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    Välj Företag
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    @GenerateDropdownContents()
-                </ul>
-            </div>
-        }
-        @DisplayMap()
+    {
+        <div class="dropdown">
+            <button class="btncompany btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                Välj Företag
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                @GenerateDropdownContents()
+            </ul>
+        </div>
 
+        @DisplayMap()
+}
+else
+{
+    <div style="padding-top:34px">
+        @DisplayMap()
     </div>
-    <div class="col-sm-6" style="padding-left:15px" color="#fff">
+}
+    </div>
+    <div class="col-sm-6" style="padding-left:28px" color="#fff">
         <ul class="nav nav-tabs">
             @DisplayActive()
         </ul>
@@ -408,9 +421,14 @@
                 <h3>@((string)Session["företag"])</h3>
             }
             @DisplayEnergy()
+
             <div class="row" style="padding-bottom:50px">
                 <div class="col-sm-6">
-                    @DisplayWeatherQuality()
+                 @if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+                {
+                @DisplayWeatherQuality()
+                }
+
                 </div>
             </div>
         }
@@ -425,5 +443,5 @@
             <div class="col"> @Timeinput() </div>
         </div>
     </div>
-    
+
 </div>
