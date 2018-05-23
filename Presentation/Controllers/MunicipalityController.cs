@@ -40,8 +40,8 @@ namespace Presentation.Controllers
                 Session["options"] = false;
                 if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
                 {
-                    Session["företag"] = id;
-                    Session["företagOld"] = id;
+                    Session["kommun"] = id;
+                    Session["kommunOld"] = id;
                 }
             }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
@@ -61,8 +61,8 @@ namespace Presentation.Controllers
                 Session["options"] = false;
                 if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
                 {
-                    Session["företag"] = id;
-                    Session["företagOld"] = id;
+                    Session["kommun"] = id;
+                    Session["kommunOld"] = id;
                 }
             }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
