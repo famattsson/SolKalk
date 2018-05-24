@@ -124,7 +124,7 @@
         {
             <text>
             options = {
-                title: "Producerad energi i alla kommuner (Wh)",
+                title: "Producerad energi i alla kommuner (kWh)",
            
             bar: { groupWidth: "60%" },
             legend: { position: "none" },
@@ -165,8 +165,14 @@
         else if ("@Session["chosenAction"]" == "ShowPowerOfYear") {
             for (var i = 0; i < monthSummedList.length; i++) {
                 if (monthSummedList[i].month == timeUnit) {
-                    data.addRow([monthSummedList[i].municipality, monthSummedList[i].energy]);
+                    if (monthSummedList[i].energy < 1000) {
+                        data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy)]);
+                    }
+                    else {
+                        data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy / 1000)]);
+                    }
                 }
+
             }
         }
         chart.draw(data, options)
