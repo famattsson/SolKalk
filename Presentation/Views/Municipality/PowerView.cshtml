@@ -233,16 +233,16 @@ if (prefix == 'k')
     switch (rand)
     {
         case 1:
-            omvandling = " koppar kaffe";
-            times = 40;
+            omvandling = " koppar kaffe bryggd i en kaffebryggare";
+            times = 0.04;
             break;
         case 2:
-            omvandling = " timmar hårtork";
-            times = 0.5;
+            omvandling = " timmar konstant användande av en hårtork";
+            times = 0.0005;
             break;
         case 3:
-            omvandling = " timmar mikrovågsugn";
-            times = 0.7166;
+            omvandling = " timmar användande av en mikrovågsugn";
+            times = 0.0007166;
             break;
     }
 }
@@ -251,16 +251,16 @@ else if (prefix == 'm')
     switch (rand)
     {
         case 1:
-            omvandling = " timmar med en vattenkokare";
-            times = (0.45);
+            omvandling = " års upvärmning av en genomsnittlig svensk villa";
+            times = 0.00000066;
             break;
         case 2:
-            omvandling = " timmar med en dammsugare";
-            times = (0.8333);
+            omvandling = " års genonomsnittlig varmvattenförbrukning för hushåll på 4 personer";
+            times = 0.0002;
             break;
         case 3:
-            omvandling = " timmar med en induktionsspis";
-            times = (0.55);
+            omvandling = " års hushållselsförbrukning för en genomsnittlig svensk villa";
+            times = 0.000125;
             break;
     }
 }
@@ -268,17 +268,29 @@ else if (prefix == 'g')
 {
     switch (rand)
     {
-        case 1:
-            omvandling = " timmar bastubad";
-            times = 0.2;
+        /*case 1:
+            omvandling = " dygn användade av en bastu";
+            times = 0.2 / 24;
             break;
         case 2:
-            omvandling = " timmar med ett strykjärn";
-            times = 0.4166;
+            omvandling = " dygn användande av ett strykjärn";
+            times = 0.4166 / 24;
             break;
         case 3:
-            omvandling = " kg tvätt i en torktummlare";
-            times = 1.2;
+            omvandling = " ton tvätt torkad i en torktummlare";
+            times = 1.2 / 1000;
+            break;*/
+        case 1:
+            omvandling = " års upvärmning av en genomsnittlig svensk villa";
+            times = 0.00000066;
+            break;
+        case 2:
+            omvandling = " års genonomsnittlig varmvattenförbrukning för hushåll på 4 personer";
+            times = 0.0002;
+            break;
+        case 3:
+            omvandling = " års hushållselsförbrukning för en genomsnittlig svensk villa";
+            times = 0.000125;
             break;
     }
 }
@@ -287,41 +299,41 @@ else if (prefix == 'n')
     switch (rand)
     {
         case 1:
-            omvandling = " timmar bastubad";
-            times = 0.2;
+            omvandling = " timmar användande av en bastu";
+            times = 0.005;
             break;
         case 2:
-            omvandling = " timmar med ett strykjärn";
-            times = 0.4166;
+            omvandling = " timmar användande av ett strykjärn";
+            times = 0.0024;
             break;
         case 3:
-            omvandling = " kg tvätt i en torktummlare";
-            times = 1.2;
+            omvandling = " kg tvätt torkad i en torktummlare";
+            times = 0.0012;
             break;
     }
 
 }
-    if (totalenergi * times > 1000000)
+if (totalenergi * times > 1000000)
+{
+    if(Math.Round(totalenergi * times/ 1000000) == 1)
     {
-        if(Math.Round(totalenergi * times/ 1000000) == 1)
-        {
-            omvandling = " miljon" + omvandling;
-        }
-        else
-        {
-            omvandling = " miljoner" + omvandling;
-        }
+        omvandling = " miljon" + omvandling;
+    }
+    else
+    {
+        omvandling = " miljoner" + omvandling;
+    }
 
             @Math.Round(((totalenergi) * times) / 1000000, 0)@omvandling
     }
     else if (totalenergi * times > 1000)
     {
         omvandling = " tusen" + omvandling;
-        @Math.Round(((totalenergi) * times) / 1000, 0)@omvandling
+        @Math.Round(((totalenergi) * times) / 1000, 1)@omvandling
     }
     else if (totalenergi * times < 1000)
     {
-        @Math.Round((totalenergi) * times, 0)@omvandling
+        @Math.Round((totalenergi) * times, 1)@omvandling
     }
 }
 
