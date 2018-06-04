@@ -90,13 +90,13 @@ namespace Presentation.Controllers
             {
                 Session["compare"] = false;
                 Session["kommun"] = Session["kommunOld"];
-                Session["företag"] = Session["företagOld"];
+                Session["Organisation"] = Session["OrganisationOld"];
             }
             else
             {
                 Session["compare"] = true;
                 Session["kommun"] = null;
-                Session["företag"] = null;
+                Session["Organisation"] = null;
             }
             return RedirectToAction((string)Session["chosenACtion"]);
         }

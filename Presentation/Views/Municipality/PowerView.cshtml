@@ -93,7 +93,7 @@
         data = new google.visualization.DataTable();
 
         data.addColumn("string", "Kommun");
-        @if((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Kwh");</text> }
+        @if((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Wh");</text> }
         else { <text>data.addColumn("number", "kWh");</text> }
 
         @foreach (var elem in PowerDict)
@@ -116,7 +116,7 @@
                 easing: 'out'
             },
             series: { 0: { color: 'green' } },
-            vAxis: { minValue: 0, maxValue: 500 }
+            vAxis: { minValue: 0, maxValue: 0}
             };
             </text>
         }
@@ -149,7 +149,7 @@
         if (timeUnit < 10) {
             timeUnit = "0" + timeUnit;
         }
-        if ("@Session["chosenAction"]" == "ShowPowerOfMonth") {
+        if ("@Session["chosenACtion"]" == "ShowPowerOfMonth") {
             for (var i = 0; i < ModelJson.length; i++) {
                 if (ModelJson[i].Day == timeUnit) {
                     if (ModelJson[i].Energi < 1000) {
@@ -162,7 +162,7 @@
                 }
             }
         }
-        else if ("@Session["chosenAction"]" == "ShowPowerOfYear") {
+        else if ("@Session["chosenACtion"]" == "ShowPowerOfYear") {
             for (var i = 0; i < monthSummedList.length; i++) {
                 if (monthSummedList[i].month == timeUnit) {
                     if (monthSummedList[i].energy < 1000) {

@@ -54,7 +54,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     -webkit-transition-duration: 0.4s;
     transition-duration: 0.1s;
     position: relative;
-    width: 120px;
+    width: 140px;
     -webkit-transition: width 2s; /* Safari */
     transition: width 0.5s;
 }
@@ -72,7 +72,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 
 .btncompany:hover {
     background-color: rgb(183, 222, 255) !important;
-    width: 130px;
+    width: 150px;
 }
 
 .infobtn {

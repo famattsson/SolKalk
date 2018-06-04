@@ -74,7 +74,7 @@
 
     function drawChart() {
         data = new google.visualization.DataTable();
-        data.addColumn("string", "Företag");
+        data.addColumn("string", "Organisation");
         data.addColumn("number", "Wh");
         @foreach (var elem in companyPowerDict)
         {
@@ -84,7 +84,7 @@
             </text>
         }
         options = {
-            title: "Producerad energi i alla företag (Wh)",
+            title: "Producerad energi i alla organisationer (Wh)",
             bar: { groupWidth: "80%" },
             legend: { position: "none" },
             animation: {
@@ -116,7 +116,7 @@
         else if ("@Session["chosenAction"]" == "ShowPowerOfYear") {
             for (var i = 0; i < monthSummedList.length; i++) {
                 if (monthSummedList[i].month == timeUnit) {
-                    data.addRow([monthSummedList[i].company, monthSummedList[i].energy]);
+                    data.addRow([monthSummedList[i].Company, monthSummedList[i].energy]);
                 }
             }
         }
@@ -134,19 +134,19 @@
         {
             <li><a class="tabtext" href="/Company/ShowPowerOfYear"> Senaste året </a></li>
         }
-        if ((string)Session["ChosenACtion"] == "ShowPowerOfMonth")
+        if ((string)Session["chosenACtion"] == "ShowPowerOfMonth")
         {
             <li class="active"><a class="tabtext" href="/Company/ShowPowerOfMonth"> Senaste månaden </a></li>
         }
-        else if ((string)Session["ChosenACtion"] != "ShowPowerOfMonth")
+        else if ((string)Session["chosenACtion"] != "ShowPowerOfMonth")
         {
             <li><a class="tabtext" href="/Company/ShowPowerOfMonth"> Senaste månaden </a></li>
         }
-        if ((string)Session["ChosenACtion"] == "ShowPowerOfDay")
+        if ((string)Session["chosenACtion"] == "ShowPowerOfDay")
         {
             <li class="active"><a class="tabtext" href="/Company/ShowPowerOfDay"> Igår </a></li>
         }
-        else if ((string)Session["ChosenACtion"] != "ShowPowerOfDay")
+        else if ((string)Session["chosenACtion"] != "ShowPowerOfDay")
         {
             <li><a class="tabtext" href="/Company/ShowPowerOfDay"> Igår </a></li>
         }
@@ -293,8 +293,8 @@
         ResourceSet resourceSet = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
         foreach (DictionaryEntry elem in resourceSet)
         {
-            var kommun = Session["företag"];
-            if ((string)elem.Key == (string)Session["företag"] || (Session["företag"] == null && (string)elem.Key == "world"))
+            var kommun = Session["Organisation"];
+            if ((string)elem.Key == (string)Session["Organisation"] || (Session["Organisation"] == null && (string)elem.Key == "world"))
             {
                 ImageConverter converter = new ImageConverter();
                 byte[] imagebytes = (byte[])converter.ConvertTo(elem.Value, typeof(byte[]));
@@ -305,10 +305,10 @@
 
 @helper GenerateDropdownContents()
     {
-        List<string> företag = new List<string>() { "Husqvarna", "Alla Företag" };
+        List<string> företag = new List<string>() { "Husqvarna", "Alla Organisationer" };
         foreach (var elem in företag)
         {
-            if (elem == "Alla Företag")
+            if (elem == "Alla Organisationer")
             {
                 <li> <a href="/Company/ChooseCompany/"> @elem </a>  </li>
             }
@@ -375,25 +375,25 @@
 <div class="row container">
     <div class=" col-sm-4" style="padding-left: 15px">
         @if (((bool?)Session["compare"] == false || (bool?)Session["compare"] == null) && (bool?)Session["options"] != false)
-    {
-        <div class="dropdown">
-            <button class="btncompany btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                Välj Företag
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                @GenerateDropdownContents()
-            </ul>
-        </div>
+        {
+            <div class="dropdown">
+                <button class="btncompany btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Välj Organisation
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    @GenerateDropdownContents()
+                </ul>
+            </div>
 
-        @DisplayMap()
-}
-else
-{
-    <div style="padding-top:34px">
-        @DisplayMap()
-    </div>
-}
+            @DisplayMap()
+        }
+        else
+        {
+            <div style="padding-top:34px">
+                @DisplayMap()
+            </div>
+        }
     </div>
     <div class="col-sm-6" style="padding-left:28px" color="#fff">
         <ul class="nav nav-tabs">
@@ -405,13 +405,13 @@ else
         }
         else
         {
-            if (Session["företag"] == null)
+            if (Session["Organisation"] == null)
             {
-                <h3>Alla Företag</h3>
+                <h3>Alla Organisationer</h3>
             }
             else
             {
-                <h3>@((string)Session["företag"])</h3>
+                <h3>@((string)Session["Organisation"])</h3>
             }
             @DisplayEnergy()
             <div class="row" style="padding-bottom:50px">
