@@ -65,6 +65,20 @@
     var options = null;
     var ModelJson = @Html.Raw(Json.Encode(Model.powerRecords));
     var monthSummedList = []
+    var perInhabitant;
+    @if((bool?)Session["perInhabitant"] == true)
+    {
+        <text>
+            perInhabitant = true;
+        </text>
+    }
+    else if((bool?)Session["perInhabitant"] == false)
+    {
+        <text>
+            perInhabitant = false;
+        </text>
+    }
+
     @foreach(var monthelem in monthPowerDict)
 
     {
@@ -93,7 +107,7 @@
         data = new google.visualization.DataTable();
 
         data.addColumn("string", "Kommun");
-        @if((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Kwh");</text> }
+        @if((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Wh");</text> }
         else { <text>data.addColumn("number", "kWh");</text> }
 
         @foreach (var elem in PowerDict)
@@ -125,7 +139,7 @@
             <text>
             options = {
                 title: "Producerad energi i alla kommuner (kWh)",
-           
+
             bar: { groupWidth: "60%" },
             legend: { position: "none" },
             animation:
@@ -152,7 +166,7 @@
         if ("@Session["chosenAction"]" == "ShowPowerOfMonth") {
             for (var i = 0; i < ModelJson.length; i++) {
                 if (ModelJson[i].Day == timeUnit) {
-                    if (ModelJson[i].Energi < 1000) {
+                    if (perInhabitant) {
                         data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi)]);
                     }
                     else {
@@ -165,7 +179,7 @@
         else if ("@Session["chosenAction"]" == "ShowPowerOfYear") {
             for (var i = 0; i < monthSummedList.length; i++) {
                 if (monthSummedList[i].month == timeUnit) {
-                    if (monthSummedList[i].energy < 1000) {
+                    if (perInhabitant) {
                         data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy)]);
                     }
                     else {
