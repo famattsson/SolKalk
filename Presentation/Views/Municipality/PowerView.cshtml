@@ -22,12 +22,16 @@
         if ((bool?)Session["perInhabitant"] == true)
         {
             PowerDict[elem.Kommun] += Math.Round(elem.Energi);
+
         }
         else
         {
             PowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
         }
     }
+    //Sort PowerDict by value
+    var PowerArr = PowerDict.ToList();
+    PowerArr.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
 
     Dictionary<string, double> tempPowerDict = new Dictionary<string, double>();
     foreach (var elem in Model.powerRecords)
@@ -49,6 +53,7 @@
         {
             tempPowerDict[elem.Kommun] += Math.Round(elem.Energi);
         }
+
         monthPowerDict[elem.Month] = new Dictionary<string, double>(tempPowerDict);
         month = elem.Month;
     }
@@ -64,7 +69,7 @@
     var chart = null;
     var options = null;
     var ModelJson = @Html.Raw(Json.Encode(Model.powerRecords));
-    var monthSummedList = []
+    var monthSummedList = [];
     @foreach(var monthelem in monthPowerDict)
 
     {
@@ -79,8 +84,12 @@
             </text>
         }
     }
-
-
+    ModelJson.sort(function(a, b){
+        return a.Energi - b.Energi;
+    });
+    monthSummedList.sort(function (a, b) {
+        return a.energy - b.energy;
+    });
     $("[type='number']").keypress(function (evt) {
         evt.preventDefault();
     });
@@ -96,11 +105,11 @@
         @if((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Kwh");</text> }
         else { <text>data.addColumn("number", "kWh");</text> }
 
-        @foreach (var elem in PowerDict)
+        @foreach (var elem in PowerArr)
         {
             <text>
-                var name = he.decode("@elem.Key")
-                data.addRow([name,@elem.Value]);
+                 var name = he.decode("@elem.Key");
+                data.addRow([name, @elem.Value]);    
             </text>
         }
         @if((bool?)Session["perInhabitant"] == true)
@@ -108,13 +117,13 @@
             <text>
             options = {
                 title: "Estimerad energi per invånare i alla kommuner (Wh)",
-            bar: { groupWidth: "65%" },
+                bar: { groupWidth: "65%" },
                 legend: { position: "none" },
-            animation:
+                animation:
                 {
                     duration: 750,
-                easing: 'out'
-            },
+                    easing: 'out'
+                },
             series: { 0: { color: 'green' } },
             vAxis: { minValue: 0, maxValue: 500 }
             };
@@ -138,7 +147,6 @@
             };
             </text>
         }
-
         chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
         chart.draw(data, options);
     }
@@ -161,6 +169,7 @@
 
                 }
             }
+            
         }
         else if ("@Session["chosenAction"]" == "ShowPowerOfYear") {
             for (var i = 0; i < monthSummedList.length; i++) {
@@ -174,7 +183,9 @@
                 }
 
             }
+            
         }
+        
         chart.draw(data, options)
     }
 </script>
