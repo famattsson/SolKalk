@@ -10,6 +10,7 @@ namespace Presentation.Controllers
         {
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfDay";
+
             if (id == "options")
             {
                 Session["options"] = true;
@@ -25,6 +26,7 @@ namespace Presentation.Controllers
             }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView",MunicipalDataHandler.GetProducedPowerOfDay(date, (string)Session["kommun"], (bool?)Session["perInhabitant"]));
+            
         }
 
         public ActionResult ShowPowerOfMonth(string id)
@@ -68,6 +70,7 @@ namespace Presentation.Controllers
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
             return View("PowerView", MunicipalDataHandler.GetProducedPowerOfYear(date, (string)Session["kommun"], (bool?)Session["perInhabitant"]));
         }
+
         public  ActionResult ShowTotalPower()
         {
             Session["chosenACtion"] = "ShowTotalPower";

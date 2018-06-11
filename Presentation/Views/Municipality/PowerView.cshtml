@@ -6,12 +6,11 @@
 @using Resources;
 
 @model HandledMunicipalData
-
 @{
     Dictionary<string, double> PowerDict = new Dictionary<string, double>();
     Dictionary<string, Dictionary<string, double>> monthPowerDict = new Dictionary<string, Dictionary<string, double>>();
     List<string> Kommuner = new List<string>() { "Aneby", "Tranås", "Nässjö", "Eksjö", "Vetlanda", "Sävsjö", "Värnamo", "Gislaved", "Gnosjö", "Vaggeryd", "Jönköping", "Habo", "Mullsjö" };
-
+    
     var month = "";
     foreach (var elem in Kommuner)
     {
@@ -56,6 +55,7 @@
 
 }
 
+
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load("current", { packages: ['corechart'] });
@@ -66,23 +66,23 @@
     var ModelJson = @Html.Raw(Json.Encode(Model.powerRecords));
     var monthSummedList = []
     var perInhabitant;
-    @if((bool?)Session["perInhabitant"] == true)
+    @if ((bool?)Session["perInhabitant"] == true)
     {
         <text>
             perInhabitant = true;
         </text>
     }
-    else if((bool?)Session["perInhabitant"] == false)
+    else if ((bool?)Session["perInhabitant"] == false)
     {
         <text>
             perInhabitant = false;
         </text>
     }
 
-    @foreach(var monthelem in monthPowerDict)
+    @foreach (var monthelem in monthPowerDict)
 
     {
-        foreach(var record in monthelem.Value)
+        foreach (var record in monthelem.Value)
         {
             <text>
                 monthSummedList.push({
@@ -107,7 +107,7 @@
         data = new google.visualization.DataTable();
 
         data.addColumn("string", "Kommun");
-        @if((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Wh");</text> }
+        @if ((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Wh");</text> }
         else { <text>data.addColumn("number", "kWh");</text> }
 
         @foreach (var elem in PowerDict)
@@ -117,7 +117,7 @@
                 data.addRow([name,@elem.Value]);
             </text>
         }
-        @if((bool?)Session["perInhabitant"] == true)
+        @if ((bool?)Session["perInhabitant"] == true)
         {
             <text>
             options = {
@@ -224,150 +224,150 @@
 @helper RandomizeEq(double totalenergi, char prefix)
     {
 
-string omvandling = "";
-Random rnd = new Random();
-int rand = rnd.Next(1, 4);
-double times = 0;
-if (prefix == 'k')
-{
-    switch (rand)
-    {
-        case 1:
-            omvandling = " koppar kaffe bryggd i en kaffebryggare";
-            times = 0.04;
-            break;
-        case 2:
-            omvandling = " timmar konstant användande av en hårtork";
-            times = 0.0005;
-            break;
-        case 3:
-            omvandling = " timmar användande av en mikrovågsugn";
-            times = 0.0007166;
-            break;
-    }
-}
-else if (prefix == 'm')
-{
-    switch (rand)
-    {
-        case 1:
-            omvandling = " års upvärmning av en genomsnittlig svensk villa";
-            times = 0.00000066;
-            break;
-        case 2:
-            omvandling = " års genonomsnittlig varmvattenförbrukning för hushåll på 4 personer";
-            times = 0.0002;
-            break;
-        case 3:
-            omvandling = " års hushållselsförbrukning för en genomsnittlig svensk villa";
-            times = 0.000125;
-            break;
-    }
-}
-else if (prefix == 'g')
-{
-    switch (rand)
-    {
-        /*case 1:
-            omvandling = " dygn användade av en bastu";
-            times = 0.2 / 24;
-            break;
-        case 2:
-            omvandling = " dygn användande av ett strykjärn";
-            times = 0.4166 / 24;
-            break;
-        case 3:
-            omvandling = " ton tvätt torkad i en torktummlare";
-            times = 1.2 / 1000;
-            break;*/
-        case 1:
-            omvandling = " års upvärmning av en genomsnittlig svensk villa";
-            times = 0.00000066;
-            break;
-        case 2:
-            omvandling = " års genonomsnittlig varmvattenförbrukning för hushåll på 4 personer";
-            times = 0.0002;
-            break;
-        case 3:
-            omvandling = " års hushållselsförbrukning för en genomsnittlig svensk villa";
-            times = 0.000125;
-            break;
-    }
-}
-else if (prefix == 'n')
-{
-    switch (rand)
-    {
-        case 1:
-            omvandling = " timmar användande av en bastu";
-            times = 0.005;
-            break;
-        case 2:
-            omvandling = " timmar användande av ett strykjärn";
-            times = 0.0024;
-            break;
-        case 3:
-            omvandling = " kg tvätt torkad i en torktummlare";
-            times = 0.0012;
-            break;
-    }
+        string omvandling = "";
+        Random rnd = new Random();
+        int rand = rnd.Next(1, 4);
+        double times = 0;
+        if (prefix == 'k')
+        {
+            switch (rand)
+            {
+                case 1:
+                    omvandling = " koppar kaffe bryggd i en kaffebryggare";
+                    times = 0.04;
+                    break;
+                case 2:
+                    omvandling = " timmar konstant användande av en hårtork";
+                    times = 0.0005;
+                    break;
+                case 3:
+                    omvandling = " timmar användande av en mikrovågsugn";
+                    times = 0.0007166;
+                    break;
+            }
+        }
+        else if (prefix == 'm')
+        {
+            switch (rand)
+            {
+                case 1:
+                    omvandling = " års upvärmning av en genomsnittlig svensk villa";
+                    times = 0.00000066;
+                    break;
+                case 2:
+                    omvandling = " års genonomsnittlig varmvattenförbrukning för hushåll på 4 personer";
+                    times = 0.0002;
+                    break;
+                case 3:
+                    omvandling = " års hushållselsförbrukning för en genomsnittlig svensk villa";
+                    times = 0.000125;
+                    break;
+            }
+        }
+        else if (prefix == 'g')
+        {
+            switch (rand)
+            {
+                /*case 1:
+                    omvandling = " dygn användade av en bastu";
+                    times = 0.2 / 24;
+                    break;
+                case 2:
+                    omvandling = " dygn användande av ett strykjärn";
+                    times = 0.4166 / 24;
+                    break;
+                case 3:
+                    omvandling = " ton tvätt torkad i en torktummlare";
+                    times = 1.2 / 1000;
+                    break;*/
+                case 1:
+                    omvandling = " års upvärmning av en genomsnittlig svensk villa";
+                    times = 0.00000066;
+                    break;
+                case 2:
+                    omvandling = " års genonomsnittlig varmvattenförbrukning för hushåll på 4 personer";
+                    times = 0.0002;
+                    break;
+                case 3:
+                    omvandling = " års hushållselsförbrukning för en genomsnittlig svensk villa";
+                    times = 0.000125;
+                    break;
+            }
+        }
+        else if (prefix == 'n')
+        {
+            switch (rand)
+            {
+                case 1:
+                    omvandling = " timmar användande av en bastu";
+                    times = 0.005;
+                    break;
+                case 2:
+                    omvandling = " timmar användande av ett strykjärn";
+                    times = 0.0024;
+                    break;
+                case 3:
+                    omvandling = " kg tvätt torkad i en torktummlare";
+                    times = 0.0012;
+                    break;
+            }
 
-}
-if (totalenergi * times > 1000000)
-{
-    if(Math.Round(totalenergi * times/ 1000000) == 1)
-    {
-        omvandling = " miljon" + omvandling;
-    }
-    else
-    {
-        omvandling = " miljoner" + omvandling;
-    }
+        }
+        if (totalenergi * times > 1000000)
+        {
+            if (Math.Round(totalenergi * times / 1000000) == 1)
+            {
+                omvandling = " miljon" + omvandling;
+            }
+            else
+            {
+                omvandling = " miljoner" + omvandling;
+            }
 
             @Math.Round(((totalenergi) * times) / 1000000, 0)@omvandling
-    }
-    else if (totalenergi * times > 1000)
-    {
-        omvandling = " tusen" + omvandling;
-        @Math.Round(((totalenergi) * times) / 1000, 1)@omvandling
-    }
-    else if (totalenergi * times < 1000)
-    {
-        @Math.Round((totalenergi) * times, 1)@omvandling
-    }
+        }
+        else if (totalenergi * times > 1000)
+        {
+            omvandling = " tusen" + omvandling;
+            @Math.Round(((totalenergi) * times) / 1000, 1)@omvandling
+        }
+        else if (totalenergi * times < 1000)
+        {
+            @Math.Round((totalenergi) * times, 1)@omvandling
+        }
 }
 
 @helper DisplayEnergy()
     {
-    double totalenergi = 0;
-    foreach (var elem in Model.powerRecords)
-    {
-        totalenergi += elem.Energi;
-    }
-    if (totalenergi > 1000000000)
-    {
-        <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
-        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'g')</h4>
-    }
-    else if (totalenergi > 1000000)
-    {
-        <h2> @Math.Round(totalenergi / 1000000, 2) MWh</h2>
-        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'm')</h4>
-    }
-    else if (totalenergi > 1000)
-    {
-        <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
-        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
-    }
-    else if (totalenergi < 1000 && totalenergi > 0)
-    {
-        <h2> @Math.Round(totalenergi) Wh </h2>
-        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'n')</h4>
-    }
-    else if (totalenergi <= 0 )
-    {
-        <h2> Ingen data tillgänglig ännu. Återkom efter kl. 10:30 </h2>
-    }
+        double totalenergi = 0;
+        foreach (var elem in Model.powerRecords)
+        {
+            totalenergi += elem.Energi;
+        }
+        if (totalenergi > 1000000000)
+        {
+            <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
+            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'g')</h4>
+        }
+        else if (totalenergi > 1000000)
+        {
+            <h2> @Math.Round(totalenergi / 1000000, 2) MWh</h2>
+            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'm')</h4>
+        }
+        else if (totalenergi > 1000)
+        {
+            <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
+            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
+        }
+        else if (totalenergi < 1000 && totalenergi > 0)
+        {
+            <h2> @Math.Round(totalenergi) Wh </h2>
+            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'n')</h4>
+        }
+        else if (totalenergi <= 0)
+        {
+            <h2> Ingen data tillgänglig ännu. Återkom efter kl. 10:30 </h2>
+        }
 }
 
 @helper GenerateDropdownContents()
@@ -415,7 +415,7 @@ if (totalenergi * times > 1000000)
                     {
                         if ((string)Session["kommun"] == (string)resource.Key)
                         {
-                            if((bool?)Session["options"] != false)
+                            if ((bool?)Session["options"] != false)
                             {
                                 <a xlink:href="/Municipality/ChooseMunicipality/">
                                     <title id="title">@resource.Key</title>
@@ -432,7 +432,7 @@ if (totalenergi * times > 1000000)
                         }
                         else
                         {
-                            if((bool?)Session["options"] != false)
+                            if ((bool?)Session["options"] != false)
                             {
                                 <a xlink:href="/Municipality/ChooseMunicipality/@((string)resource.Key)">
                                     <title id="title">@resource.Key</title>
@@ -455,11 +455,11 @@ if (totalenergi * times > 1000000)
 
 @helper Timeinput()
     {
-        if ((string)Session["chosenAction"] == "ShowPowerOfYear" && (bool?)Session["compare"] == true)
+        if ((string)Session["chosenAction"] == "ShowPowerOfYear")
         {
             <span class="text-info"> Månad: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
-        if ((string)Session["chosenAction"] == "ShowPowerOfMonth" && (bool?)Session["compare"] == true)
+        if ((string)Session["chosenAction"] == "ShowPowerOfMonth")
         {
             <span class="text-info"> Dag: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
@@ -529,27 +529,22 @@ if (totalenergi * times > 1000000)
             @DisplayActive()
         </ul>
 
-        @if ((bool?)Session["compare"] == true)
+        @if (Session["kommun"] == null)
         {
-            @DisplayComparison();
+            <h3>Jönköpings Län</h3>
         }
         else
         {
-            if (Session["kommun"] == null)
-            {
-                <h3>Jönköpings Län</h3>
-            }
-            else
-            {
-                <h3>@((string)Session["kommun"])</h3>
-            }
-            @DisplayEnergy()
+            <h3>@((string)Session["kommun"])</h3>
         }
+        @DisplayEnergy()
+
         <br />
         <div class="row" style="padding-bottom:50px">
             <div class="col-sm-6">
                 @if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
                 {
+                    <h2>Solfaktor:</h2>
                     @DisplayWeatherQuality()
                 }
             </div>
@@ -566,6 +561,17 @@ if (totalenergi * times > 1000000)
         </div>
     </div>
 
+    <div class="row" style="padding-top:50px">
+        <div class="col-sm-3">
 
+        </div>
+        <div class="col-sm-7">
+            @DisplayComparison()
+
+        </div>
+        <div class="col-sm-2" style="padding-top:50px">
+            @Timeinput()
+        </div>
+    </div>
 
 </div>
