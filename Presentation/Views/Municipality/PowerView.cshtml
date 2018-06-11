@@ -69,9 +69,6 @@
     var chart = null;
     var options = null;
     var ModelJson = @Html.Raw(Json.Encode(Model.powerRecords));
-<<<<<<< HEAD
-    var monthSummedList = [];
-=======
     var monthSummedList = []
     var perInhabitant;
     @if((bool?)Session["perInhabitant"] == true)
@@ -87,7 +84,6 @@
         </text>
     }
 
->>>>>>> 7f96e15c728e6c889c9131d1d60f33a49ceb2a6a
     @foreach(var monthelem in monthPowerDict)
 
     {
