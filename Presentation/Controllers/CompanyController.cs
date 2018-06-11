@@ -19,13 +19,13 @@ namespace Presentation.Controllers
                 Session["options"] = false;
                 if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
                 {
-                    Session["företag"] = id;
-                    Session["företagOld"] = id;
+                    Session["Organisation"] = id;
+                    Session["OrganisationOld"] = id;
                 }
             }
 
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
-            return View("PowerView", CompanyDataHandler.GetProducedPowerOfDay(date, (string)Session["företag"]));
+            return View("PowerView", CompanyDataHandler.GetProducedPowerOfDay(date, (string)Session["Organisation"]));
         }
         public ActionResult ShowPowerOfMonth(string id)
         {
@@ -40,12 +40,12 @@ namespace Presentation.Controllers
                 Session["options"] = false;
                 if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
                 {
-                    Session["företag"] = id;
-                    Session["företagOld"] = id;
+                    Session["Organisation"] = id;
+                    Session["OrganisationOld"] = id;
                 }
             }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
-            return View("PowerView", CompanyDataHandler.GetProducedPowerOfMonth(date, (string)Session["företag"]));
+            return View("PowerView", CompanyDataHandler.GetProducedPowerOfMonth(date, (string)Session["Organisation"]));
         }
         public ActionResult ShowPowerOfYear(string id)
         {
@@ -60,24 +60,24 @@ namespace Presentation.Controllers
                 Session["options"] = false;
                 if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
                 {
-                    Session["företag"] = id;
-                    Session["företagOld"] = id;
+                    Session["Organisation"] = id;
+                    Session["OrganisationOld"] = id;
                 }
             }
             var date = String.Format("{0} {1} {2} {3}", DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.AddDays(-1).Day, DateTime.Today.Hour);
-            return View("PowerView", CompanyDataHandler.GetProducedPowerOfYear(date, (string)Session["företag"]));
+            return View("PowerView", CompanyDataHandler.GetProducedPowerOfYear(date, (string)Session["Organisation"]));
         }
         public ActionResult ShowTotalPower()
         {
             Session["chosenACtion"] = "ShowTotalPower";
-            return View("PowerView", CompanyDataHandler.GetTotalProducedPower((string)Session["företag"]));
+            return View("PowerView", CompanyDataHandler.GetTotalProducedPower((string)Session["Organisation"]));
         }
         public ActionResult ChooseCompany(string id)
         {
             if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
             {
-                Session["företag"] = id;
-                Session["företagOld"] = id;
+                Session["Organisation"] = id;
+                Session["OrganisationOld"] = id;
             }
             return RedirectToAction((string)Session["chosenACtion"]);
         }
@@ -87,13 +87,13 @@ namespace Presentation.Controllers
             {
                 Session["compare"] = false;
                 Session["kommun"] = Session["kommunOld"];
-                Session["företag"] = Session["företagOld"];
+                Session["Organisation"] = Session["OrganisationOld"];
             }
             else
             {
                 Session["compare"] = true;
                 Session["kommun"] = null;
-                Session["företag"] = null;
+                Session["Organisation"] = null;
             }
             return RedirectToAction((string)Session["chosenACtion"]);
         }
