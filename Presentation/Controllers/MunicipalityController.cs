@@ -10,7 +10,6 @@ namespace Presentation.Controllers
         {
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfDay";
-
             if (id == "options")
             {
                 Session["options"] = true;

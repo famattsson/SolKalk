@@ -27,7 +27,7 @@
             PowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
         }
     }
-
+    
     Dictionary<string, double> tempPowerDict = new Dictionary<string, double>();
     foreach (var elem in Model.powerRecords)
     {
@@ -555,9 +555,6 @@
         <div class="col"> @ChartButton() </div>
         <div class="row" style="padding:5px 0px 0px 15px">
             <div class="col"> @PerInhabitantButton() </div>
-        </div>
-        <div class="row" style="padding: 15px 0px 0px 15px">
-            <div class="col"> @Timeinput() </div>
         </div>
     </div>
 
