@@ -10,13 +10,13 @@
     Dictionary<string, double> PowerDict = new Dictionary<string, double>();
     Dictionary<string, Dictionary<string, double>> monthPowerDict = new Dictionary<string, Dictionary<string, double>>();
     List<string> Kommuner = new List<string>() { "Aneby", "Tranås", "Nässjö", "Eksjö", "Vetlanda", "Sävsjö", "Värnamo", "Gislaved", "Gnosjö", "Vaggeryd", "Jönköping", "Habo", "Mullsjö" };
-    
+
     var month = "";
     foreach (var elem in Kommuner)
     {
         PowerDict.Add(elem, 0);
     }
-    foreach (var elem in Model.powerRecords)
+    foreach (var elem in Model.powerChartRecords)
     {
         if ((bool?)Session["perInhabitant"] == true)
         {
@@ -33,7 +33,7 @@
     PowerArr.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
 
     Dictionary<string, double> tempPowerDict = new Dictionary<string, double>();
-    foreach (var elem in Model.powerRecords)
+    foreach (var elem in Model.powerChartRecords)
     {
         if (elem.Month != month)
         {
@@ -68,7 +68,7 @@
     var data = null;
     var chart = null;
     var options = null;
-    var ModelJson = @Html.Raw(Json.Encode(Model.powerRecords));
+    var ModelJson = @Html.Raw(Json.Encode(Model.powerChartRecords));
     var monthSummedList = []
     var perInhabitant;
     @if ((bool?)Session["perInhabitant"] == true)
@@ -123,7 +123,7 @@
         {
             <text>
                  var name = he.decode("@elem.Key");
-                data.addRow([name, @elem.Value]);    
+                data.addRow([name, @elem.Value]);
             </text>
         }
         @if ((bool?)Session["perInhabitant"] == true)
@@ -183,7 +183,7 @@
 
                 }
             }
-            
+
         }
         else if ("@Session["chosenACtion"]" == "ShowPowerOfYear") {
             for (var i = 0; i < monthSummedList.length; i++) {
@@ -197,11 +197,12 @@
                 }
 
             }
-            
+
         }
-        
+
         chart.draw(data, options)
     }
+
 </script>
 
 @helper DisplayActive()
