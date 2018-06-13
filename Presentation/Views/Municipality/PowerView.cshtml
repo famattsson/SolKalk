@@ -402,7 +402,7 @@
 
 @helper DisplayComparison()
     {
-        <div id="columnchart_values" style="width:700px; height:450px"></div>
+        <div id="columnchart_values" style="max-width:700px; min-height:450px"></div>
     }
 
 @helper ChartButton()
@@ -519,57 +519,59 @@
 }
 
 <div class="row container">
-    <div class=" col-sm-4" style="padding-left:60px; padding-bottom:10px">
-        @if (((bool?)Session["compare"] == false || (bool?)Session["compare"] == null) && (bool?)Session["options"] != false)
-        {
-            <div class="dropdown">
-                <button class="btnmunicipal btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                    Välj Kommun
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    @GenerateDropdownContents()
-                </ul> 
-                @PerInhabitantButton()
-            </div>
-        }
-        else
-        {
-            <div>
-                @PerInhabitantButton()
-            </div>
-        }
-    </div>
-
-    <div class="col-sm-6" style="padding-left:60px" color="#fff">
-        <ul class="nav nav-tabs">
-            @DisplayActive()
-        </ul>
-    </div>
-
     <div class="row">
-    <div class=" col-sm-4">
-        @DisplaySVGMap()
-        <div class="row" style="padding-left:60px;padding-bottom:20px">
-            @if (Session["kommun"] == null)
+        <div class=" col-sm-4" style="padding-left:50px; padding-bottom:10px">
+            @if (((bool?)Session["compare"] == false || (bool?)Session["compare"] == null) && (bool?)Session["options"] != false)
             {
-                <h3>Jönköpings län</h3>
+                <div class="dropdown">
+                    <button class="btnmunicipal btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        Välj Kommun
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        @GenerateDropdownContents()
+                    </ul> 
+                    @PerInhabitantButton()
+                </div>
             }
             else
             {
-                <h3>@((string)Session["kommun"])</h3>
+                <div>
+                    @PerInhabitantButton()
+                </div>
             }
-            @DisplayEnergy()
-            <h2>Solfaktor:</h2>
-            @DisplayWeatherQuality()
+        </div>
+
+        <div class="col-sm-8" style="padding-left:50px" color="#fff">
+            <ul class="nav nav-tabs">
+                @DisplayActive()
+            </ul>
         </div>
     </div>
+
+    <div class="row">
+        <div class=" col-sm-4">
+            @DisplaySVGMap()
+            <div class="row" style="padding-left:50px;padding-bottom:20px">
+                @if (Session["kommun"] == null)
+                {
+                    <h3>Jönköpings län</h3>
+                }
+                else
+                {
+                    <h3>@((string)Session["kommun"])</h3>
+                }
+                @DisplayEnergy()
+                <h2>Solfaktor:</h2>
+                @DisplayWeatherQuality()
+            </div>
+        </div>
     
-    <div class="col-sm-6" color="#fff">
-        <div style="padding-left:70px; padding-top:10px">
-            @Timeinput()
+        <div class="col-sm-8" color="#fff">
+            <div style="padding-left:40px; padding-top:10px">
+                @Timeinput()
+            </div>
+            @DisplayComparison()
         </div>
-        @DisplayComparison()
-    </div>
     </div>
 </div>
