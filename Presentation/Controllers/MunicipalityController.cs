@@ -108,5 +108,6 @@ namespace Presentation.Controllers
             Session["perInhabitant"] = id;
             return RedirectToAction((string)Session["chosenAction"]);
         }
+       
     }
 }

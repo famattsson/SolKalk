@@ -5,6 +5,7 @@ using Data;
 public struct HandledMunicipalData
 {
     public List<ProducedMunicipalPower> powerRecords;
+    public List<ProducedMunicipalPower> powerChartRecords;
     public int weatherRating;
 }
 
@@ -12,13 +13,14 @@ namespace Logic
 {
     public class MunicipalDataHandler
     {
-
+        
         static public HandledMunicipalData GetTotalProducedPower(string kommun = null, bool? perInhabitant = false)
         {
             if (perInhabitant == true)
             {
                 HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetTotalProducedPower(kommun));
+                handledData.powerChartRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetTotalProducedPower(null));
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
@@ -26,6 +28,7 @@ namespace Logic
             {
                 HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = MunicipalDataAccesser.GetTotalProducedPower(kommun);
+                handledData.powerChartRecords = MunicipalDataAccesser.GetTotalProducedPower(null);
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
@@ -38,6 +41,7 @@ namespace Logic
             {
                 HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfDay(ConvertDate(date), kommun));
+                handledData.powerChartRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfDay(ConvertDate(date), null));
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
@@ -45,6 +49,7 @@ namespace Logic
             {
                 HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = MunicipalDataAccesser.GetProducedPowerOfDay(ConvertDate(date), kommun);
+                handledData.powerChartRecords = MunicipalDataAccesser.GetProducedPowerOfDay(ConvertDate(date), null);
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
@@ -58,6 +63,7 @@ namespace Logic
             {
                 HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfMonth(ConvertDate(date),kommun));
+                handledData.powerChartRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfMonth(ConvertDate(date), null));
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
@@ -65,6 +71,7 @@ namespace Logic
             {
                 HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = MunicipalDataAccesser.GetProducedPowerOfMonth(ConvertDate(date), kommun);
+                handledData.powerChartRecords = MunicipalDataAccesser.GetProducedPowerOfMonth(ConvertDate(date), null);
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
@@ -76,6 +83,7 @@ namespace Logic
             {
                 HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfYear(ConvertDate(date), kommun));
+                handledData.powerChartRecords = ConvertToPerInhabitant(MunicipalDataAccesser.GetProducedPowerOfYear(ConvertDate(date), null));
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
@@ -83,6 +91,7 @@ namespace Logic
             {
                 HandledMunicipalData handledData = new HandledMunicipalData();
                 handledData.powerRecords = MunicipalDataAccesser.GetProducedPowerOfYear(ConvertDate(date), kommun);
+                handledData.powerChartRecords = MunicipalDataAccesser.GetProducedPowerOfYear(ConvertDate(date), null);
                 handledData.weatherRating = CalculateWeatherRating(handledData.powerRecords);
                 return handledData;
             }
