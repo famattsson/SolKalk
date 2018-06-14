@@ -12,6 +12,7 @@
     List<string> Kommuner = new List<string>() { "Aneby", "Tranås", "Nässjö", "Eksjö", "Vetlanda", "Sävsjö", "Värnamo", "Gislaved", "Gnosjö", "Vaggeryd", "Jönköping", "Habo", "Mullsjö" };
 
     var month = "";
+    PowerDict.Clear();
     foreach (var elem in Kommuner)
     {
         PowerDict.Add(elem, 0);
@@ -250,94 +251,24 @@
     {
 
         string omvandling = "";
-        Random rnd = new Random();
-        int rand = rnd.Next(1, 4);
         double times = 0;
         if (prefix == 'k')
         {
-            switch (rand)
-            {
-                case 1:
                     omvandling = " koppar kaffe bryggd i en kaffebryggare";
                     times = 0.04;
-                    break;
-                case 2:
-                    omvandling = " timmar konstant användande av en hårtork";
-                    times = 0.0005;
-                    break;
-                case 3:
-                    omvandling = " timmar användande av en mikrovågsugn";
-                    times = 0.0007166;
-                    break;
-            }
         }
-        else if (prefix == 'm')
+        else if (prefix == 'c')
         {
-            switch (rand)
-            {
-                case 1:
+                    omvandling = " mil i en elbil";
+                    times = 0.0015;
+        }
+        else if (prefix == 'h')
+        {
                     omvandling = " års upvärmning av en genomsnittlig svensk villa";
                     times = 0.00000066;
-                    break;
-                case 2:
-                    omvandling = " års genonomsnittlig varmvattenförbrukning för hushåll på 4 personer";
-                    times = 0.0002;
-                    break;
-                case 3:
-                    omvandling = " års hushållselsförbrukning för en genomsnittlig svensk villa";
-                    times = 0.000125;
-                    break;
-            }
         }
-        else if (prefix == 'g')
-        {
-            switch (rand)
-            {
-                /*case 1:
-                    omvandling = " dygn användade av en bastu";
-                    times = 0.2 / 24;
-                    break;
-                case 2:
-                    omvandling = " dygn användande av ett strykjärn";
-                    times = 0.4166 / 24;
-                    break;
-                case 3:
-                    omvandling = " ton tvätt torkad i en torktummlare";
-                    times = 1.2 / 1000;
-                    break;*/
-                case 1:
-                    omvandling = " års upvärmning av en genomsnittlig svensk villa";
-                    times = 0.00000066;
-                    break;
-                case 2:
-                    omvandling = " års genonomsnittlig varmvattenförbrukning för hushåll på 4 personer";
-                    times = 0.0002;
-                    break;
-                case 3:
-                    omvandling = " års hushållselsförbrukning för en genomsnittlig svensk villa";
-                    times = 0.000125;
-                    break;
-            }
-        }
-        else if (prefix == 'n')
-        {
-            switch (rand)
-            {
-                case 1:
-                    omvandling = " timmar användande av en bastu";
-                    times = 0.005;
-                    break;
-                case 2:
-                    omvandling = " timmar användande av ett strykjärn";
-                    times = 0.0024;
-                    break;
-                case 3:
-                    omvandling = " kg tvätt torkad i en torktummlare";
-                    times = 0.0012;
-                    break;
-            }
 
-        }
+
         if (totalenergi * times > 1000000)
         {
             if (Math.Round(totalenergi * times / 1000000) == 1)
@@ -372,22 +303,83 @@
         if (totalenergi > 1000000000)
         {
             <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
-            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'g')</h4>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
+ 
         }
         else if (totalenergi > 1000000)
         {
             <h2> @Math.Round(totalenergi / 1000000, 2) MWh</h2>
-            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'm')</h4>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
         }
         else if (totalenergi > 1000)
         {
             <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
-            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
         }
         else if (totalenergi < 1000 && totalenergi > 0)
         {
             <h2> @Math.Round(totalenergi) Wh </h2>
-            <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'n')</h4>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
         }
         else if (totalenergi <= 0)
         {
@@ -416,18 +408,6 @@
     {
         <div id="columnchart_values" style="max-width:700px; min-height:450px"></div>
     }
-
-@helper ChartButton()
-    {
-        if ((bool?)Session["compare"] == true)
-        {
-            <a href="/Municipality/SetCompareMode/0" class="btnmunicipal btn btn-info" role="button">Dölj Diagram</a>
-        }
-        else
-        {
-            <a href="/Municipality/SetCompareMode/1" class="btnmunicipal btn btn-info" role="button">Visa Diagram</a>
-        }
-}
 
 @helper DisplaySVGMap()
     {
@@ -528,6 +508,28 @@
         {
             <a class="btnmunicipal btn btn-info" role="button" href="/Municipality/PerInhabitant/true"> Se Per Invånare </a>
         }
+}
+
+@helper ShowIcons(char prefix)
+{
+    ImageConverter imageConverter = new ImageConverter();
+    Image image = Resources.sun;
+    byte[] imageBytes = (byte[])imageConverter.ConvertTo(image, typeof(byte[]));
+
+    if (prefix == 'c'){
+        imageBytes = (byte[])imageConverter.ConvertTo(Resources.car, typeof(byte[]));
+        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
+    }
+
+    else if (prefix == 'h'){
+        imageBytes = (byte[])imageConverter.ConvertTo(Resources.house, typeof(byte[]));
+        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
+    }    
+
+    else if (prefix == 'k'){
+        imageBytes = (byte[])imageConverter.ConvertTo(Resources.coffee, typeof(byte[]));
+        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
+    }
 }
 
 <div class="row container">
