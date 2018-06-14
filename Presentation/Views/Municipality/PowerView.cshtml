@@ -44,13 +44,13 @@
             }
         }
 
-        if ((bool?)Session["perInhabitant"] == false)
+        if ((bool?)Session["perInhabitant"] == true)
         {
-            tempPowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
+            tempPowerDict[elem.Kommun] += Math.Round(elem.Energi);
         }
         else
         {
-            tempPowerDict[elem.Kommun] += Math.Round(elem.Energi);
+            tempPowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
         }
 
         monthPowerDict[elem.Month] = new Dictionary<string, double>(tempPowerDict);
@@ -71,6 +71,8 @@
     var ModelJson = @Html.Raw(Json.Encode(Model.powerChartRecords));
     var monthSummedList = []
     var perInhabitant;
+    var activeMuni;
+   
     @if ((bool?)Session["perInhabitant"] == true)
     {
         <text>
@@ -117,13 +119,15 @@
 
         data.addColumn("string", "Kommun");
         @if ((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Wh");</text> }
-        else { <text>data.addColumn("number", "kWh");</text> }
+        else { <text>data.addColumn("number", "kWh");</text> }data.addColumn({type:'string', role: "style" });
 
         @foreach (var elem in PowerArr)
         {
             <text>
-                 var name = he.decode("@elem.Key");
-                data.addRow([name, @elem.Value]);
+                var name = he.decode("@elem.Key");
+                if (name == he.decode("@((string)Session["kommun"])")){
+                    data.addRow([name, @elem.Value, 'rgb(58, 145, 63)']);
+                } else { data.addRow([name, @elem.Value, 'rgb(161, 216, 132)'])}
             </text>
         }
         @if ((bool?)Session["perInhabitant"] == true)
@@ -131,14 +135,14 @@
             <text>
             options = {
                 title: "Producerad energi per invånare i alla kommuner (Wh)",
-                bar: { groupWidth: "65%" },
+                bar: { groupWidth: "80%" },
                 legend: { position: "none" },
                 animation:
                 {
                     duration: 750,
                     easing: 'out'
                 },
-            series: { 0: { color: 'green' } },
+            //series: { 0: { color: 'green' } },
             vAxis: { minValue: 0, maxValue: 0}
             };
             </text>
@@ -150,15 +154,15 @@
             options = {
                 title: "Producerad energi i alla kommuner (kWh)",
 
-            bar: { groupWidth: "60%" },
+            bar: { groupWidth: "80%" },
             legend: { position: "none" },
             animation:
                 {
                     duration: 750,
                 easing: 'out'
             },
-            series: { 0: { color: 'green' } },
-            vAxis: { minValue: 0, maxValue: 27500 }
+            //series: { 0: { color: 'green' } },
+            vAxis: { minValue: 0, maxValue: 0 }
             };
             </text>
         }
@@ -176,10 +180,14 @@
             for (var i = 0; i < ModelJson.length; i++) {
                 if (ModelJson[i].Day == timeUnit) {
                     if (perInhabitant) {
-                        data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi)]);
+                        if (ModelJson[i].Kommun == he.decode("@((string)Session["kommun"])")) {
+                            data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi), 'rgb(58, 145, 63)']);
+                        } else data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi), 'rgb(161, 216, 132)']);
                     }
                     else {
-                        data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi / 1000)]);
+                        if (ModelJson[i].Kommun == he.decode("@((string)Session["kommun"])")) {
+                            data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi /1000), 'rgb(58, 145, 63)'])
+                        } else data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi/1000), 'rgb(161, 216, 132)']);
                     }
 
                 }
@@ -190,10 +198,14 @@
             for (var i = 0; i < monthSummedList.length; i++) {
                 if (monthSummedList[i].month == timeUnit) {
                     if (perInhabitant) {
-                        data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy)]);
+                        if (monthSummedList[i].municipality == he.decode("@((string)Session["kommun"])")) {
+                            data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy), 'rgb(58, 145, 63)']);
+                        } else data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy), 'rgb(161, 216, 132)']);
                     }
                     else {
-                        data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy / 1000)]);
+                        if (monthSummedList[i].municipality == he.decode("@((string)Session["kommun"])")) {
+                            data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy), 'rgb(58, 145, 63)']);
+                        } else data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy), 'rgb(161, 216, 132)']);
                     }
                 }
 
