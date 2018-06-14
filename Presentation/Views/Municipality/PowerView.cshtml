@@ -12,6 +12,7 @@
     List<string> Kommuner = new List<string>() { "Aneby", "Tranås", "Nässjö", "Eksjö", "Vetlanda", "Sävsjö", "Värnamo", "Gislaved", "Gnosjö", "Vaggeryd", "Jönköping", "Habo", "Mullsjö" };
 
     var month = "";
+    PowerDict.Clear();
     foreach (var elem in Kommuner)
     {
         PowerDict.Add(elem, 0);
@@ -290,14 +291,22 @@
         if (totalenergi > 1000000000)
         {
             <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
-            @ShowIcons('h')
-            <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
-            <br/>
-            @ShowIcons('c')
-            <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
-            <br/>
-            @ShowIcons('k')
-            <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
  
         }
         else if (totalenergi > 1000000)
@@ -323,26 +332,42 @@
         else if (totalenergi > 1000)
         {
             <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
-            @ShowIcons('h')
-            <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
-            <br/>
-            @ShowIcons('c')
-            <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
-            <br/>
-            @ShowIcons('k')
-            <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
         }
         else if (totalenergi < 1000 && totalenergi > 0)
         {
             <h2> @Math.Round(totalenergi) Wh </h2>
-            @ShowIcons('h')
-            <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
-            <br/>
-            @ShowIcons('c')
-            <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
-            <br/>
-            @ShowIcons('k')
-            <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
         }
         else if (totalenergi <= 0)
         {
