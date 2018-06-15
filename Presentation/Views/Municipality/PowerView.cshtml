@@ -72,7 +72,7 @@
     var monthSummedList = []
     var perInhabitant;
     var activeMuni;
-   
+
     @if ((bool?)Session["perInhabitant"] == true)
     {
         <text>
@@ -146,7 +146,7 @@
             vAxis: { minValue: 0, maxValue: 0}
             };
             </text>
-            
+
         }
         else
         {
@@ -253,18 +253,18 @@
         double times = 0;
         if (prefix == 'k')
         {
-                    omvandling = " koppar kaffe bryggd i en kaffebryggare";
-                    times = 0.04;
+            omvandling = " koppar kaffe bryggd i en kaffebryggare";
+            times = 0.04;
         }
         else if (prefix == 'c')
         {
-                    omvandling = " mil i en elbil";
-                    times = 0.0015;
+            omvandling = " mil i en elbil";
+            times = 0.0015;
         }
         else if (prefix == 'h')
         {
-                    omvandling = " års upvärmning av en genomsnittlig svensk villa";
-                    times = 0.00000066;
+            omvandling = " års upvärmning av en genomsnittlig svensk villa";
+            times = 0.00000066;
         }
 
 
@@ -283,11 +283,13 @@
         }
         else if (totalenergi * times > 1000)
         {
-            double first = Math.Round((totalenergi * times) / 1000, 0);
-            double last = Math.Round(totalenergi * times - (first * 1000),0);
-            char space = ' ';
-            @first@space@last@omvandling
-            
+            var delning = Math.Round(((totalenergi) * times), 0);
+            var delningStr = delning.ToString();
+            delningStr = delningStr.Substring(delningStr.Length - 3);
+            delning = Math.Round(delning / 1000, 0);
+            var space = " ";
+            @delning@space@delningStr@omvandling
+
         }
         else if (totalenergi * times < 1000)
         {
@@ -311,17 +313,17 @@
             </div>
 
             <div>
-                <br/><br/>
+                <br /><br />
                 @ShowIcons('c')
                 <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
             </div>
-           
+
             <div>
-                <br/><br/>
+                <br /><br />
                 @ShowIcons('k')
                 <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
             </div>
- 
+
         }
         else if (totalenergi > 1000000)
         {
@@ -332,13 +334,13 @@
             </div>
 
             <div>
-                <br/><br/>
+                <br /><br />
                 @ShowIcons('c')
                 <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
             </div>
-           
+
             <div>
-                <br/><br/>
+                <br /><br />
                 @ShowIcons('k')
                 <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
             </div>
@@ -352,13 +354,13 @@
             </div>
 
             <div>
-                <br/><br/>
+                <br /><br />
                 @ShowIcons('c')
                 <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
             </div>
-           
+
             <div>
-                <br/><br/>
+                <br /><br />
                 @ShowIcons('k')
                 <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
             </div>
@@ -372,13 +374,13 @@
             </div>
 
             <div>
-                <br/><br/>
+                <br /><br />
                 @ShowIcons('c')
                 <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
             </div>
-           
+
             <div>
-                <br/><br/>
+                <br /><br />
                 @ShowIcons('k')
                 <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
             </div>
@@ -409,7 +411,7 @@
 @helper DisplayComparison()
     {
         <div id="columnchart_values" style="max-width:700px; min-height:500px"></div>
-    }
+}
 
 @helper DisplaySVGMap()
     {
@@ -474,7 +476,7 @@
         {
             <div style="padding-top:54px"></div>
         }
-    }
+}
 
 @helper DisplayWeatherQuality()
     {
@@ -513,25 +515,28 @@
 }
 
 @helper ShowIcons(char prefix)
-{
-    ImageConverter imageConverter = new ImageConverter();
-    Image image = Resources.sun;
-    byte[] imageBytes = (byte[])imageConverter.ConvertTo(image, typeof(byte[]));
+    {
+        ImageConverter imageConverter = new ImageConverter();
+        Image image = Resources.sun;
+        byte[] imageBytes = (byte[])imageConverter.ConvertTo(image, typeof(byte[]));
 
-    if (prefix == 'c'){
-        imageBytes = (byte[])imageConverter.ConvertTo(Resources.car, typeof(byte[]));
-        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
-    }
+        if (prefix == 'c')
+        {
+            imageBytes = (byte[])imageConverter.ConvertTo(Resources.car, typeof(byte[]));
+            <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
+        }
 
-    else if (prefix == 'h'){
-        imageBytes = (byte[])imageConverter.ConvertTo(Resources.house, typeof(byte[]));
-        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
-    }    
+        else if (prefix == 'h')
+        {
+            imageBytes = (byte[])imageConverter.ConvertTo(Resources.house, typeof(byte[]));
+            <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
+        }
 
-    else if (prefix == 'k'){
-        imageBytes = (byte[])imageConverter.ConvertTo(Resources.coffee, typeof(byte[]));
-        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
-    }
+        else if (prefix == 'k')
+        {
+            imageBytes = (byte[])imageConverter.ConvertTo(Resources.coffee, typeof(byte[]));
+            <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
+        }
 }
 
 <div class="row container">
@@ -546,7 +551,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         @GenerateDropdownContents()
-                    </ul> 
+                    </ul>
                     @PerInhabitantButton()
                 </div>
             }
@@ -578,15 +583,15 @@
                     <h3>@((string)Session["kommun"])</h3>
                 }
                 @DisplayEnergy()
-                <br/>
+                <br />
             </div>
         </div>
-    
+
         <div class="col-sm-8" color="#fff">
             <div style="padding-left:40px; padding-top:10px">
                 <h2>Solfaktor:</h2>
                 @DisplayWeatherQuality()
-                <br/><br/><br/>
+                <br /><br /><br />
                 @Timeinput()
             </div>
             @DisplayComparison()
