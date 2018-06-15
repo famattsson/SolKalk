@@ -5,8 +5,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="3fca486e05664b189657befd591fbbaa" Name="Diagram1">
-        <EntityTypeShape EntityType="SolkalkDbModel.ProducedCompanyPower" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SolkalkDbModel.ProducedMunicipalPower" Width="1.5" PointX="3.125" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SolkalkDbModel.ProducedCompanyPower" Width="2.25" PointX="0.5" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SolkalkDbModel.ProducedMunicipalPower" Width="2.25" PointX="3.125" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
