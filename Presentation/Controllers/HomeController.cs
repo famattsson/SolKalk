@@ -13,9 +13,9 @@ namespace Presentation.Controllers
         {
             Session["onHome"] = true;
             Session["options"] = true;
-            if (Session["chosenAction"] == null)
+            if (Session["chosenACtion"] == null)
             {
-                Session["chosenAction"] = "ShowPowerOfYear";
+                Session["chosenACtion"] = "ShowPowerOfYear";
             }
             return View("HomeView");
         }
