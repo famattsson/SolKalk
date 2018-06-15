@@ -57,7 +57,7 @@ namespace Presentation.Controllers
             {
                 Session["options"] = true;
             }
-            else if (id != "" && id != null)
+            else if (id != "" || id != null)
             {
                 Session["options"] = false;
                 if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
