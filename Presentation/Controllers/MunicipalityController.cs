@@ -8,6 +8,7 @@ namespace Presentation.Controllers
     {
         public ActionResult ShowPowerOfDay(string id)
         {
+            Session["compare"] = false;
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfDay";
             if (id == "options")
@@ -30,6 +31,7 @@ namespace Presentation.Controllers
 
         public ActionResult ShowPowerOfMonth(string id)
         {
+            Session["compare"] = false;
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfMonth";
             if (id == "options")
@@ -51,6 +53,7 @@ namespace Presentation.Controllers
 
         public ActionResult ShowPowerOfYear(string id)
         {
+            Session["compare"] = false;
             Session["onHome"] = false;
             Session["chosenACtion"] = "ShowPowerOfYear";
             if (id == "options")

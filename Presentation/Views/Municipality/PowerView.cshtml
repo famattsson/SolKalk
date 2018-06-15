@@ -279,7 +279,7 @@
                 omvandling = " miljoner" + omvandling;
             }
 
-            @Math.Round(((totalenergi) * times) / 1000000, 0)@omvandling
+            @Math.Round(((totalenergi) * times) / 1000000, 1)@omvandling
         }
         else if (totalenergi * times > 1000)
         {
@@ -309,19 +309,19 @@
             <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
             <div>
                 @ShowIcons('h')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'h')</h4>
             </div>
 
             <div>
                 <br /><br />
                 @ShowIcons('c')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'c')</h4>
             </div>
 
             <div>
                 <br /><br />
                 @ShowIcons('k')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'k')</h4>
             </div>
 
         }
@@ -330,19 +330,19 @@
             <h2> @Math.Round(totalenergi / 1000000, 2) MWh</h2>
             <div>
                 @ShowIcons('h')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'h')</h4>
             </div>
 
             <div>
                 <br /><br />
                 @ShowIcons('c')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'c')</h4>
             </div>
 
             <div>
                 <br /><br />
                 @ShowIcons('k')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'k')</h4>
             </div>
         }
         else if (totalenergi > 1000)
@@ -350,19 +350,19 @@
             <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
             <div>
                 @ShowIcons('h')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'h')</h4>
             </div>
 
             <div>
                 <br /><br />
                 @ShowIcons('c')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'c')</h4>
             </div>
 
             <div>
                 <br /><br />
                 @ShowIcons('k')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'k')</h4>
             </div>
         }
         else if (totalenergi < 1000 && totalenergi > 0)
@@ -370,19 +370,19 @@
             <h2> @Math.Round(totalenergi) Wh </h2>
             <div>
                 @ShowIcons('h')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'h')</h4>
             </div>
 
             <div>
                 <br /><br />
                 @ShowIcons('c')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'c')</h4>
             </div>
 
             <div>
                 <br /><br />
                 @ShowIcons('k')
-                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+                <h4 style="color:gray; display:inline">Eller ca @RandomizeEq(totalenergi, 'k')</h4>
             </div>
         }
         else if (totalenergi <= 0)
