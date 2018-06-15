@@ -24,7 +24,7 @@ h3 { /*Kommunnamn font*/
 }
 
 path {
-    transition: .4s fill;
+    transition: .5s fill;
 }
 
 path:hover {
