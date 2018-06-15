@@ -50,14 +50,14 @@ namespace Data
                 if (kommun != "" && kommun != null)
                 {
                     var query = from power in db.ProducedMunicipalPowers
-                                where power.Kommun == kommun && power.Day == date.day
+                                where power.Kommun == kommun && power.Day == date.day && power.Month == date.month && power.Year == date.year
                                 select power;
                     return query.ToList();
                 }
                 else
                 {
                     var query = from power in db.ProducedMunicipalPowers
-                                where power.Day == date.day
+                                where power.Day == date.day && power.Month == date.month && power.Year == date.year
                                 select power;
                     return query.ToList();
                 }
@@ -70,14 +70,14 @@ namespace Data
                 if (kommun != "" && kommun != null)
                 {
                     var query = from power in db.ProducedMunicipalPowers
-                                where power.Kommun == kommun && power.Month == date.month
+                                where power.Kommun == kommun && power.Month == date.month && power.Year == date.year
                                 select power;
                     return query.ToList();
                 }
                 else
                 {
                     var query = from power in db.ProducedMunicipalPowers
-                                where power.Month == date.month
+                                where power.Month == date.month && power.Year == date.year
                                 select power;
                     return query.ToList();
                 }

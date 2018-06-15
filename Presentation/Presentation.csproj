@@ -133,6 +133,9 @@
     <None Include="Resources\Husqvarna.jpg" />
     <None Include="Resources\Cybercom.png" />
     <None Include="Resources\klimatradet.png" />
+    <None Include="Resources\coffee.png" />
+    <None Include="Resources\house.png" />
+    <None Include="Resources\car.png" />
     <Content Include="Resources\Naturvärdsverket.png" />
     <Content Include="Resources\smhi.png" />
     <Content Include="Resources\solstartbild.jpg" />

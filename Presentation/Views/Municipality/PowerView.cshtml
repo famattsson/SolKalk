@@ -6,31 +6,35 @@
 @using Resources;
 
 @model HandledMunicipalData
-
 @{
     Dictionary<string, double> PowerDict = new Dictionary<string, double>();
     Dictionary<string, Dictionary<string, double>> monthPowerDict = new Dictionary<string, Dictionary<string, double>>();
     List<string> Kommuner = new List<string>() { "Aneby", "Tranås", "Nässjö", "Eksjö", "Vetlanda", "Sävsjö", "Värnamo", "Gislaved", "Gnosjö", "Vaggeryd", "Jönköping", "Habo", "Mullsjö" };
 
     var month = "";
+    PowerDict.Clear();
     foreach (var elem in Kommuner)
     {
         PowerDict.Add(elem, 0);
     }
-    foreach (var elem in Model.powerRecords)
+    foreach (var elem in Model.powerChartRecords)
     {
         if ((bool?)Session["perInhabitant"] == true)
         {
             PowerDict[elem.Kommun] += Math.Round(elem.Energi);
+
         }
         else
         {
             PowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
         }
     }
+    //Sort PowerDict by value
+    var PowerArr = PowerDict.ToList();
+    PowerArr.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
 
     Dictionary<string, double> tempPowerDict = new Dictionary<string, double>();
-    foreach (var elem in Model.powerRecords)
+    foreach (var elem in Model.powerChartRecords)
     {
         if (elem.Month != month)
         {
@@ -41,20 +45,22 @@
             }
         }
 
-        if ((bool?)Session["perInhabitant"] == false)
-        {
-            tempPowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
-        }
-        else
+        if ((bool?)Session["perInhabitant"] == true)
         {
             tempPowerDict[elem.Kommun] += Math.Round(elem.Energi);
         }
+        else
+        {
+            tempPowerDict[elem.Kommun] += Math.Round(elem.Energi / 1000);
+        }
+
         monthPowerDict[elem.Month] = new Dictionary<string, double>(tempPowerDict);
         month = elem.Month;
     }
 
 
 }
+
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
@@ -63,12 +69,28 @@
     var data = null;
     var chart = null;
     var options = null;
-    var ModelJson = @Html.Raw(Json.Encode(Model.powerRecords));
+    var ModelJson = @Html.Raw(Json.Encode(Model.powerChartRecords));
     var monthSummedList = []
-    @foreach(var monthelem in monthPowerDict)
+    var perInhabitant;
+    var activeMuni;
+   
+    @if ((bool?)Session["perInhabitant"] == true)
+    {
+        <text>
+            perInhabitant = true;
+        </text>
+    }
+    else if ((bool?)Session["perInhabitant"] == false)
+    {
+        <text>
+            perInhabitant = false;
+        </text>
+    }
+
+    @foreach (var monthelem in monthPowerDict)
 
     {
-        foreach(var record in monthelem.Value)
+        foreach (var record in monthelem.Value)
         {
             <text>
                 monthSummedList.push({
@@ -79,8 +101,12 @@
             </text>
         }
     }
-
-
+    ModelJson.sort(function(a, b){
+        return a.Energi - b.Energi;
+    });
+    monthSummedList.sort(function (a, b) {
+        return a.energy - b.energy;
+    });
     $("[type='number']").keypress(function (evt) {
         evt.preventDefault();
     });
@@ -93,52 +119,54 @@
         data = new google.visualization.DataTable();
 
         data.addColumn("string", "Kommun");
-        @if((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Kwh");</text> }
-        else { <text>data.addColumn("number", "kWh");</text> }
+        @if ((bool?)Session["perInhabitant"] == true) { <text>data.addColumn("number", "Wh");</text> }
+        else { <text>data.addColumn("number", "kWh");</text> }data.addColumn({type:'string', role: "style" });
 
-        @foreach (var elem in PowerDict)
+        @foreach (var elem in PowerArr)
         {
             <text>
-                var name = he.decode("@elem.Key")
-                data.addRow([name,@elem.Value]);
+                var name = he.decode("@elem.Key");
+                if (name == he.decode("@((string)Session["kommun"])")){
+                    data.addRow([name, @elem.Value, 'rgb(58, 145, 63)']);
+                } else { data.addRow([name, @elem.Value, 'rgb(161, 216, 132)'])}
             </text>
         }
-        @if((bool?)Session["perInhabitant"] == true)
+        @if ((bool?)Session["perInhabitant"] == true)
         {
             <text>
             options = {
-                title: "Estimerad energi per invånare i alla kommuner (Wh)",
-            bar: { groupWidth: "65%" },
+                title: "Producerad energi per invånare i alla kommuner (Wh)",
+                bar: { groupWidth: "80%" },
                 legend: { position: "none" },
-            animation:
+                animation:
                 {
                     duration: 750,
-                easing: 'out'
-            },
-            series: { 0: { color: 'green' } },
-            vAxis: { minValue: 0, maxValue: 500 }
+                    easing: 'out'
+                },
+            //series: { 0: { color: 'green' } },
+            vAxis: { minValue: 0, maxValue: 0}
             };
             </text>
+            
         }
         else
         {
             <text>
             options = {
-                title: "Producerad energi i alla kommuner (Wh)",
-           
-            bar: { groupWidth: "60%" },
+                title: "Producerad energi i alla kommuner (kWh)",
+
+            bar: { groupWidth: "80%" },
             legend: { position: "none" },
             animation:
                 {
                     duration: 750,
                 easing: 'out'
             },
-            series: { 0: { color: 'green' } },
-            vAxis: { minValue: 0, maxValue: 27500 }
+            //series: { 0: { color: 'green' } },
+            vAxis: { minValue: 0, maxValue: 0 }
             };
             </text>
         }
-
         chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
         chart.draw(data, options);
     }
@@ -149,28 +177,46 @@
         if (timeUnit < 10) {
             timeUnit = "0" + timeUnit;
         }
-        if ("@Session["chosenAction"]" == "ShowPowerOfMonth") {
+        if ("@Session["chosenACtion"]" == "ShowPowerOfMonth") {
             for (var i = 0; i < ModelJson.length; i++) {
                 if (ModelJson[i].Day == timeUnit) {
-                    if (ModelJson[i].Energi < 1000) {
-                        data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi)]);
+                    if (perInhabitant) {
+                        if (ModelJson[i].Kommun == he.decode("@((string)Session["kommun"])")) {
+                            data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi), 'rgb(58, 145, 63)']);
+                        } else data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi), 'rgb(161, 216, 132)']);
                     }
                     else {
-                        data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi / 1000)]);
+                        if (ModelJson[i].Kommun == he.decode("@((string)Session["kommun"])")) {
+                            data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi /1000), 'rgb(58, 145, 63)'])
+                        } else data.addRow([ModelJson[i].Kommun, Math.round(ModelJson[i].Energi/1000), 'rgb(161, 216, 132)']);
                     }
 
                 }
             }
+
         }
-        else if ("@Session["chosenAction"]" == "ShowPowerOfYear") {
+        else if ("@Session["chosenACtion"]" == "ShowPowerOfYear") {
             for (var i = 0; i < monthSummedList.length; i++) {
                 if (monthSummedList[i].month == timeUnit) {
-                    data.addRow([monthSummedList[i].municipality, monthSummedList[i].energy]);
+                    if (perInhabitant) {
+                        if (monthSummedList[i].municipality == he.decode("@((string)Session["kommun"])")) {
+                            data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy), 'rgb(58, 145, 63)']);
+                        } else data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy), 'rgb(161, 216, 132)']);
+                    }
+                    else {
+                        if (monthSummedList[i].municipality == he.decode("@((string)Session["kommun"])")) {
+                            data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy), 'rgb(58, 145, 63)']);
+                        } else data.addRow([monthSummedList[i].municipality, Math.round(monthSummedList[i].energy), 'rgb(161, 216, 132)']);
+                    }
                 }
+
             }
+
         }
+
         chart.draw(data, options)
     }
+
 </script>
 
 @helper DisplayActive()
@@ -204,138 +250,144 @@
 @helper RandomizeEq(double totalenergi, char prefix)
     {
 
-string omvandling = "";
-Random rnd = new Random();
-int rand = rnd.Next(1, 4);
-double times = 0;
-if (prefix == 'k')
-{
-    switch (rand)
-    {
-        case 1:
-            omvandling = " koppar kaffe";
-            times = 40;
-            break;
-        case 2:
-            omvandling = " timmar hårtork";
-            times = 0.5;
-            break;
-        case 3:
-            omvandling = " timmar mikrovågsugn";
-            times = 0.7166;
-            break;
-    }
-}
-else if (prefix == 'm')
-{
-    switch (rand)
-    {
-        case 1:
-            omvandling = " timmar med en vattenkokare";
-            times = (0.45);
-            break;
-        case 2:
-            omvandling = " timmar med en dammsugare";
-            times = (0.8333);
-            break;
-        case 3:
-            omvandling = " timmar med en induktionsspis";
-            times = (0.55);
-            break;
-    }
-}
-else if (prefix == 'g')
-{
-    switch (rand)
-    {
-        case 1:
-            omvandling = " timmar bastubad";
-            times = 0.2;
-            break;
-        case 2:
-            omvandling = " timmar med ett strykjärn";
-            times = 0.4166;
-            break;
-        case 3:
-            omvandling = " kg tvätt i en torktummlare";
-            times = 1.2;
-            break;
-    }
-}
-else if (prefix == 'n')
-{
-    switch (rand)
-    {
-        case 1:
-            omvandling = " timmar bastubad";
-            times = 0.2;
-            break;
-        case 2:
-            omvandling = " timmar med ett strykjärn";
-            times = 0.4166;
-            break;
-        case 3:
-            omvandling = " kg tvätt i en torktummlare";
-            times = 1.2;
-            break;
-    }
+        string omvandling = "";
+        double times = 0;
+        if (prefix == 'k')
+        {
+                    omvandling = " koppar kaffe bryggd i en kaffebryggare";
+                    times = 0.04;
+        }
+        else if (prefix == 'c')
+        {
+                    omvandling = " mil i en elbil";
+                    times = 0.0015;
+        }
+        else if (prefix == 'h')
+        {
+                    omvandling = " års upvärmning av en genomsnittlig svensk villa";
+                    times = 0.00000066;
+        }
 
-}
-    if (totalenergi * times > 1000000)
-    {
-        if(Math.Round(totalenergi * times/ 1000000) == 1)
+
+        if (totalenergi * times > 1000000)
         {
-            omvandling = " miljon" + omvandling;
-        }
-        else
-        {
-            omvandling = " miljoner" + omvandling;
-        }
+            if (Math.Round(totalenergi * times / 1000000) == 1)
+            {
+                omvandling = " miljon" + omvandling;
+            }
+            else
+            {
+                omvandling = " miljoner" + omvandling;
+            }
 
             @Math.Round(((totalenergi) * times) / 1000000, 0)@omvandling
-    }
-    else if (totalenergi * times > 1000)
-    {
-        omvandling = " tusen" + omvandling;
-        @Math.Round(((totalenergi) * times) / 1000, 0)@omvandling
-    }
-    else if (totalenergi * times < 1000)
-    {
-        @Math.Round((totalenergi) * times, 0)@omvandling
-    }
+        }
+        else if (totalenergi * times > 1000)
+        {
+            double first = Math.Round((totalenergi * times) / 1000, 0);
+            double last = Math.Round(totalenergi * times - (first * 1000),0);
+            char space = ' ';
+            @first@space@last@omvandling
+            
+        }
+        else if (totalenergi * times < 1000)
+        {
+            @Math.Round((totalenergi) * times, 1)@omvandling
+        }
 }
 
 @helper DisplayEnergy()
     {
-    double totalenergi = 0;
-    foreach (var elem in Model.powerRecords)
-    {
-        totalenergi += elem.Energi;
-    }
-    if (totalenergi > 1000000000)
-    {
-        <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
-        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'g')</h4>
-    }
-    else if (totalenergi > 1000000)
-    {
-        <h2> @Math.Round(totalenergi / 1000000, 2) MWh</h2>
-        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'm')</h4>
-    }
-    else if (totalenergi > 1000)
-    {
-        <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
-        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'k')</h4>
-    }
-    else if (totalenergi < 1000 && totalenergi > 0)
-    {
-        <h2> @Math.Round(totalenergi) Wh </h2>
-        <h4 style="color:gray">Eller @RandomizeEq(totalenergi, 'n')</h4>
-    }
-    else if (totalenergi <= 0 )
-    {
-        <h2> Ingen data tillgänglig ännu. Återkom efter kl. 10:30 </h2>
-    }
+        double totalenergi = 0;
+        foreach (var elem in Model.powerRecords)
+        {
+            totalenergi += elem.Energi;
+        }
+        if (totalenergi > 1000000000)
+        {
+            <h2> @Math.Round(totalenergi / 1000000000, 2) GWh</h2>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
+ 
+        }
+        else if (totalenergi > 1000000)
+        {
+            <h2> @Math.Round(totalenergi / 1000000, 2) MWh</h2>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
+        }
+        else if (totalenergi > 1000)
+        {
+            <h2> @Math.Round(totalenergi / 1000, 1) kWh</h2>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
+        }
+        else if (totalenergi < 1000 && totalenergi > 0)
+        {
+            <h2> @Math.Round(totalenergi) Wh </h2>
+            <div>
+                @ShowIcons('h')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'h')</h4>
+            </div>
+
+            <div>
+                <br/><br/>
+                @ShowIcons('c')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'c')</h4>
+            </div>
+           
+            <div>
+                <br/><br/>
+                @ShowIcons('k')
+                <h4 style="color:gray; display:inline">Eller @RandomizeEq(totalenergi, 'k')</h4>
+            </div>
+        }
+        else if (totalenergi <= 0)
+        {
+            <h2> Ingen data tillgänglig ännu. Återkom efter kl. 10:30 </h2>
+        }
 }
 
 @helper GenerateDropdownContents()
@@ -357,20 +409,8 @@ else if (prefix == 'n')
 
 @helper DisplayComparison()
     {
-        <div id="columnchart_values" style="padding-top:40px"></div>
-}
-
-@helper ChartButton()
-    {
-        if ((bool?)Session["compare"] == true)
-        {
-            <a href="/Municipality/SetCompareMode/0" class="btnmunicipal btn btn-info" role="button">Dölj Diagram</a>
-        }
-        else
-        {
-            <a href="/Municipality/SetCompareMode/1" class="btnmunicipal btn btn-info" role="button">Visa Diagram</a>
-        }
-}
+        <div id="columnchart_values" style="max-width:700px; min-height:500px"></div>
+    }
 
 @helper DisplaySVGMap()
     {
@@ -383,7 +423,7 @@ else if (prefix == 'n')
                     {
                         if ((string)Session["kommun"] == (string)resource.Key)
                         {
-                            if((bool?)Session["options"] != false)
+                            if ((bool?)Session["options"] != false)
                             {
                                 <a xlink:href="/Municipality/ChooseMunicipality/">
                                     <title id="title">@resource.Key</title>
@@ -400,7 +440,7 @@ else if (prefix == 'n')
                         }
                         else
                         {
-                            if((bool?)Session["options"] != false)
+                            if ((bool?)Session["options"] != false)
                             {
                                 <a xlink:href="/Municipality/ChooseMunicipality/@((string)resource.Key)">
                                     <title id="title">@resource.Key</title>
@@ -423,15 +463,19 @@ else if (prefix == 'n')
 
 @helper Timeinput()
     {
-        if ((string)Session["chosenAction"] == "ShowPowerOfYear" && (bool?)Session["compare"] == true)
+        if ((string)Session["chosenAction"] == "ShowPowerOfYear")
         {
-            <span class="text-info"> Månad: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Välj månad i det senaste året: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Month)" max="@Model.powerRecords.Max(x => x.Month)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
-        if ((string)Session["chosenAction"] == "ShowPowerOfMonth" && (bool?)Session["compare"] == true)
+        if ((string)Session["chosenAction"] == "ShowPowerOfMonth")
         {
-            <span class="text-info"> Dag: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
+            <span class="text-info"> Välj dag i den senaste månaden: </span> <input class="form-control" min="@Model.powerRecords.Min(x => x.Day)" max="@Model.powerRecords.Max(x => x.Day)" onchange="changeChart()" type="number" id="timeInput" style="max-width: 75px" />
         }
-}
+        if ((string)Session["chosenAction"] == "ShowPowerOfDay")
+        {
+            <div style="padding-top:54px"></div>
+        }
+    }
 
 @helper DisplayWeatherQuality()
     {
@@ -469,71 +513,84 @@ else if (prefix == 'n')
         }
 }
 
+@helper ShowIcons(char prefix)
+{
+    ImageConverter imageConverter = new ImageConverter();
+    Image image = Resources.sun;
+    byte[] imageBytes = (byte[])imageConverter.ConvertTo(image, typeof(byte[]));
+
+    if (prefix == 'c'){
+        imageBytes = (byte[])imageConverter.ConvertTo(Resources.car, typeof(byte[]));
+        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
+    }
+
+    else if (prefix == 'h'){
+        imageBytes = (byte[])imageConverter.ConvertTo(Resources.house, typeof(byte[]));
+        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
+    }    
+
+    else if (prefix == 'k'){
+        imageBytes = (byte[])imageConverter.ConvertTo(Resources.coffee, typeof(byte[]));
+        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline; float:left; width: 50px; height:50px" class="footerimg img-responsive" />
+    }
+}
+
 <div class="row container">
-    <div class=" col-sm-4" style="padding-left: 15px">
-        @if (((bool?)Session["compare"] == false || (bool?)Session["compare"] == null) && (bool?)Session["options"] != false)
-        {
-            <div class="dropdown">
-                <button class="btnmunicipal btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                    Välj Kommun
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    @GenerateDropdownContents()
-                </ul>
-            </div>
-            @DisplaySVGMap()
-        }
-        else
-        {
-            <div style="padding-top:34px">
-                @DisplaySVGMap()
-            </div>
-        }
-
-    </div>
-    <div class="col-sm-6" style="padding-left: 28px" color="#fff">
-        <ul class="nav nav-tabs">
-            @DisplayActive()
-        </ul>
-
-        @if ((bool?)Session["compare"] == true)
-        {
-            @DisplayComparison();
-        }
-        else
-        {
-            if (Session["kommun"] == null)
+    <div class="row">
+        <div class=" col-sm-4" style="padding-left:50px; padding-bottom:10px">
+            @if (((bool?)Session["compare"] == false || (bool?)Session["compare"] == null) && (bool?)Session["options"] != false)
             {
-                <h3>Jönköpings Län</h3>
+                <div class="dropdown">
+                    <button class="btnmunicipal btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        Välj Kommun
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        @GenerateDropdownContents()
+                    </ul> 
+                    @PerInhabitantButton()
+                </div>
             }
             else
             {
-                <h3>@((string)Session["kommun"])</h3>
+                <div>
+                    @PerInhabitantButton()
+                </div>
             }
-            @DisplayEnergy()
-        }
-        <br />
-        <div class="row" style="padding-bottom:50px">
-            <div class="col-sm-6">
-                @if ((bool?)Session["compare"] == false || (bool?)Session["compare"] == null)
+        </div>
+
+        <div class="col-sm-8" style="padding-left:50px" color="#fff">
+            <ul class="nav nav-tabs">
+                @DisplayActive()
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class=" col-sm-4">
+            @DisplaySVGMap()
+            <div class="row" style="padding-left:50px;padding-bottom:20px">
+                @if (Session["kommun"] == null)
                 {
-                    @DisplayWeatherQuality()
+                    <h3>Jönköpings län</h3>
                 }
+                else
+                {
+                    <h3>@((string)Session["kommun"])</h3>
+                }
+                @DisplayEnergy()
+                <br/>
             </div>
         </div>
-    </div>
-
-    <div class="col-sm-2">
-        <div class="col"> @ChartButton() </div>
-        <div class="row" style="padding:5px 0px 0px 15px">
-            <div class="col"> @PerInhabitantButton() </div>
+    
+        <div class="col-sm-8" color="#fff">
+            <div style="padding-left:40px; padding-top:10px">
+                <h2>Solfaktor:</h2>
+                @DisplayWeatherQuality()
+                <br/><br/><br/>
+                @Timeinput()
+            </div>
+            @DisplayComparison()
         </div>
-        <div class="row" style="padding: 15px 0px 0px 15px">
-            <div class="col"> @Timeinput() </div>
-        </div>
     </div>
-
-
-
 </div>

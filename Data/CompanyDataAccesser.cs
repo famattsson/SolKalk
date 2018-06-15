@@ -33,14 +33,14 @@ namespace Data
                 if (företag != "" && företag != null)
                 {
                     var query = from power in db.ProducedCompanyPowers
-                                where power.Företag == företag && power.Day == date.day
+                                where power.Företag == företag && power.Day == date.day && power.Month == date.month && power.Year == date.year
                                 select power;
                     return query.ToList();
                 }
                 else
                 {
                     var query = from power in db.ProducedCompanyPowers
-                                where power.Day == date.day
+                                where power.Day == date.day && power.Month == date.month && power.Year == date.year
                                 select power;
                     return query.ToList();
                 }
@@ -53,14 +53,14 @@ namespace Data
                 if (företag != "" && företag != null)
                 {
                     var query = from power in db.ProducedCompanyPowers
-                                where power.Företag == företag && power.Month == date.month
+                                where power.Företag == företag && power.Month == date.month && power.Year == date.year
                                 select power;
                     return query.ToList();
                 }
                 else
                 {
                     var query = from power in db.ProducedCompanyPowers
-                                where power.Month == date.month
+                                where power.Month == date.month && power.Year == date.year
                                 select power;
                     return query.ToList();
                 }

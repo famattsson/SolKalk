@@ -12,10 +12,10 @@ namespace Presentation.Controllers
         public ActionResult Index()
         {
             Session["onHome"] = true;
-            if(Session["chosenAction"] == null)
+            Session["options"] = true;
+            if (Session["chosenAction"] == null)
             {
                 Session["chosenAction"] = "ShowPowerOfDay";
-                Session["options"] = true;
             }
             return View("HomeView");
         }
