@@ -281,15 +281,17 @@
             }
 
             @Math.Round(((totalenergi) * times) / 1000000, 0)@omvandling
-}
-else if (totalenergi * times > 1000)
-{
-
-    
-    
-}
-else if (totalenergi * times < 1000)
-{
+        }
+        else if (totalenergi * times > 1000)
+        {
+            double first = Math.Round((totalenergi * times) / 1000, 0);
+            double last = Math.Round(totalenergi * times - (first * 1000),0);
+            char space = ' ';
+            @first@space@last@omvandling
+            
+        }
+        else if (totalenergi * times < 1000)
+        {
             @Math.Round((totalenergi) * times, 1)@omvandling
         }
 }
@@ -407,7 +409,7 @@ else if (totalenergi * times < 1000)
 
 @helper DisplayComparison()
     {
-        <div id="columnchart_values" style="max-width:700px; min-height:450px"></div>
+        <div id="columnchart_values" style="max-width:700px; min-height:500px"></div>
     }
 
 @helper DisplaySVGMap()
@@ -577,13 +579,15 @@ else if (totalenergi * times < 1000)
                     <h3>@((string)Session["kommun"])</h3>
                 }
                 @DisplayEnergy()
-                <h2>Solfaktor:</h2>
-                @DisplayWeatherQuality()
+                <br/>
             </div>
         </div>
     
         <div class="col-sm-8" color="#fff">
             <div style="padding-left:40px; padding-top:10px">
+                <h2>Solfaktor:</h2>
+                @DisplayWeatherQuality()
+                <br/><br/><br/>
                 @Timeinput()
             </div>
             @DisplayComparison()

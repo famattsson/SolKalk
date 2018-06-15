@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solkalk</title>
+    <title>Solkalkylatorn</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
@@ -32,7 +32,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a href="/Home/Index" class="navbar-brand">Solkalk</a>
+                    <a href="/Home/Index" class="navbar-brand">Solkalkylatorn</a>
                 </div>
 
                 <ul class="navbar-collapse collapse nav navbar-nav" id="myNavbar">
@@ -69,10 +69,10 @@
                     @{
                         ImageConverter converter = new ImageConverter();
                         imageBytes = (byte[])converter.ConvertTo(Resources.Cybercom, typeof(byte[]));
-                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive" />
+                        <a href="https://www.cybercom.com/sv/"><img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive" /></a>
 
                         imageBytes = (byte[])converter.ConvertTo(Resources.klimatradet, typeof(byte[]));
-                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive" />
+                        <a href="https://klimatradet.se/"><img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(imageBytes))" style="display:inline" class="footerimg img-responsive" /></a>
                     }
                 </div>
             </div>
