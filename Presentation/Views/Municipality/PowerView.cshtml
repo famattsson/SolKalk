@@ -259,15 +259,48 @@
         else if (prefix == 'c')
         {
             omvandling = " mil i en elbil";
-            times = 0.0015;
+            times = 1500;
         }
         else if (prefix == 'h')
         {
             omvandling = " års upvärmning av en genomsnittlig svensk villa";
-            times = 0.00000066;
+            times = 0.000000066;
         }
 
+        if (prefix == 'c')
+        {
+            if (totalenergi / times > 1000000)
+        {
+            if (Math.Round((totalenergi / times) / 1000000) == 1)
+            {
+                omvandling = " miljon" + omvandling;
+            }
+            else
+            {
+                omvandling = " miljoner" + omvandling;
+            }
 
+            @Math.Round(((totalenergi) / times) / 1000000, 1)@omvandling
+        }
+        else if (totalenergi / times > 1000)
+        {
+            var delning = Math.Round(((totalenergi) / times), 0);
+            var delningStr = delning.ToString();
+            delningStr = delningStr.Substring(delningStr.Length - 3);
+            delning = Math.Round(delning / 1000, 0);
+            var space = " ";
+            @delning@space@delningStr@omvandling
+
+        }
+        else if (totalenergi / times < 1000)
+        {
+            
+                @Math.Round((totalenergi) * times, 1)@omvandling
+        }    
+        }
+
+        else
+        {
         if (totalenergi * times > 1000000)
         {
             if (Math.Round(totalenergi * times / 1000000) == 1)
@@ -293,7 +326,14 @@
         }
         else if (totalenergi * times < 1000)
         {
-            @Math.Round((totalenergi) * times, 1)@omvandling
+            if (prefix == 'h' && (bool?)Session["perInhabitant"] == true)
+            {
+                @Math.Round((totalenergi) * times, 4)@omvandling
+            }
+            else{
+                @Math.Round((totalenergi) * times, 1)@omvandling
+            }
+        }
         }
 }
 
